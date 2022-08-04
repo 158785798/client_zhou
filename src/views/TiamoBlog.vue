@@ -23,7 +23,7 @@
       </div>
     </aside>
     <main v-loading="loading" style="margin: 15px 10px 0 10px; padding: 0; z-index:60;flex: 1">
-      <Cell @show_delDialog="show_delDialog" :blogs="blogs"></Cell>
+      <Cell @show_delDialog="show_delDialog" :item="item" :index="index" v-for="(item, index) in blogs"></Cell>
     </main>
     <aside style="height: 100%;margin-top: 15px;width:300px;border-radius: 6px;">
       <div style="position: sticky;top:-50px;">
@@ -63,8 +63,6 @@
           </div>
         </div>
       </div>
-
-
     </aside>
   </div>
 </template>
@@ -107,9 +105,7 @@ export default {
         '世界只有一个中国',
       ],
       taste: [],
-      blogs: computed(() => {
-        return store.state.blogs
-      }),
+      blogs: [],
       largeImgPath: '',
       delDialog: false,
       blog_id: null,
@@ -119,7 +115,7 @@ export default {
         router.push({name: 'UserPage', params: {u_id: u_id}})
       },
       u_confirm: async () => {
-        store.commit('spliceBlogs', self.blog_index)
+        self.blogs.splice(self.blog_index, 1)
         self.delDialog = false
         ElMessage.success('删除成功!')
         const res = await instance.delete('/del_blog', {params: {blog_id: self.blog_id, flag: 'all'}})
@@ -138,7 +134,7 @@ export default {
       const res1 = await instance.get('/get_taste')
       self.taste = res1.data
       const res2 = await instance.get('/get_blogs', {params: {flag: 'all'}})
-      store.commit('set_blogs', res2.data)
+      self.blogs.push(...res2.data)
       self.loading = false
     })
     return {

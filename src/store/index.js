@@ -41,8 +41,8 @@ export default createStore({
     set_pub(state, payload) {
       state[payload.name] = payload.value
     },
-    set_blogs(state, payload) {
-      state.blogs = payload
+    push_blogs(state, payload) {
+      state.blogs.push(...payload)
     },
     unShiftBlogs(state, payload) {
       state.blogs.unshift(payload)

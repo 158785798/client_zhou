@@ -35,7 +35,7 @@
     <div style="font-size: 12px; color: rgba(0,0,0,0.49);margin: 5px">
       IP归属地： 湖南
     </div>
-    <Cell @show_delDialog="show_delDialog" :blogs="blogs"></Cell>
+    <Cell @show_delDialog="show_delDialog" :item="item" :index="index" v-for="(item, index) in blogs"></Cell>
   </header>
 </template>
 
@@ -87,12 +87,11 @@ export default {
         {name: 'packages'},
       ],
       u_confirm: async () => {
+        self.blogs.splice(self.blog_index, 1)
+        self.delDialog = false
+        ElMessage.success('删除成功!')
         const res = await instance.delete('/del_blog', {params: {blog_id: self.blog_id, flag: 'user'}})
-        if (res.code === 200) {
-          self.blogs = res.data
-          self.delDialog = false
-          ElMessage.success('删除成功!')
-        }
+
       },
       u_cancel: () => {
         self.delDialog = false
@@ -124,7 +123,7 @@ export default {
         const res1 = await instance.get('/get_userinfo', {params: {u_id: route.params.u_id}})
         self.userInfo = res1.data
         const res2 = await instance.get('/get_blogs', {params: {u_id: route.params.u_id, flag: 'one'}})
-        self.blogs = res2.data
+        self.blogs.push(...res2.data)
       },
     })
     onMounted(() => {

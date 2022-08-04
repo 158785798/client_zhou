@@ -1,6 +1,5 @@
 <template>
-  <div style="font-size: 18px;background-color: #fff;padding: 20px;margin-bottom: 8px; border-radius: 6px"
-       v-for="(item, index) in blogs" :key="item.id">
+  <div style="font-size: 18px;background-color: #fff;padding: 20px;margin-bottom: 8px; border-radius: 6px">
     <header style="display: flex; ">
       <img class="avatar" :src="item.userInfo.avatarUrl" alt="" style="width: 40px; height: 40px; border-radius: 50%"
            @click="to_tab(item.userInfo.id)">
@@ -98,8 +97,11 @@ export default {
     Comment
   },
   props: {
-    blogs: {
-      type: Array,
+    item: {
+      type: Object,
+    },
+    index:{
+      type: Number
     },
     showlikes: {
       type: Boolean,
@@ -121,7 +123,6 @@ export default {
     const store = useStore()
     const router = useRouter()
     const self = reactive({
-      blogs: props.blogs,
       curentImgGroups: [],
       cur_each: {},
       cur_index: 0,

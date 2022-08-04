@@ -122,7 +122,7 @@ export default {
         const res = await instance.post('/publish_blog', {content: self.content, images: self.blogImgs})
         if (res.code === 200) {
           if (route.name === 'TiamoBlog'){
-            store.commit('unShiftBlogs', res.data)
+            self.blogs.unshift(res.data)
 
           }else{
             await router.push('TiamoBlog')
