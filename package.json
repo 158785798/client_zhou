@@ -1,0 +1,31 @@
+{
+  "name": "candy-cats",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "@element-plus/icons-vue": "^2.0.6",
+    "@vitejs/plugin-vue": "^2.3.3",
+    "Math": "0.0.1-security",
+    "animate.css": "^4.1.1",
+    "axios": "^0.27.2",
+    "cropperjs": "^2.0.0-beta.1",
+    "echarts": "^5.3.0",
+    "sortablejs": "^1.15.0",
+    "vite-plugin-svg-icons": "^2.0.1",
+    "vue": "^3.2.1",
+    "vue-cropper": "^1.0.2",
+    "vue-router": "^4.0.16",
+    "vuex": "^4.0.2",
+    "vuex-persistedstate": "^4.1.0"
+  },
+  "devDependencies": {
+    "@vue/compiler-sfc": "^3.0.4",
+    "element-plus": "^2.0.5",
+    "sass": "^1.53.0",
+    "sass-loader": "^7.0.2",
+    "vite": "^2.9.12"
+  }
+}

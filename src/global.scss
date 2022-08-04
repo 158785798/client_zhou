@@ -1,0 +1,142 @@
+$color: #333;
+$body-width: 1250px;
+#app {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  //text-align: center;
+  color: $color;
+  font-size: 14px;
+
+  min-width: 1250px;
+  width: 1250px;
+  margin: 0 auto;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+  transition-duration: 0.3s !important;
+}
+
+a:hover {
+  color: #b93276;
+}
+
+.vue-cropper {
+  z-index: 300;
+  width: 350px !important;
+  height: 350px !important;
+}
+
+
+.cropper-modal{
+  background-color: rgb(233, 162, 104) !important;
+}
+
+.cropper-view-box{
+  border-radius: 50% !important;
+  background-color: #f1f1f1;
+}
+
+.el-input__wrapper {
+  //border-radius: 5px !important;
+  background-color: transparent !important
+}
+.el-textarea__inner {
+  border-radius: 15px;
+}
+
+.iconfontguanbi1 {
+  color: red;
+}
+.iconfont{
+  cursor: pointer;
+}
+.iconfont:hover{
+  color: #f18e63
+}
+.avatar{
+  cursor: pointer;
+}
+
+.iconfontduihao {
+  color: green;
+}
+
+.iconfontjiantou_xiangyou {
+  color: #ea15e0;
+}
+
+//.el-form-item{
+//  margin: 0;
+//}
+.el-input__inner {
+  line-height: 15px;
+
+  background-color: transparent !important
+
+}
+.el-textarea__inner{
+  border-radius: 7px;
+}
+
+
+li {
+  list-style: none !important;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 144, 255, 0.43);
+  width: 12px !important;
+}
+
+/* 滚动槽 */
+/*::-webkit-scrollbar-track {*/
+/*  !*-webkit-box-shadow:inset 0 0 6px rgba(0,0,0,0.3);*!*/
+/*  border-radius:10px;*/
+/*}*/
+/* 滚动条滑块 */
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: rgba(0, 144, 255, 0.28);
+}
+
+/*.container::-webkit-scrollbar-thumb:window-inactive {*/
+/*  background-color: rgba(0, 0, 0, 0.1);*/
+/*}*/
+body {
+  margin: 0;
+  background-color: #e1c39e;
+}
+.u-del-blog {
+  background-color: #e5b77a;
+  padding: 20px;
+  border-radius: 10px;
+  z-index: 100;
+  position: fixed;
+  text-align: center;
+  transform: translateX(-50px);
+  width: 200px;
+  margin: auto;
+  left: 0;
+  right: 0;
+  top: 300px;
+}
+
+.del-blog:after {
+  content: '';
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.2);
+  position: absolute;
+  cursor: pointer;
+}
