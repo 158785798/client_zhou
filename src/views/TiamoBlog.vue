@@ -1,8 +1,6 @@
 <template>
-  <el-backtop :bottom="100">
-    <div style="height: 100%;width: 100%;box-shadow: red;text-align: center;line-height: 40px;color: #1989fa;">
-      TOP
-    </div>
+  <el-backtop :bottom="100" class="backtop">
+      <i class="iconfont iconfonttubiao02" style="font-size: 20px"></i>
   </el-backtop>
   <div class="common-layout" style="display: flex;height: 100%" :class="{'del-blog': delDialog}">
     <div class="u-del-blog" v-show="delDialog">
@@ -24,6 +22,11 @@
     </aside>
     <main v-loading="loading" style="margin: 15px 10px 0 10px; padding: 0; z-index:60;flex: 1">
       <Cell @show_delDialog="show_delDialog" :item="item" :index="index" v-for="(item, index) in blogs"></Cell>
+      <div style="text-align: center; color: rgba(0,0,0,0.53)">
+<!--        <span v-loading="true"  element-loading-background="transparent" v-if="endLoading"></span>-->
+        <img src="../assets/loading2.gif" alt="" style="border-radius: 20px" width="150" v-show="endLoading">
+        <span v-show="!endLoading&&!loading">我是有底线的o(*￣▽￣*)o</span>
+      </div>
     </main>
     <aside style="height: 100%;margin-top: 15px;width:300px;border-radius: 6px;">
       <div style="position: sticky;top:-50px;">
@@ -70,7 +73,7 @@
 <script>
 
 import Cell from "../components/Cell.vue";
-import {computed, onMounted, reactive, toRefs} from "vue";
+import {computed, onMounted, onUnmounted, reactive, toRefs} from "vue";
 import instance from "../api/request.js";
 import {ElMessage} from "element-plus";
 import {Sortable} from 'sortablejs'
@@ -110,7 +113,14 @@ export default {
       delDialog: false,
       blog_id: null,
       blog_index: null,
-      loading: false,
+      pageNum: 1,
+      pageSize: 7,
+      serverPageSize: 7,
+      loading: true,
+      endLoading: false,
+      noMore: computed(() => {
+        return self.pageSize > self.serverPageSize || self.endLoading
+      }),
       to_tab: (u_id) => {
         router.push({name: 'UserPage', params: {u_id: u_id}})
       },
@@ -128,14 +138,49 @@ export default {
         self.blog_index = blog_index
         self.delDialog = true
       },
+      get_blogs: async () => {
+        const res2 = await instance.get('/get_blogs', {
+          params: {
+            flag: 'all', pageNum: self.pageNum,
+            pageSize: self.pageSize
+          }
+        })
+        self.serverPageSize = res2.data.length
+        self.blogs = self.blogs.concat(res2.data)
+        self.endLoading = false
+      },
+      scroll() {
+        window.onscroll = () => {
+          // 整个页面的高度
+          const scrollHeight = document.body.scrollHeight
+          // 当前可视区的顶部到页面顶部的高度，||是做兼容处理的
+          const scrollTop = document.body.scrollTop || document.documentElement.scrollTop
+          // 当前可视区的高度
+          const clientHeight = document.documentElement.clientHeight
+          // 可视区底部到页面底部的高度，即滚动条与底部的距离
+          const instance = scrollHeight - scrollTop - clientHeight
+          // 当滚动条与底部的距离小于100时就触发加载数据
+          if (instance < 100) {
+            if (self.noMore) return
+            self.endLoading = true
+            setTimeout(()=>{
+              self.pageNum++
+              self.get_blogs()
+            }, 1000)
+
+          }
+        }
+      }
     })
     onMounted(async () => {
-      self.loading = true
+      window.addEventListener('scroll', self.scroll, false)
       const res1 = await instance.get('/get_taste')
       self.taste = res1.data
-      const res2 = await instance.get('/get_blogs', {params: {flag: 'all'}})
-      self.blogs.push(...res2.data)
+      await self.get_blogs()
       self.loading = false
+    })
+    onUnmounted(() => {
+      window.removeEventListener('scroll', self.scroll, false)
     })
     return {
       ...toRefs(self)
@@ -146,7 +191,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$icon-hover-color: #f18e63;
+@import "../global";
 .navItem_left:hover {
   background-color: #f2f2f2;
 }

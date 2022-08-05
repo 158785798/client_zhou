@@ -116,8 +116,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$icon-hover-color: #f18e63;
-$icon-hover-bg-color: rgba(246, 179, 150, 0.28);
+@import "../global";
+
 .btn-item {
   margin: 0 5px;
   width: 22px

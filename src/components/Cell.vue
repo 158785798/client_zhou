@@ -186,7 +186,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$icon-hover-color: #f18e63;
+@import "../global";
 .content-btn {
   flex: 1;
   display: flex;

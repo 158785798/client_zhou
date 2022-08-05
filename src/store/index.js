@@ -42,7 +42,7 @@ export default createStore({
       state[payload.name] = payload.value
     },
     push_blogs(state, payload) {
-      state.blogs.push(...payload)
+      state.blogs = state.blogs.concat(payload)
     },
     unShiftBlogs(state, payload) {
       state.blogs.unshift(payload)

@@ -121,10 +121,10 @@ export default {
         self.loading = true
         const res = await instance.post('/publish_blog', {content: self.content, images: self.blogImgs})
         if (res.code === 200) {
-          if (route.name === 'TiamoBlog'){
+          if (route.name === 'TiamoBlog') {
             self.blogs.unshift(res.data)
 
-          }else{
+          } else {
             await router.push('TiamoBlog')
           }
           store.commit('set_pub', {name: 'pub', value: false})
@@ -161,9 +161,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$icon-hover-color: #f18e63;
-$icon-hover-bg-color: rgba(246, 179, 150, 0.28);
-
+@import "../global";
 
 .main {
   transition-duration: 0.2s;
