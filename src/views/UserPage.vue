@@ -35,7 +35,8 @@
     </div>
     <Cell @show_delDialog="show_delDialog" :item="item" :index="index" v-for="(item, index) in blogs"></Cell>
     <div style="text-align: center; color: rgba(0,0,0,0.53)">
-      <span v-loading="true" element-loading-background="transparent" v-if="endLoading"></span>
+      <!--        <span v-loading="true"  element-loading-background="transparent" v-if="endLoading"></span>-->
+      <img src="../assets/loading2.gif" alt="" style="border-radius: 20px" width="150" v-show="endLoading">
       <span v-show="!endLoading&&!loading">我是有底线的o(*￣▽￣*)o</span>
     </div>
   </header>
@@ -82,7 +83,7 @@ export default {
       pageNum: 1,
       pageSize: 7,
       serverPageSize: 7,
-      loading: false,
+      loading: true,
       endLoading: false,
       noMore: computed(() => {
         return self.pageSize > self.serverPageSize || self.endLoading
@@ -130,10 +131,13 @@ export default {
       get_blogs: async () => {
         const res2 = await instance.get('/get_blogs', {
           params: {
-            flag: 'all', pageNum: self.pageNum,
+            flag: 'user',
+            u_id: route.params.u_id,
+            pageNum: self.pageNum,
             pageSize: self.pageSize
           }
         })
+        self.serverPageSize = res2.data.length
         self.blogs = self.blogs.concat(res2.data)
         self.endLoading = false
       },
@@ -151,15 +155,20 @@ export default {
           if (instance < 100) {
             if (self.noMore) return
             self.endLoading = true
-            self.pageNum++
-            self.get_blogs()
+            setTimeout(()=>{
+              self.pageNum++
+              self.get_blogs()
+            }, 1000)
           }
         }
       }
     })
     onMounted(async () => {
       window.addEventListener('scroll', self.scroll, false)
+      const res = await instance.get('/get_userinfo', {params:{u_id: route.params.u_id}})
+      self.userInfo = res.data
       await self.get_blogs()
+      self.loading = false
     })
     onUnmounted(() => {
       window.removeEventListener('scroll', self.scroll, false)
