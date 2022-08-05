@@ -80,6 +80,7 @@ export default {
       showCutImg: false,
       isUploadAvatarMaskShow: false,
       blog_id: null,
+      blog_index: null,
       pageNum: 1,
       pageSize: 7,
       serverPageSize: 7,
@@ -96,17 +97,18 @@ export default {
         {name: 'packages'},
       ],
       u_confirm: async () => {
-        self.blogs.splice(self.blog_id, 1)
+        self.blogs.splice(self.blog_index, 1)
         self.delDialog = false
         ElMessage.success('删除成功!')
-        const res = await instance.delete('/del_blog', {params: {blog_id: self.blog_id, flag: 'user'}})
+        const res = await instance.delete('/del_blog', {params: {blog_id: self.blog_id}})
 
       },
       u_cancel: () => {
         self.delDialog = false
       },
-      show_delDialog: (blog_id) => {
+      show_delDialog: (blog_id, blog_index) => {
         self.blog_id = blog_id
+        self.blog_index = blog_index
         self.delDialog = true
       },
       openCutImg: () => {

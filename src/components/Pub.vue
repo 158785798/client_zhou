@@ -77,7 +77,8 @@ import {useRoute, useRouter} from "vue-router";
 
 export default {
   name: "Pub",
-  setup() {
+  emits: ['unshift_blog'],
+  setup(props, context) {
     const store = useStore()
     const router = useRouter()
     const route = useRoute()
@@ -112,27 +113,21 @@ export default {
             store.commit('set_pub', {name: 'trans', value: !self.pub})
           }, 10)
         }
-
       },
       push_emoji: (item) => {
         self.content += item.display_name
       },
       publish_blog: async () => {
         self.loading = true
+        await router.push('TiamoBlog')
         const res = await instance.post('/publish_blog', {content: self.content, images: self.blogImgs})
-        if (res.code === 200) {
-          if (route.name === 'TiamoBlog') {
-            self.blogs.unshift(res.data)
+        context.emit('unshift_blog', res.data)
+        store.commit('set_pub', {name: 'pub', value: false})
+        self.loading = false
+        self.blogImgs = []
+        self.content = ''
+        ElMessage.success('发布成功！')
 
-          } else {
-            await router.push('TiamoBlog')
-          }
-          store.commit('set_pub', {name: 'pub', value: false})
-          self.loading = false
-          self.blogImgs = []
-          self.content = ''
-          ElMessage.success('发布成功！')
-        }
       },
       upload_success: (res) => {
         self.blogImgs.push(res)

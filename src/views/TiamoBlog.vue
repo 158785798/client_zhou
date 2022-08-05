@@ -1,6 +1,6 @@
 <template>
   <el-backtop :bottom="100" class="backtop">
-      <i class="iconfont iconfonttubiao02" style="font-size: 20px"></i>
+    <i class="iconfont iconfonttubiao02" style="font-size: 20px"></i>
   </el-backtop>
   <div class="common-layout" style="display: flex;height: 100%" :class="{'del-blog': delDialog}">
     <div class="u-del-blog" v-show="delDialog">
@@ -23,7 +23,7 @@
     <main v-loading="loading" style="margin: 15px 10px 0 10px; padding: 0; z-index:60;flex: 1">
       <Cell @show_delDialog="show_delDialog" :item="item" :index="index" v-for="(item, index) in blogs"></Cell>
       <div style="text-align: center; color: rgba(0,0,0,0.53)">
-<!--        <span v-loading="true"  element-loading-background="transparent" v-if="endLoading"></span>-->
+        <!--        <span v-loading="true"  element-loading-background="transparent" v-if="endLoading"></span>-->
         <img src="../assets/loading2.gif" alt="" style="border-radius: 20px" width="150" v-show="endLoading">
         <span v-show="!endLoading&&!loading">我是有底线的o(*￣▽￣*)o</span>
       </div>
@@ -73,7 +73,7 @@
 <script>
 
 import Cell from "../components/Cell.vue";
-import {computed, onMounted, onUnmounted, reactive, toRefs} from "vue";
+import {computed, onMounted, onUnmounted, reactive, toRefs,watch} from "vue";
 import instance from "../api/request.js";
 import {ElMessage} from "element-plus";
 import {Sortable} from 'sortablejs'
@@ -82,10 +82,11 @@ import {useRouter} from "vue-router";
 
 export default {
   name: "TiamoBlog",
+  props:['blog'],
   components: {
     Cell
   },
-  setup() {
+  setup(props, context) {
     const store = useStore()
     const router = useRouter()
     const self = reactive({
@@ -128,7 +129,7 @@ export default {
         self.blogs.splice(self.blog_index, 1)
         self.delDialog = false
         ElMessage.success('删除成功!')
-        const res = await instance.delete('/del_blog', {params: {blog_id: self.blog_id, flag: 'all'}})
+        const res = await instance.delete('/del_blog', {params: {blog_id: self.blog_id}})
       },
       u_cancel: () => {
         self.delDialog = false
@@ -163,7 +164,7 @@ export default {
           if (instance < 100) {
             if (self.noMore) return
             self.endLoading = true
-            setTimeout(()=>{
+            setTimeout(() => {
               self.pageNum++
               self.get_blogs()
             }, 1000)
@@ -172,6 +173,11 @@ export default {
         }
       }
     })
+    watch(() => props.blog, (newBlog, oldBlog)=>{
+      console.log(newBlog);
+      self.blogs.unshift(newBlog)
+    })
+
     onMounted(async () => {
       window.addEventListener('scroll', self.scroll, false)
       const res1 = await instance.get('/get_taste')
@@ -192,6 +198,7 @@ export default {
 
 <style lang="scss" scoped>
 @import "../global";
+
 .navItem_left:hover {
   background-color: #f2f2f2;
 }

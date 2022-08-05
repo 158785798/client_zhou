@@ -2,10 +2,10 @@
   <div class="h-hrader">
     <Header></Header>
   </div>
-  <Pub></Pub>
+  <Pub @unshift_blog="unshift_blog"></Pub>
   <el-container style="margin: 50px auto">
     <div style="width: 100%">
-      <router-view/>
+      <router-view :blog="blog"/>
     </div>
   </el-container>
 
@@ -26,6 +26,10 @@ export default {
     const self = reactive({
 
       delDialog: false,
+      blog: {},
+      unshift_blog:(value)=>{
+        self.blog = value
+      },
       show_delDialog: () => {
         self.delDialog = true
       }
