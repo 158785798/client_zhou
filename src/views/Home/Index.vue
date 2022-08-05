@@ -1,7 +1,7 @@
 <template>
   <img class="bg" src="https://github.githubassets.com/images/modules/site/home/hero-glow.svg" alt=""
        style="border-style: none;width: 100%; position: fixed;top: 0; left: 0; z-index: -2">
-  <img src="../../assets/home_bg.png" alt="" style="width: 1250px;position: fixed;margin-left: -20px; z-index: -1">
+  <img src="../../assets/home_bg.png" alt="" style="width: 1250px;position: fixed; z-index: -1">
   <el-container>
     <el-main>
       <div style="display: flex; justify-content: space-between; margin: 100px 0;">
