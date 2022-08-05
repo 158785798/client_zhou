@@ -20,7 +20,7 @@
         <div style="height: 100%"></div>
       </div>
     </aside>
-    <main v-loading="loading" style="margin: 15px 10px 0 10px; padding: 0; z-index:60;flex: 1">
+    <main v-loading="loading" style="margin: 15px 10px 0 10px; padding: 0;flex: 1">
       <Cell @show_delDialog="show_delDialog" :item="item" :index="index" v-for="(item, index) in blogs"></Cell>
       <div style="text-align: center; color: rgba(0,0,0,0.53)">
         <!--        <span v-loading="true"  element-loading-background="transparent" v-if="endLoading"></span>-->
