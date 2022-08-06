@@ -140,9 +140,7 @@ export default {
       },
       hideArrow: () => {
         self.isShowArrow = false;
-
         setTimeout(self.trans, 3000)
-
       },
       auto1: () => {
         self.index = 1

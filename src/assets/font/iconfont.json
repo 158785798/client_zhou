@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "22624159",
+      "name": "成功",
+      "font_class": "icon_succeed",
+      "unicode": "e62d",
+      "unicode_decimal": 58925
+    },
+    {
       "icon_id": "258548",
       "name": "回到顶部",
       "font_class": "tubiao02",

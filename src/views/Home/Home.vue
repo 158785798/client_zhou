@@ -2,9 +2,15 @@
   <div class="h-hrader">
     <Header></Header>
   </div>
-  <Pub @unshift_blog="unshift_blog"></Pub>
+
+  <transition name="pub">
+    <Pub v-show="pub" @unshift_blog="unshift_blog" @close_pub="pub=false"></Pub>
+  </transition>
   <el-container style="margin: 50px auto">
-    <div style="width: 100%">
+    <div style="width: 100%; position: relative">
+      <span :class="{'pub': pub}" @click="pub=!pub" style="position: absolute;z-index: 120;top:-35px;left: 200px">
+    <i class="iconfont iconfontjiahao " style="font-size: 30px;color: red"></i>
+  </span>
       <router-view :blog="blog"/>
     </div>
   </el-container>
@@ -27,6 +33,7 @@ export default {
 
       delDialog: false,
       blog: {},
+      pub: false,
       unshift_blog:(value)=>{
         self.blog = value
       },
@@ -41,7 +48,18 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+
+.pub-enter-active, .pub-leave-active {
+  transition: all .3s linear;
+}
+.pub-enter-from, .pub-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  transform: translateY(200px) rotateX(90deg);
+
+}
+.pub-enter-to ,.pub-leave-from /* .fade-leave-active below version 2.1.8 */ {
+  //transform: translateY(0) rotateX(-180deg);
+}
 
 .h-hrader {
   border-radius: 10px;
@@ -51,6 +69,16 @@ export default {
   width: 1250px;
   top: 0;
   z-index: 100
+}
+.pub::after {
+  content: '';
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  position: fixed;
+  cursor: default;
+  background-color: rgba(0, 0, 0, 0.23);
 }
 
 @media screen and (max-width: 800px) {

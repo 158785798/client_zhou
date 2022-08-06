@@ -1,8 +1,8 @@
 <template>
-  <main :class="['main', {trans: trans}]" v-show="pub">
+  <main class="main">
     <div style="margin-bottom: 40px;display: flex; justify-content: space-between">
       <strong style="font-size: 16px">快捷发布</strong>
-      <i class="iconfont iconfontchahao1" @click="showPub"></i>
+      <i class="iconfont iconfontchahao1" @click="close_pub"></i>
     </div>
     <el-input
         v-model="content"
@@ -77,22 +77,13 @@ import {useRoute, useRouter} from "vue-router";
 
 export default {
   name: "Pub",
-  emits: ['unshift_blog'],
+  emits: ['unshift_blog', 'show_pub'],
   setup(props, context) {
     const store = useStore()
     const router = useRouter()
     const route = useRoute()
     const self = reactive({
       loading: false,
-      pub: computed(() => {
-        return store.state.pub
-      }),
-      trans: computed(() => {
-        return store.state.trans
-      }),
-      blogs: computed(() => {
-        return store.state.blogs
-      }),
       content: '',
       dragImg: null,
       isEmojiShow: false,
@@ -100,19 +91,8 @@ export default {
       emojis: [],
       headers: {Authorization: window.localStorage.getItem('token_zhou')},
       blogImgs: [],
-      showPub: () => {
-        if (self.pub) {
-          store.commit('set_pub', {name: 'trans', value: !self.pub})
-          setTimeout(() => {
-            store.commit('set_pub', {name: 'pub', value: !self.pub})
-          }, 100)
-        } else {
-          store.commit('set_pub', {name: 'pub', value: !self.pub})
-
-          setTimeout(() => {
-            store.commit('set_pub', {name: 'trans', value: !self.pub})
-          }, 10)
-        }
+      close_pub: () => {
+        context.emit('close_pub')
       },
       push_emoji: (item) => {
         self.content += item.display_name
@@ -122,12 +102,11 @@ export default {
         await router.push('TiamoBlog')
         const res = await instance.post('/publish_blog', {content: self.content, images: self.blogImgs})
         context.emit('unshift_blog', res.data)
-        store.commit('set_pub', {name: 'pub', value: false})
+        self.close_pub()
         self.loading = false
         self.blogImgs = []
         self.content = ''
         ElMessage.success('发布成功！')
-
       },
       upload_success: (res) => {
         self.blogImgs.push(res)
@@ -160,7 +139,7 @@ export default {
 
 .main {
   transition-duration: 0.2s;
-  z-index: 100;
+  z-index: 150;
   position: fixed;
   width: 640px;
   padding: 20px;
@@ -226,10 +205,6 @@ export default {
 
 .iconfontchahao1:hover {
   color: $icon-hover-color;
-}
-
-.trans {
-  transform: translateY(-30%);
 }
 
 .image-picbed:hover::before {

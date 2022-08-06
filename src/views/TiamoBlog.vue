@@ -2,6 +2,23 @@
   <el-backtop :bottom="100" class="backtop">
     <i class="iconfont iconfonttubiao02" style="font-size: 20px"></i>
   </el-backtop>
+  <transition name="fade">
+  <div v-show="successFollow" style="
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  border-radius: 10px;
+  background-color: rgba(0,0,0,0.76); width: 200px;
+  height: 130px; left:0; right:0;top:0;bottom:0;
+  z-index: 3000; margin: auto">
+    <div>
+    <div class="iconfont iconfonticon_succeed" style="font-size: 40px;margin: 10px; font-weight: lighter"></div>
+      <div>关注成功</div>
+    </div>
+  </div>
+  </transition>
   <div class="common-layout" style="display: flex;height: 100%" :class="{'del-blog': delDialog}">
     <div class="u-del-blog" v-show="delDialog">
       <div style="margin-bottom: 20px; ">确定要删帖吗？</div>
@@ -109,6 +126,7 @@ export default {
         '世界只有一个中国',
       ],
       taste: [],
+      successFollow:false,
       blogs: [],
       largeImgPath: '',
       delDialog: false,
@@ -198,6 +216,18 @@ export default {
 
 <style lang="scss" scoped>
 @import "../global";
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+}
+.iconfonticon_succeed{
+  cursor: default;
+}
+.iconfonticon_succeed:hover{
+  color: #fff;
+}
 
 .navItem_left:hover {
   background-color: #f2f2f2;

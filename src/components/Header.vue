@@ -17,11 +17,6 @@
     </div>
 
     <div class="flex-align-items" style="justify-content: space-around; margin: auto 0;position: relative">
-      <div :class="{'pub': pub}" @click="showPub">
-        <i class="iconfont iconfontjiahao animate__animated " @mouseenter="bb"
-           :class="{ animate__heartBeat: ss}"
-           style="font-size: 30px;color: red"></i>
-      </div>
       <a href="javascript:" class="homeMenus" @mouseenter="aboutShow=true" @mouseleave="aboutShow=false">
         <strong style="margin: auto 10px;">
           About
@@ -95,35 +90,6 @@ export default {
     )
     const self = reactive({
           play: true,
-          ss: false,
-          pub: computed(() => {
-            return store.state.pub
-          }),
-          trans: computed(() => {
-            return store.state.trans
-          }),
-          showPub: () => {
-            if (self.pub) {
-              store.commit('set_pub', {name: 'trans', value: !self.pub})
-              setTimeout(() => {
-                store.commit('set_pub', {name: 'pub', value: !self.pub})
-              }, 100)
-            } else {
-              store.commit('set_pub', {name: 'pub', value: !self.pub})
-
-              setTimeout(() => {
-                store.commit('set_pub', {name: 'trans', value: !self.pub})
-              }, 10)
-            }
-          },
-          bb: () => {
-            if (!self.ss) {
-              self.ss = true
-              setTimeout(() => {
-                self.ss = false
-              }, 500)
-            }
-          },
           playMusic: () => {
             const audio = document.getElementById('audio')
             self.play ? audio.pause() : audio.play()
@@ -258,18 +224,6 @@ export default {
 
 .login:hover {
   color: #2f2b2b;
-}
-
-.pub::after {
-  content: '';
-  top: 0;
-  right: 0;
-  left: 0;
-  bottom: 0;
-  z-index: 80;
-  position: fixed;
-  cursor: default;
-  background-color: rgba(0, 0, 0, 0.23);
 }
 
 </style>

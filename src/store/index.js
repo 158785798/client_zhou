@@ -25,9 +25,6 @@ export default createStore({
       userFollowedMomentsRefresh: true,
       allMomentsRefresh: true,
     },
-    pub: false,
-    trans: false,
-    blogs: []
   },
   mutations: {
     saveUserInfo(state, payload) {
@@ -37,18 +34,6 @@ export default createStore({
     },
     clearUserInfo(state) {
       state.userInfo = {}
-    },
-    set_pub(state, payload) {
-      state[payload.name] = payload.value
-    },
-    push_blogs(state, payload) {
-      state.blogs = state.blogs.concat(payload)
-    },
-    unShiftBlogs(state, payload) {
-      state.blogs.unshift(payload)
-    },
-    spliceBlogs(state, payload) {
-      state.blogs.splice(payload, 1)
     },
     set_t(state, payload) {
       state.t = payload

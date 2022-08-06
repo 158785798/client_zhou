@@ -87,7 +87,6 @@ export default {
         const param = {blog_id: self.blog_id, content: self.content}
         const res = await instance.post('/comment', param)
         self.comments.unshift(res.data)
-        store.commit('set_pub', {name: 'pub', value: false})
         self.content = ''
         self.isEmojiShow = false
         ElMessage.success('发布成功！')

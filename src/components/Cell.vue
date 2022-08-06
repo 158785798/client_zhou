@@ -47,8 +47,10 @@
       <div title="评论" class="content-btn">
         <span class="btn-item" @click="comment(item)" :class="{'is-open': item.commentShow}">
         <i class="iconfont iconfontico_pinglun"></i>
-        <span style="font-size: 13px;margin-left: 5px">239</span>
-          </span>
+        <span v-if="item.comments !==0" style="font-size: 13px;margin-left: 5px">{{ item.comments }}</span>
+          <span v-else style="font-size: 13px; margin-left: 5px">评论</span>
+        </span>
+
       </div>
       <div title="转发" class="content-btn">
         <span class="btn-item">
@@ -59,28 +61,31 @@
     </div>
     <Comment v-if="item.commentShow" :blog_id="item.id"></Comment>
   </div>
-  <div v-show="curentImgGroups.length !== 0"
-       style="display: flex;flex-direction:column;position: fixed;top:0; bottom: 0; left: 0; right: 0;z-index: 300">
-    <div
-        style="position: relative; flex: 1;justify-content:center;align-items: center;display: flex;overflow: hidden; ">
-      <div :class="{'item-sw': curentImgGroups.length !== 0}" @click="curentImgGroups=[]"></div>
-      <div style="z-index: 300;">
-        <img v-if="cur_each.direction==='h'" :src="cur_each.large" alt="" style="max-height: 92vh">
-        <img v-else :src="cur_each.large" alt="" style="max-width: 100vw">
+  <teleport to="body">
+    <div v-show="curentImgGroups.length !== 0"
+         style="display: flex;flex-direction:column;position: fixed;top:20px; bottom: 0; left: 0; right: 0;z-index: 300">
+      <div
+          style="position: relative; flex: 1;justify-content:center;align-items: center;display: flex;overflow: hidden; ">
+        <div :class="{'item-sw': curentImgGroups.length !== 0}" @click="curentImgGroups=[]"></div>
+        <div style="z-index: 300;">
+          <img v-if="cur_each.direction==='h'" :src="cur_each.large" alt="" style="max-height: 92vh">
+          <img v-else :src="cur_each.large" alt="" style="max-width: 100vw">
+        </div>
       </div>
-    </div>
 
-    <div style="display: flex; justify-content: center; background-color: rgba(0,0,0,0.8);z-index: 300">
-      <div v-for="(each, index) in curentImgGroups" @click="to_cur(index)"
-           style="margin: 15px 3px; width: 55px; height: 55px; overflow: hidden;position: relative"
-           :class="{'is-active': cur_index===index}">
-        <div :class="{'bottom-item': cur_index!==index}">
-          <img v-if="each.direction==='h'" :src="each.middle" alt="" width="55" style="cursor: pointer;">
-          <img v-else :src="each.middle" alt="" height="55" style="cursor: pointer;">
+      <div style="display: flex; justify-content: center; background-color: rgba(0,0,0,0.8);z-index: 300">
+        <div v-for="(each, index) in curentImgGroups" @click="to_cur(index)"
+             style="margin: 15px 3px; width: 55px; height: 55px; overflow: hidden;position: relative"
+             :class="{'is-active': cur_index===index}">
+          <div :class="{'bottom-item': cur_index!==index}">
+            <img v-if="each.direction==='h'" :src="each.middle" alt="" width="55" style="cursor: pointer;">
+            <img v-else :src="each.middle" alt="" height="55" style="cursor: pointer;">
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  </teleport>
+
 </template>
 
 <script>
@@ -93,14 +98,14 @@ import Comment from './Comment.vue'
 
 export default {
   name: "Cell",
-  components:{
+  components: {
     Comment
   },
   props: {
     item: {
       type: Object,
     },
-    index:{
+    index: {
       type: Number
     },
     showlikes: {
@@ -144,7 +149,7 @@ export default {
       },
 
       to_tab: (u_id) => {
-          router.push({name: 'UserPage', params: {u_id: u_id}})
+        router.push({name: 'UserPage', params: {u_id: u_id}})
       },
       follow_in: async (value) => {
         const res = await instance.get('/follow_in', {params: {moment_id: value.id}})
@@ -164,9 +169,9 @@ export default {
           item.likes++
         }
       },
-      comment:(item)=>{
+      comment: (item) => {
         item.commentShow = !item.commentShow
-        if (item.commentShow){
+        if (item.commentShow) {
 
         }
       },
@@ -187,6 +192,7 @@ export default {
 
 <style lang="scss" scoped>
 @import "../global";
+
 .content-btn {
   flex: 1;
   display: flex;
@@ -210,7 +216,6 @@ export default {
 }
 
 
-
 .bottom-item:hover:after {
   content: '';
   top: 0;
@@ -225,7 +230,8 @@ export default {
 .is-active {
   border: 3px solid $icon-hover-color;
 }
-.is-open{
+
+.is-open {
   color: $icon-hover-color
 }
 
