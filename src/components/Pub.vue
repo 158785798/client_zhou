@@ -106,7 +106,7 @@ export default {
         self.loading = false
         self.blogImgs = []
         self.content = ''
-        ElMessage.success('发布成功！')
+        context.emit('success_callback','发布成功')
       },
       upload_success: (res) => {
         self.blogImgs.push(res)

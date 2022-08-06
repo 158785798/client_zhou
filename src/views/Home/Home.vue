@@ -2,16 +2,33 @@
   <div class="h-hrader">
     <Header></Header>
   </div>
-
   <transition name="pub">
-    <Pub v-show="pub" @unshift_blog="unshift_blog" @close_pub="pub=false"></Pub>
+    <Pub v-show="pub" @success_callback="success_callback" @unshift_blog="unshift_blog" @close_pub="pub=false"></Pub>
   </transition>
+  <transition name="fade">
+    <div v-show="show" style="
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  border-radius: 10px;
+  background-color: rgba(0,0,0,0.76); width: 200px;
+  height: 130px; left:0; right:0;top:0;bottom:0;
+  z-index: 3000; margin: auto">
+      <div>
+        <div class="iconfont iconfonticon_succeed" style="font-size: 40px;margin: 10px; font-weight: lighter"></div>
+        <div>{{ message }}</div>
+      </div>
+    </div>
+  </transition>
+
   <el-container style="margin: 50px auto">
     <span @click="pub=!pub" style="position: fixed;z-index:120;transform: translate(200px, -35px)">
       <i class="iconfont iconfontjiahao " style="font-size: 30px;color: red;"></i>
   </span>
     <div style="width: 100%; position: relative" :class="{'pub': pub}" @click="pub=false">
-      <router-view :blog="blog"/>
+      <router-view :blog="blog" @success_callback="success_callback"/>
     </div>
   </el-container>
 
@@ -33,8 +50,17 @@ export default {
 
       delDialog: false,
       blog: {},
+      show: false,
+      message: '',
       pub: false,
-      unshift_blog:(value)=>{
+      success_callback: (message) => {
+        self.message = message
+        self.show = true
+        setTimeout(() => {
+          self.show = false
+        }, 1000)
+      },
+      unshift_blog: (value) => {
         self.blog = value
       },
       show_delDialog: () => {
@@ -49,15 +75,35 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */
+{
+  opacity: 0;
+}
+
+.iconfonticon_succeed {
+  cursor: default;
+}
+
+.iconfonticon_succeed:hover {
+  color: #fff;
+}
 
 .pub-enter-active, .pub-leave-active {
   transition: all .3s linear;
 }
-.pub-enter-from, .pub-leave-to /* .fade-leave-active below version 2.1.8 */ {
+
+.pub-enter-from, .pub-leave-to /* .fade-leave-active below version 2.1.8 */
+{
   transform: translateY(200px) rotateX(90deg);
 
 }
-.pub-enter-to ,.pub-leave-from /* .fade-leave-active below version 2.1.8 */ {
+
+.pub-enter-to, .pub-leave-from /* .fade-leave-active below version 2.1.8 */
+{
   //transform: translateY(0) rotateX(-180deg);
 }
 
@@ -70,6 +116,7 @@ export default {
   top: 0;
   z-index: 100
 }
+
 .pub::after {
   content: '';
   top: 0;

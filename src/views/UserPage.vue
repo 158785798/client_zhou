@@ -29,7 +29,7 @@
 
         </div>
         <div>
-          <el-button style="border-radius: 20px">关注</el-button>
+          <el-button style="border-radius: 20px" @click="success_callback('关注成功')">关注</el-button>
         </div>
       </div>
       <div style="font-size: 12px; color: rgba(0,0,0,0.49);margin: 5px">
@@ -37,8 +37,8 @@
       </div>
     </header>
 
-    <Cell @show_delDialog="show_delDialog" @back_blog_id="back_blog_id" :cur_blog_id="cur_blog_id" :blog="blog"
-          :index="index" v-for="(blog, index) in blogs"></Cell>
+    <UserCell @show_delDialog="show_delDialog" @success_callback="success_callback" @back_blog_id="back_blog_id" :cur_blog_id="cur_blog_id" :blog="blog"
+          :index="index" v-for="(blog, index) in blogs"></UserCell>
     <div style="text-align: center; color: rgba(0,0,0,0.53)">
       <!--        <span v-loading="true"  element-loading-background="transparent" v-if="endLoading"></span>-->
       <img src="../assets/loading2.gif" alt="" style="border-radius: 20px" width="150" v-show="endLoading">
@@ -54,15 +54,18 @@ import {computed, onUnmounted, onMounted, reactive, toRefs} from "vue";
 import {useRouter, useRoute} from "vue-router";
 import instance from "../api/request.js";
 import {ElMessage} from "element-plus";
-import Cell from "../components/Cell.vue";
+import UserCell from "../components/UserCell.vue";
 
 export default {
   name: "UserPage",
   components: {
     CutImg,
-    Cell,
+    UserCell,
   },
-  setup() {
+  emits:[
+    'success_callback'
+  ],
+  setup(props, context) {
     const store = useStore()
     const router = useRouter()
     const route = useRoute()
@@ -92,6 +95,9 @@ export default {
       serverPageSize: 7,
       loading: true,
       endLoading: false,
+      success_callback:(message)=>{
+        context.emit('success_callback', message)
+      },
       back_blog_id: (blog_id) => {
         if (self.cur_blog_id === blog_id) {
           self.cur_blog_id = -1
@@ -104,12 +110,16 @@ export default {
         return self.pageSize > self.serverPageSize || self.endLoading
       }),
       underlineNavIndex: 0,
-      underlineNavItems: [
-        {name: 'overview'},
-        {name: 'repositories'},
-        {name: 'projects'},
-        {name: 'packages'},
-      ],
+      dropdownMenus: [
+      {name: '置顶', icon: 'iconfont iconfonticon_zhiding'},
+      {name: '广场可见', icon: 'iconfont iconfontpengyouquan'},
+      {name: '粉丝可见', icon: 'iconfont iconfontziyuan'},
+      {name: '仅自己可见', icon: 'iconfont iconfontyonghu'},
+      {name: '删帖', icon: 'iconfont iconfontshanchu2', fu: (blog_id, blog_index)=>{
+          self.show_delDialog(blog_id, blog_index)
+          self.back_blog_id(blog_id)
+        }},
+    ],
       u_confirm: async () => {
         self.blogs.splice(self.blog_index, 1)
         self.delDialog = false

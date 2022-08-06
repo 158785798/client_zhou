@@ -1,5 +1,6 @@
 <template>
-  <div style="font-size: 18px;background-color: #fff;padding: 20px;margin-bottom: 8px; border-radius: 6px;position: relative">
+  <div
+      style="font-size: 18px;background-color: #fff;padding: 20px;margin-bottom: 8px; border-radius: 6px;position: relative">
     <header style="display: flex; justify-content: space-between">
       <img class="avatar" :src="blog.userInfo.avatarUrl" alt="" style="width: 40px; height: 40px; border-radius: 50%"
            @click="to_tab(blog.userInfo.id)">
@@ -8,17 +9,21 @@
           <strong class="avatar" @click="to_tab(blog.userInfo.id)">{{ blog.userInfo.username }}</strong>
         </div>
         <div style="color: rgba(0,0,0,0.47); font-size: 12px">
-          {{ blog.pub_time }}
+          {{ blog.create_time }}
         </div>
       </div>
       <div style="">
-<!--        <i v-if="blog.is_self" class="iconfont iconfontshanchu1" @click="show_delDialog(blog.id, index)"></i>-->
-        <i class="iconfont iconfontarrow-right" style="" @click="back_blog_id(blog.id)" :class="{'up-dropdown-menu': blog.id===cur_blog_id}"></i>
+        <!--        <i v-if="blog.is_self" class="iconfont iconfontshanchu1" @click="show_delDialog(blog.id, index)"></i>-->
+        <span style="color: rgba(0,0,0,0.47);font-size: 12px; margin-right: 5px">{{ blog.permission_text }}</span>
+        <i class="iconfont iconfontxialajiantouxiao" style="padding:5px; border-radius: 50%"
+           @click="back_blog_id(blog.id)" :class="{'up-dropdown-menu': blog.id===cur_blog_id}"></i>
         <div v-show="blog.id===cur_blog_id" style="width:150px;overflow: hidden;
-        background-color: #fff;z-index: 10;position: absolute;margin-top: 10px;border-radius: 6px; box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.25);">
-          <div style="cursor: pointer;font-size: .875rem" class="navItem_left" v-for="m in nvamenus" @click="m.fu(blog.id, index)">
-            <div style="padding:10px 20px" v-if="blog.is_self">
-              <strong class="iconfont hover" :class="m.icon" style="margin-right: 10px"></strong>
+        background-color: #fff;z-index: 10;position: absolute;margin-top: 2px;right:20px;border-radius: 6px; box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.25);">
+          <div style="cursor: pointer;font-size: .875rem" class="navItem_left" v-for="m in blog.dropdown_menus"
+               @click="to_do(m, blog.id, index)">
+            <div style="padding:10px 15px">
+              <strong class="iconfont hover" :class="m.icon"
+                      style="margin-right: 10px;font-size: 14px;background-color: rgba(0,0,0,0.1); padding: 8px; border-radius: 50%"></strong>
               <span>{{ m.name }}</span>
             </div>
           </div>
@@ -26,7 +31,7 @@
 
       </div>
     </header>
-    <div class="content" style="font-size: 14px;margin-left: 50px" v-html="blog.content">
+    <div class="content" style="font-size: 14px;margin-left: 50px;line-height: 1.5" v-html="blog.content">
     </div>
     <div style="margin: 4px 50px">
       <div style="display: inline-block; margin: 4px 2px" v-for="(each, index) in blog.images"
@@ -137,22 +142,13 @@ export default {
   },
   emits: [
     'show_delDialog',
-    'back_blog_id'
+    'back_blog_id',
+    'success_callback'
   ],
   setup(props, context) {
     const store = useStore()
     const router = useRouter()
     const self = reactive({
-      nvamenus: [
-        {name: '置顶', icon: 'iconfont iconfonticon_zhiding', fu:(blog_id)=>{console.log(blog_id)}},
-        {name: '广场可见', icon: 'iconfont iconfontpengyouquan', fu:(blog_id)=>{console.log(blog_id)}},
-        {name: '粉丝可见', icon: 'iconfont iconfontziyuan', fu:(blog_id)=>{console.log(blog_id)}},
-        {name: '仅自己可见', icon: 'iconfont iconfontyonghu', fu:(blog_id)=>{console.log(blog_id)}},
-        {name: '删除', icon: 'iconfont iconfontshanchu2', fu: (blog_id, blog_index)=>{
-          self.show_delDialog(blog_id, blog_index)
-            self.back_blog_id(blog_id)
-        }},
-      ],
       curentImgGroups: [],
       cur_each: {},
       cur_index: 0,
@@ -160,7 +156,26 @@ export default {
       userInfo: computed(() => store.state.userInfo),
       iscomment: props.iscomment,
       loading: false,
-      back_blog_id:(blog_id)=>{
+      to_do: async (m, blog_id, blog_index) => {
+        console.log(m.id);
+        if (m.id === 1) {
+          context.emit('success_callback', '置顶成功')
+        } else if (m.id === 2) {
+          context.emit('success_callback', '修改成功')
+        } else if (m.id === 3) {
+          context.emit('success_callback', '修改成功')
+        } else if (m.id === 4) {
+          context.emit('success_callback', '修改成功')
+        } else if (m.id === 5) {
+          self.show_delDialog(blog_id, blog_index)
+        } else if (m.id === 6) {
+          context.emit('success_callback', '收藏成功')
+        } else if (m.id === 7) {
+          context.emit('success_callback', '举报成功')
+        }
+        self.back_blog_id(blog_id)
+      },
+      back_blog_id: (blog_id) => {
         context.emit('back_blog_id', blog_id)
       },
       show_delDialog: (blog_id, blog_index) => {
@@ -258,7 +273,8 @@ export default {
   position: absolute;
   cursor: pointer;
 }
-.up-dropdown-menu:after{
+
+.up-dropdown-menu:after {
   content: '';
   top: 0;
   right: 0;
@@ -268,12 +284,14 @@ export default {
   cursor: pointer;
 }
 
-.hover{
+.hover {
   color: #707070
 }
-.hover:hover{
+
+.hover:hover {
   color: #707070
 }
+
 .is-active {
   border: 3px solid $icon-hover-color;
 }

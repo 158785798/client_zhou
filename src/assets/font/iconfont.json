@@ -6,6 +6,27 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "2076220",
+      "name": " 下拉箭头小",
+      "font_class": "xialajiantouxiao",
+      "unicode": "e87e",
+      "unicode_decimal": 59518
+    },
+    {
+      "icon_id": "22978005",
+      "name": "举报",
+      "font_class": "jubao",
+      "unicode": "e89c",
+      "unicode_decimal": 59548
+    },
+    {
+      "icon_id": "9666187",
+      "name": "收藏",
+      "font_class": "shoucang1",
+      "unicode": "e632",
+      "unicode_decimal": 58930
+    },
+    {
       "icon_id": "1330567",
       "name": "朋友圈",
       "font_class": "pengyouquan",
@@ -281,7 +302,7 @@
     {
       "icon_id": "11487977",
       "name": "arrow-right",
-      "font_class": "arrow-right",
+      "font_class": "arrow-bottom",
       "unicode": "e743",
       "unicode_decimal": 59203
     },

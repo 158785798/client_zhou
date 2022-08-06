@@ -4,7 +4,7 @@ import {ElMessage} from "element-plus";
 
 
 const instance = axios.create({
-  baseURL: process.env.NODE_ENV === 'development' ? 'http://127.0.0.1:8099/api' : 'http://8.141.150.118:8096/api',
+  baseURL: process.env.NODE_ENV === 'development' ? 'http://127.0.0.1:8090/api' : 'http://8.141.150.118:8096/api',
 })
 
 instance.interceptors.request.use(

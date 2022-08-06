@@ -60,6 +60,10 @@ a:hover {
 .iconfontguanbi1 {
   color: red;
 }
+.iconfontxialajiantouxiao:hover{
+  background-color: $icon-hover-bg-color;
+  color: $icon-hover-color
+}
 
 .iconfont {
   cursor: pointer;

@@ -2,23 +2,7 @@
   <el-backtop :bottom="100" class="backtop">
     <i class="iconfont iconfonttubiao02" style="font-size: 20px"></i>
   </el-backtop>
-  <transition name="fade">
-  <div v-show="successFollow" style="
-  color: #fff;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: fixed;
-  border-radius: 10px;
-  background-color: rgba(0,0,0,0.76); width: 200px;
-  height: 130px; left:0; right:0;top:0;bottom:0;
-  z-index: 3000; margin: auto">
-    <div>
-    <div class="iconfont iconfonticon_succeed" style="font-size: 40px;margin: 10px; font-weight: lighter"></div>
-      <div>关注成功</div>
-    </div>
-  </div>
-  </transition>
+
   <div class="common-layout" style="display: flex;height: 100%" :class="{'del-blog': delDialog}">
     <div class="u-del-blog" v-show="delDialog">
       <div style="margin-bottom: 20px; ">确定要删帖吗？</div>
@@ -38,7 +22,7 @@
       </div>
     </aside>
     <main v-loading="loading" style="margin: 15px 10px 0 10px; padding: 0;flex: 1">
-      <Cell @show_delDialog="show_delDialog" @back_blog_id="back_blog_id" :cur_blog_id="cur_blog_id" :blog="blog" :index="index" v-for="(blog, index) in blogs"></Cell>
+      <SquareCell @show_delDialog="show_delDialog" @back_blog_id="back_blog_id" :cur_blog_id="cur_blog_id" :blog="blog" :index="index" v-for="(blog, index) in blogs"></SquareCell>
       <div style="text-align: center; color: rgba(0,0,0,0.53)">
         <!--        <span v-loading="true"  element-loading-background="transparent" v-if="endLoading"></span>-->
         <img src="../assets/loading2.gif" alt="" style="border-radius: 20px" width="150" v-show="endLoading">
@@ -89,7 +73,7 @@
 
 <script>
 
-import Cell from "../components/Cell.vue";
+import SquareCell from "../components/SquareCell.vue";
 import {computed, onMounted, onUnmounted, reactive, toRefs,watch} from "vue";
 import instance from "../api/request.js";
 import {ElMessage} from "element-plus";
@@ -101,7 +85,7 @@ export default {
   name: "TiamoBlog",
   props:['blog'],
   components: {
-    Cell
+    SquareCell
   },
   setup(props, context) {
     const store = useStore()
@@ -126,7 +110,6 @@ export default {
         '世界只有一个中国',
       ],
       taste: [],
-      successFollow:false,
       blogs: [],
       largeImgPath: '',
       delDialog: false,
@@ -156,8 +139,8 @@ export default {
       u_confirm: async () => {
         self.blogs.splice(self.blog_index, 1)
         self.delDialog = false
-        ElMessage.success('删除成功!')
         const res = await instance.delete('/del_blog', {params: {blog_id: self.blog_id}})
+        context.emit('success_callback', '删除成功')
       },
       u_cancel: () => {
         self.delDialog = false
@@ -226,18 +209,6 @@ export default {
 
 <style lang="scss" scoped>
 @import "../global";
-.fade-enter-active, .fade-leave-active {
-  transition: opacity .5s;
-}
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
-  opacity: 0;
-}
-.iconfonticon_succeed{
-  cursor: default;
-}
-.iconfonticon_succeed:hover{
-  color: #fff;
-}
 
 .navItem_left:hover {
   background-color: #f2f2f2;
