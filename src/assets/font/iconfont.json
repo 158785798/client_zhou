@@ -6,6 +6,69 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "1330567",
+      "name": "朋友圈",
+      "font_class": "pengyouquan",
+      "unicode": "e73b",
+      "unicode_decimal": 59195
+    },
+    {
+      "icon_id": "20156738",
+      "name": "广场",
+      "font_class": "guangchang",
+      "unicode": "e630",
+      "unicode_decimal": 58928
+    },
+    {
+      "icon_id": "1546607",
+      "name": "用户",
+      "font_class": "yonghu",
+      "unicode": "e69f",
+      "unicode_decimal": 59039
+    },
+    {
+      "icon_id": "145704",
+      "name": "分类or广场or其他_填充",
+      "font_class": "fenleiorguangchangorqitatianchong",
+      "unicode": "e67d",
+      "unicode_decimal": 59005
+    },
+    {
+      "icon_id": "10580798",
+      "name": "粉丝",
+      "font_class": "ziyuan",
+      "unicode": "e62f",
+      "unicode_decimal": 58927
+    },
+    {
+      "icon_id": "974857",
+      "name": "删除",
+      "font_class": "shanchu2",
+      "unicode": "e6be",
+      "unicode_decimal": 59070
+    },
+    {
+      "icon_id": "13954736",
+      "name": "权限管理",
+      "font_class": "quanxianguanli",
+      "unicode": "e62e",
+      "unicode_decimal": 58926
+    },
+    {
+      "icon_id": "26393542",
+      "name": "icon_置顶",
+      "font_class": "icon_zhiding",
+      "unicode": "e65a",
+      "unicode_decimal": 58970
+    },
+    {
+      "icon_id": "2154470",
+      "name": "44_点点点",
+      "font_class": "diandiandianshu",
+      "unicode": "e67a",
+      "unicode_decimal": 59002
+    },
+    {
       "icon_id": "22624159",
       "name": "成功",
       "font_class": "icon_succeed",

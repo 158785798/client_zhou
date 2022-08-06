@@ -1,26 +1,37 @@
 <template>
-  <div style="font-size: 18px;background-color: #fff;padding: 20px;margin-bottom: 8px; border-radius: 6px">
-    <header style="display: flex; ">
-      <img class="avatar" :src="item.userInfo.avatarUrl" alt="" style="width: 40px; height: 40px; border-radius: 50%"
-           @click="to_tab(item.userInfo.id)">
-      <div style="margin: 10px" class="avatar">
-        <div style="margin-bottom: 5px; cursor: pointer" @click="to_tab(item.userInfo.id)">
-          <strong>{{ item.userInfo.username }}</strong>
+  <div style="font-size: 18px;background-color: #fff;padding: 20px;margin-bottom: 8px; border-radius: 6px;position: relative">
+    <header style="display: flex; justify-content: space-between">
+      <img class="avatar" :src="blog.userInfo.avatarUrl" alt="" style="width: 40px; height: 40px; border-radius: 50%"
+           @click="to_tab(blog.userInfo.id)">
+      <div style="margin: 10px; flex: 1">
+        <div style="margin-bottom: 5px;">
+          <strong class="avatar" @click="to_tab(blog.userInfo.id)">{{ blog.userInfo.username }}</strong>
         </div>
         <div style="color: rgba(0,0,0,0.47); font-size: 12px">
-          {{ item.pub_time }}
+          {{ blog.pub_time }}
         </div>
       </div>
-      <div style="text-align: right; flex: 1">
-        <i v-if="item.is_self" class="iconfont iconfontshanchu1" @click="show_delDialog(item.id, index)"></i>
+      <div style="">
+<!--        <i v-if="blog.is_self" class="iconfont iconfontshanchu1" @click="show_delDialog(blog.id, index)"></i>-->
+        <i class="iconfont iconfontarrow-right" style="" @click="back_blog_id(blog.id)" :class="{'up-dropdown-menu': blog.id===cur_blog_id}"></i>
+        <div v-show="blog.id===cur_blog_id" style="width:150px;overflow: hidden;
+        background-color: #fff;z-index: 10;position: absolute;margin-top: 10px;border-radius: 6px; box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.25);">
+          <div style="cursor: pointer;font-size: .875rem" class="navItem_left" v-for="m in nvamenus" @click="m.fu(blog.id, index)">
+            <div style="padding:10px 20px" v-if="blog.is_self">
+              <strong class="iconfont hover" :class="m.icon" style="margin-right: 10px"></strong>
+              <span>{{ m.name }}</span>
+            </div>
+          </div>
+        </div>
+
       </div>
     </header>
-    <div class="content" style="font-size: 14px;margin-left: 50px" v-html="item.content">
+    <div class="content" style="font-size: 14px;margin-left: 50px" v-html="blog.content">
     </div>
     <div style="margin: 4px 50px">
-      <div style="display: inline-block; margin: 4px 2px" v-for="(each, index) in item.images"
+      <div style="display: inline-block; margin: 4px 2px" v-for="(each, index) in blog.images"
            :data-id="each.name">
-        <div @click="set_current_groups(item, index)"
+        <div @click="set_current_groups(blog, index)"
              style="overflow: hidden; width: 96px; height: 96px; border-radius: 7px">
           <img v-if="each.direction==='h'" :src="each.middle" alt="" width="96" style="cursor: zoom-in">
           <img v-else :src="each.middle" alt="" height="96" style="cursor: zoom-in">
@@ -28,45 +39,45 @@
       </div>
     </div>
     <div style="margin-top: 15px; display: flex; justify-content: space-between; color: #808080;">
-      <div v-if="!item.is_like" title="点赞" class="content-btn">
-        <span class="btn-item" @click="like(item)">
+      <div v-if="!blog.is_like" title="点赞" class="content-btn">
+        <span class="btn-blog" @click="like(blog)">
           <i class="iconfont iconfontxin" style="font-size: 14px"></i>
-          <span v-if="item.likes !==0" style="font-size: 13px;margin-left: 5px">{{ item.likes }}</span>
+          <span v-if="blog.likes !==0" style="font-size: 13px;margin-left: 5px">{{ blog.likes }}</span>
           <span v-else style="font-size: 13px; margin-left: 5px">赞</span>
           </span>
       </div>
 
       <div v-else title="点赞" class="content-btn">
-        <span class="btn-item" @click="like(item)">
+        <span class="btn-blog" @click="like(blog)">
           <i class="iconfont iconfontaixin" style="font-size: 14px;color: red"></i>
-          <span v-if="item.likes !==0" style="font-size: 13px;margin-left: 5px">{{ item.likes }}</span>
+          <span v-if="blog.likes !==0" style="font-size: 13px;margin-left: 5px">{{ blog.likes }}</span>
           <span v-else style="font-size: 13px; margin-left: 5px">赞</span>
           </span>
       </div>
 
       <div title="评论" class="content-btn">
-        <span class="btn-item" @click="comment(item)" :class="{'is-open': item.commentShow}">
+        <span class="btn-blog" @click="comment(blog)" :class="{'is-open': blog.commentShow}">
         <i class="iconfont iconfontico_pinglun"></i>
-        <span v-if="item.comments !==0" style="font-size: 13px;margin-left: 5px">{{ item.comments }}</span>
+        <span v-if="blog.comments !==0" style="font-size: 13px;margin-left: 5px">{{ blog.comments }}</span>
           <span v-else style="font-size: 13px; margin-left: 5px">评论</span>
         </span>
 
       </div>
       <div title="转发" class="content-btn">
-        <span class="btn-item">
+        <span class="btn-blog">
         <i class="iconfont iconfontzhuanfa1"></i>
         <span style="font-size: 13px;margin-left: 5px">405</span>
           </span>
       </div>
     </div>
-    <Comment v-if="item.commentShow" :blog_id="item.id"></Comment>
+    <Comment v-if="blog.commentShow" :blog_id="blog.id"></Comment>
   </div>
   <teleport to="body">
     <div v-show="curentImgGroups.length !== 0"
          style="display: flex;flex-direction:column;position: fixed;top:20px; bottom: 0; left: 0; right: 0;z-index: 300">
       <div
           style="position: relative; flex: 1;justify-content:center;align-items: center;display: flex;overflow: hidden; ">
-        <div :class="{'item-sw': curentImgGroups.length !== 0}" @click="curentImgGroups=[]"></div>
+        <div :class="{'blog-sw': curentImgGroups.length !== 0}" @click="curentImgGroups=[]"></div>
         <div style="z-index: 300;">
           <img v-if="cur_each.direction==='h'" :src="cur_each.large" alt="" style="max-height: 92vh">
           <img v-else :src="cur_each.large" alt="" style="max-width: 100vw">
@@ -77,7 +88,7 @@
         <div v-for="(each, index) in curentImgGroups" @click="to_cur(index)"
              style="margin: 15px 3px; width: 55px; height: 55px; overflow: hidden;position: relative"
              :class="{'is-active': cur_index===index}">
-          <div :class="{'bottom-item': cur_index!==index}">
+          <div :class="{'bottom-blog': cur_index!==index}">
             <img v-if="each.direction==='h'" :src="each.middle" alt="" width="55" style="cursor: pointer;">
             <img v-else :src="each.middle" alt="" height="55" style="cursor: pointer;">
           </div>
@@ -102,10 +113,13 @@ export default {
     Comment
   },
   props: {
-    item: {
+    blog: {
       type: Object,
     },
     index: {
+      type: Number
+    },
+    cur_blog_id: {
       type: Number
     },
     showlikes: {
@@ -122,12 +136,23 @@ export default {
     }
   },
   emits: [
-    'show_delDialog'
+    'show_delDialog',
+    'back_blog_id'
   ],
   setup(props, context) {
     const store = useStore()
     const router = useRouter()
     const self = reactive({
+      nvamenus: [
+        // {name: '置顶', icon: 'iconfont iconfonticon_zhiding', },
+        // {name: '广场可见', icon: 'iconfont iconfontpengyouquan'},
+        // {name: '粉丝可见', icon: 'iconfont iconfontziyuan'},
+        // {name: '仅自己可见', icon: 'iconfont iconfontyonghu'},
+        {name: '删除', icon: 'iconfont iconfontshanchu2', fu: (blog_id, blog_index)=>{
+          self.show_delDialog(blog_id, blog_index)
+            self.back_blog_id(blog_id)
+        }},
+      ],
       curentImgGroups: [],
       cur_each: {},
       cur_index: 0,
@@ -135,6 +160,9 @@ export default {
       userInfo: computed(() => store.state.userInfo),
       iscomment: props.iscomment,
       loading: false,
+      back_blog_id:(blog_id)=>{
+        context.emit('back_blog_id', blog_id)
+      },
       show_delDialog: (blog_id, blog_index) => {
         context.emit('show_delDialog', blog_id, blog_index)
       },
@@ -142,9 +170,9 @@ export default {
         self.cur_index = index
         self.cur_each = self.curentImgGroups[index]
       },
-      set_current_groups: (item, index) => {
-        self.curentImgGroups = item.images
-        self.cur_each = item.images[index]
+      set_current_groups: (blog, index) => {
+        self.curentImgGroups = blog.images
+        self.cur_each = blog.images[index]
         self.cur_index = index
       },
 
@@ -158,20 +186,20 @@ export default {
           store.commit('refreshAllMoments', value.user)
         }
       },
-      like: async (item) => {
-        if (item.is_like) {
-          await instance.get('/dislike', {params: {blog_id: item.id}})
-          item.is_like = false
-          item.likes--
+      like: async (blog) => {
+        if (blog.is_like) {
+          await instance.get('/dislike', {params: {blog_id: blog.id}})
+          blog.is_like = false
+          blog.likes--
         } else {
-          await instance.get('/like', {params: {blog_id: item.id}})
-          item.is_like = true
-          item.likes++
+          await instance.get('/like', {params: {blog_id: blog.id}})
+          blog.is_like = true
+          blog.likes++
         }
       },
-      comment: (item) => {
-        item.commentShow = !item.commentShow
-        if (item.commentShow) {
+      comment: (blog) => {
+        blog.commentShow = !blog.commentShow
+        if (blog.commentShow) {
 
         }
       },
@@ -193,18 +221,22 @@ export default {
 <style lang="scss" scoped>
 @import "../global";
 
+.navItem_left:hover {
+  background-color: #f2f2f2;
+}
+
 .content-btn {
   flex: 1;
   display: flex;
   justify-content: center;
 }
 
-.btn-item:hover {
+.btn-blog:hover {
   cursor: pointer;
   color: $icon-hover-color;
 }
 
-.bottom-item:after {
+.bottom-blog:after {
   content: '';
   top: 0;
   right: 0;
@@ -216,7 +248,7 @@ export default {
 }
 
 
-.bottom-item:hover:after {
+.bottom-blog:hover:after {
   content: '';
   top: 0;
   right: 0;
@@ -226,7 +258,22 @@ export default {
   position: absolute;
   cursor: pointer;
 }
+.up-dropdown-menu:after{
+  content: '';
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  position: absolute;
+  cursor: pointer;
+}
 
+.hover{
+  color: #707070
+}
+.hover:hover{
+  color: #707070
+}
 .is-active {
   border: 3px solid $icon-hover-color;
 }
@@ -235,7 +282,7 @@ export default {
   color: $icon-hover-color
 }
 
-.item-sw::before {
+.blog-sw::before {
   content: '';
   top: 0;
   right: 0;

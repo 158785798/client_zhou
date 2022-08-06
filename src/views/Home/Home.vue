@@ -7,10 +7,10 @@
     <Pub v-show="pub" @unshift_blog="unshift_blog" @close_pub="pub=false"></Pub>
   </transition>
   <el-container style="margin: 50px auto">
-    <div style="width: 100%; position: relative">
-      <div :class="{'pub': pub}" @click="pub=!pub" style="position: fixed;right: 0; left: 0; margin: auto;z-index:120;text-align: center">
-    <div class="iconfont iconfontjiahao " style="font-size: 30px;color: red;transform: translate(-200px, -35px)"></div>
-  </div>
+    <span @click="pub=!pub" style="position: fixed;z-index:120;transform: translate(200px, -35px)">
+      <i class="iconfont iconfontjiahao " style="font-size: 30px;color: red;"></i>
+  </span>
+    <div style="width: 100%; position: relative" :class="{'pub': pub}" @click="pub=false">
       <router-view :blog="blog"/>
     </div>
   </el-container>

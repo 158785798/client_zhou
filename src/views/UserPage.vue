@@ -1,45 +1,50 @@
 <template>
-  <el-backtop :bottom="100" class="backtop">
-    <i class="iconfont iconfonttubiao02" style="font-size: 20px"></i>
-  </el-backtop>
-  <div :class="[{'cut-img-mask': showCutImg},{'scale-cut-img': !showCutImg}]" @click="openCutImg"></div>
-  <CutImg :imgUrl="cutImgUrl" :class="['cropper-avatar', {'scale-cut-img': !showCutImg}]"
-          @closeCutImg="showCutImg=false"></CutImg>
-  <header style="position: relative" :class="{'del-blog': delDialog}">
-    <div class="u-del-blog" v-show="delDialog">
-      <div style="margin-bottom: 20px; ">确定要删帖吗？</div>
-      <el-button size="small" @click="u_confirm">确认</el-button>
-      <el-button size="small" @click="u_cancel">取消</el-button>
-    </div>
-    <div style="display: flex;  align-items: center">
-      <el-upload ref="upload" :beforeUpload="beforeUpload" accept=".png, .jpg, .jpeg"
-                 name="file" :show-file-list="false" :headers="{authorization: 'JWT ' + token}"
-                 :http-request="customRequest">
-        <div style="position: relative">
-          <img :src="userInfo.avatarUrl" alt="" style="border-radius: 50%;width: 6rem;height: 6rem" class="user-avatar">
-        </div>
-      </el-upload>
-      <div style="flex: 1;margin-left: 20px">
-        <div style="margin: 5px auto">
-          <strong>{{ userInfo.username }}</strong>
-        </div>
-        <span>粉丝 3735.8万</span>
+  <div>
+    <el-backtop :bottom="100" class="backtop">
+      <i class="iconfont iconfonttubiao02" style="font-size: 20px"></i>
+    </el-backtop>
+    <div :class="[{'cut-img-mask': showCutImg},{'scale-cut-img': !showCutImg}]" @click="openCutImg"></div>
+    <CutImg :imgUrl="cutImgUrl" :class="['cropper-avatar', {'scale-cut-img': !showCutImg}]"
+            @closeCutImg="showCutImg=false"></CutImg>
+    <header style="position: relative" :class="{'del-blog': delDialog}">
+      <div class="u-del-blog" v-show="delDialog">
+        <div style="margin-bottom: 20px; ">确定要删帖吗？</div>
+        <el-button size="small" @click="u_confirm">确认</el-button>
+        <el-button size="small" @click="u_cancel">取消</el-button>
+      </div>
+      <div style="display: flex;  align-items: center">
+        <el-upload ref="upload" :beforeUpload="beforeUpload" accept=".png, .jpg, .jpeg"
+                   name="file" :show-file-list="false" :headers="{authorization: 'JWT ' + token}"
+                   :http-request="customRequest">
+          <div style="position: relative">
+            <img :src="userInfo.avatarUrl" alt="" style="border-radius: 50%;width: 6rem;height: 6rem"
+                 class="user-avatar">
+          </div>
+        </el-upload>
+        <div style="flex: 1;margin-left: 20px">
+          <div style="margin: 5px auto">
+            <strong>{{ userInfo.username }}</strong>
+          </div>
+          <span>粉丝 3735.8万</span>
 
+        </div>
+        <div>
+          <el-button style="border-radius: 20px">关注</el-button>
+        </div>
       </div>
-      <div>
-        <el-button style="border-radius: 20px">关注</el-button>
+      <div style="font-size: 12px; color: rgba(0,0,0,0.49);margin: 5px">
+        IP归属地： 湖南
       </div>
-    </div>
-    <div style="font-size: 12px; color: rgba(0,0,0,0.49);margin: 5px">
-      IP归属地： 湖南
-    </div>
-    <Cell @show_delDialog="show_delDialog" :item="item" :index="index" v-for="(item, index) in blogs"></Cell>
+    </header>
+
+    <Cell @show_delDialog="show_delDialog" @back_blog_id="back_blog_id" :cur_blog_id="cur_blog_id" :blog="blog"
+          :index="index" v-for="(blog, index) in blogs"></Cell>
     <div style="text-align: center; color: rgba(0,0,0,0.53)">
       <!--        <span v-loading="true"  element-loading-background="transparent" v-if="endLoading"></span>-->
       <img src="../assets/loading2.gif" alt="" style="border-radius: 20px" width="150" v-show="endLoading">
       <span v-show="!endLoading&&!loading">我是有底线的o(*￣▽￣*)o</span>
     </div>
-  </header>
+  </div>
 </template>
 
 <script>
@@ -81,11 +86,20 @@ export default {
       isUploadAvatarMaskShow: false,
       blog_id: null,
       blog_index: null,
+      cur_blog_id: -1,
       pageNum: 1,
       pageSize: 7,
       serverPageSize: 7,
       loading: true,
       endLoading: false,
+      back_blog_id: (blog_id) => {
+        if (self.cur_blog_id === blog_id) {
+          self.cur_blog_id = -1
+        } else {
+          self.cur_blog_id = blog_id
+        }
+
+      },
       noMore: computed(() => {
         return self.pageSize > self.serverPageSize || self.endLoading
       }),
@@ -157,7 +171,7 @@ export default {
           if (instance < 100) {
             if (self.noMore) return
             self.endLoading = true
-            setTimeout(()=>{
+            setTimeout(() => {
               self.pageNum++
               self.get_blogs()
             }, 1000)
@@ -167,7 +181,7 @@ export default {
     })
     onMounted(async () => {
       window.addEventListener('scroll', self.scroll, false)
-      const res = await instance.get('/get_userinfo', {params:{u_id: route.params.u_id}})
+      const res = await instance.get('/get_userinfo', {params: {u_id: route.params.u_id}})
       self.userInfo = res.data
       await self.get_blogs()
       self.loading = false

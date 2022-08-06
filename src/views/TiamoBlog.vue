@@ -38,7 +38,7 @@
       </div>
     </aside>
     <main v-loading="loading" style="margin: 15px 10px 0 10px; padding: 0;flex: 1">
-      <Cell @show_delDialog="show_delDialog" :item="item" :index="index" v-for="(item, index) in blogs"></Cell>
+      <Cell @show_delDialog="show_delDialog" @back_blog_id="back_blog_id" :cur_blog_id="cur_blog_id" :blog="blog" :index="index" v-for="(blog, index) in blogs"></Cell>
       <div style="text-align: center; color: rgba(0,0,0,0.53)">
         <!--        <span v-loading="true"  element-loading-background="transparent" v-if="endLoading"></span>-->
         <img src="../assets/loading2.gif" alt="" style="border-radius: 20px" width="150" v-show="endLoading">
@@ -137,9 +137,19 @@ export default {
       serverPageSize: 7,
       loading: true,
       endLoading: false,
+      cur_blog_id: -1,
+      back_blog_id: (blog_id) => {
+        if (self.cur_blog_id === blog_id) {
+          self.cur_blog_id = -1
+        } else {
+          self.cur_blog_id = blog_id
+        }
+
+      },
       noMore: computed(() => {
         return self.pageSize > self.serverPageSize || self.endLoading
       }),
+
       to_tab: (u_id) => {
         router.push({name: 'UserPage', params: {u_id: u_id}})
       },
