@@ -8,9 +8,9 @@
   </transition>
   <el-container style="margin: 50px auto">
     <div style="width: 100%; position: relative">
-      <span :class="{'pub': pub}" @click="pub=!pub" style="position: absolute;z-index: 120;top:-35px;left: 200px">
-    <i class="iconfont iconfontjiahao " style="font-size: 30px;color: red"></i>
-  </span>
+      <div :class="{'pub': pub}" @click="pub=!pub" style="position: fixed;right: 0; left: 0; margin: auto;z-index:120;text-align: center">
+    <div class="iconfont iconfontjiahao " style="font-size: 30px;color: red;transform: translate(-200px, -35px)"></div>
+  </div>
       <router-view :blog="blog"/>
     </div>
   </el-container>
