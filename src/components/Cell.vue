@@ -144,10 +144,10 @@ export default {
     const router = useRouter()
     const self = reactive({
       nvamenus: [
-        // {name: '置顶', icon: 'iconfont iconfonticon_zhiding', },
-        // {name: '广场可见', icon: 'iconfont iconfontpengyouquan'},
-        // {name: '粉丝可见', icon: 'iconfont iconfontziyuan'},
-        // {name: '仅自己可见', icon: 'iconfont iconfontyonghu'},
+        {name: '置顶', icon: 'iconfont iconfonticon_zhiding', fu:(blog_id)=>{console.log(blog_id)}},
+        {name: '广场可见', icon: 'iconfont iconfontpengyouquan', fu:(blog_id)=>{console.log(blog_id)}},
+        {name: '粉丝可见', icon: 'iconfont iconfontziyuan', fu:(blog_id)=>{console.log(blog_id)}},
+        {name: '仅自己可见', icon: 'iconfont iconfontyonghu', fu:(blog_id)=>{console.log(blog_id)}},
         {name: '删除', icon: 'iconfont iconfontshanchu2', fu: (blog_id, blog_index)=>{
           self.show_delDialog(blog_id, blog_index)
             self.back_blog_id(blog_id)
