@@ -2,9 +2,9 @@
   <div class="h-hrader" @click="">
     <Header class="header" :msgCount="msgCount" @show_msg_box="show_msg_box"></Header>
   </div>
-  <!--  <transition name="pub">-->
-  <!--    <Pub v-show="pub" @success_callback="success_callback" @unshift_blog="unshift_blog" @close_pub="pub=false"></Pub>-->
-  <!--  </transition>-->
+    <transition name="pub">
+      <Pub v-show="pub" @success_callback="success_callback" @unshift_blog="unshift_blog" @close_pub="pub=false"></Pub>
+    </transition>
   <transition name="fade">
     <div v-show="show">
       <div>
@@ -44,7 +44,7 @@
       <i class="iconfont iconfontjiahao " style="font-size: 30px;color: red;"></i>
   </span>
     <div style="width: 100%; position: relative" :class="{'pub': pub}" @click="pub=false">
-      <!--      <router-view :blog="blog" @success_callback="success_callback"/>-->
+            <router-view :blog="blog" @success_callback="success_callback"/>
     </div>
   </el-container>
 
@@ -53,7 +53,7 @@
 <script>
 import Header from "../../components/Header.vue";
 import {computed, onMounted, reactive, toRefs} from "vue";
-// import Pub from "../../components/Pub.vue";
+import Pub from "../../components/Pub.vue";
 import {useStore} from "vuex";
 import instance from "../../api/request.js";
 
@@ -61,7 +61,7 @@ export default {
   name: "Home",
   components: {
     Header,
-    // Pub
+    Pub
   },
   setup() {
     const store = useStore()
@@ -69,7 +69,7 @@ export default {
 
       delDialog: false,
       blog: {},
-      msgCount: 0,
+      msgCount: "99+",
       show: false,
       msgBoxShow: false,
       msgBox: [],
@@ -84,7 +84,6 @@ export default {
             : `ws://8.141.150.118:8096/ws/${clientId}`
         self.ws = new WebSocket(url)
         self.ws.onmessage = (event) => {
-          console.log('ssssssssssss', event);
           self.msgCount++
         }
         self.ws.onclose = () => {
