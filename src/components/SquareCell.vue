@@ -8,7 +8,7 @@
         <div style="margin-bottom: 5px;">
           <strong class="avatar" @click="to_tab(blog.userInfo.id)">{{ blog.userInfo.username }}</strong>
         </div>
-        <div style="color: rgba(0,0,0,0.47); font-size: 12px">
+        <div style="color: rgba(0,0,0,0.5); font-size: 12px">
           {{ blog.pub_time }}
         </div>
       </div>

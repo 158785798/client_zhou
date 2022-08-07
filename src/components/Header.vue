@@ -43,16 +43,17 @@
       <div v-else class="flex-align-items"
            style="position: relative;color:#000;margin-left: 30px; margin-right: 20px; cursor: pointer;">
         <div class="flex-align-items">
-          <span @click="msgCount++" style="user-select: none;margin-right: 20px;padding-right: 20px;color: rgba(0,0,0,0.5);" class="u-msg">
+          <span @click="show_msg_box"
+                style="user-select: none;margin-right: 20px;padding-right: 20px;color: rgba(0,0,0,0.5);" class="u-msg">
           <i style=" font-size: 20px" class="iconfont iconfontyoujian u-msg"></i>
             <span v-show="msgCount!=0" style="padding: 0 5px;font-size: 12px;background-color: red;
             color: #fff;border-radius:10px;position: absolute;line-height: 1.2;
-            transform: translate(-8px, -5px)">{{msgCount}}</span>
+            transform: translate(-8px, -5px)">{{ msgCount }}</span>
             </span>
           <div @click="dropdownMenuShow=!dropdownMenuShow" class="header-link flex-align-items"
                :class="{'dropdown-menu-sw': dropdownMenuShow}">
-          <img :src="userInfo.avatarUrl" alt="" style="width: 24px; border-radius: 50%">
-          <span class="dropdown-caret"></span>
+            <img :src="userInfo.avatarUrl" alt="" style="width: 24px; border-radius: 50%">
+            <span class="dropdown-caret"></span>
           </div>
         </div>
 
@@ -83,8 +84,9 @@ import {ElMessage} from "element-plus";
 
 export default {
   name: "Header",
-  props:['msgCount'],
-  setup() {
+  props: ['msgCount'],
+  emits: ['show_msg_box'],
+  setup(props, context) {
     const store = useStore()
     const router = useRouter();
     onMounted(() => {
@@ -100,13 +102,16 @@ export default {
     )
     const self = reactive({
           play: true,
+          aboutShow: false,
+          dropdownMenuShow: false,
+      show_msg_box: () => {
+            context.emit('show_msg_box')
+          },
           playMusic: () => {
             const audio = document.getElementById('audio')
             self.play ? audio.pause() : audio.play()
             self.play = !self.play
           },
-          aboutShow: false,
-          dropdownMenuShow: false,
           signOut: () => {
             self.dropdownMenuShow = false
             window.localStorage.removeItem('token_zhou')
@@ -116,7 +121,6 @@ export default {
 
           },
           userInfo: computed(() => store.state.userInfo),
-
           homeMenus: [
             {
               name: 'OurMeow',
@@ -131,9 +135,9 @@ export default {
               route: 'WeChat',
             },
           ],
-          toTab: (route, u_id=null) => {
+          toTab: (route, u_id = null) => {
             self.dropdownMenuShow = false
-            router.push({name: route, params: {u_id: u_id }})
+            router.push({name: route, params: {u_id: u_id}})
           },
         }
     )
@@ -235,7 +239,8 @@ export default {
 .login:hover {
   color: #2f2b2b;
 }
-.u-msg:hover{
+
+.u-msg:hover {
   color: rgba(255, 255, 255, 0.6) !important;
 }
 

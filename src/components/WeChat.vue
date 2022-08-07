@@ -89,9 +89,9 @@ export default {
       const div = document.getElementById('container')
       div.scrollTop = div.scrollHeight;
     })
-    onUnmounted(() => {
-      delete self.ws
-    })
+    // onUnmounted(() => {
+    //   delete self.ws
+    // })
     return {
       ...toRefs(self)
     }
