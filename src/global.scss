@@ -60,7 +60,8 @@ a:hover {
 .iconfontguanbi1 {
   color: red;
 }
-.iconfontxialajiantouxiao:hover{
+
+.iconfontxialajiantouxiao:hover {
   background-color: $icon-hover-bg-color;
   color: $icon-hover-color
 }
@@ -132,21 +133,6 @@ body {
   background-color: #e1c39e;
 }
 
-.u-del-blog {
-  background-color: #e5b77a;
-  padding: 20px;
-  border-radius: 10px;
-  z-index: 100;
-  position: fixed;
-  text-align: center;
-  transform: translateX(-50px);
-  width: 200px;
-  margin: auto;
-  left: 0;
-  right: 0;
-  top: 300px;
-}
-
 .del-blog:after {
   content: '';
   top: 0;
@@ -157,3 +143,22 @@ body {
   position: fixed;
   cursor: pointer;
 }
+.u-cell-enter-active {
+  animation: bound-in .5s;
+}
+
+.u-cell-leave-active {
+  animation: bound-in .5s reverse;
+}
+
+@keyframes bound-in {
+  0% {
+    transform: scale(0);
+    //opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    //opacity: 1;
+  }
+}
+

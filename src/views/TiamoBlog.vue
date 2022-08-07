@@ -3,12 +3,7 @@
     <i class="iconfont iconfonttubiao02" style="font-size: 20px"></i>
   </el-backtop>
 
-  <div class="common-layout" style="display: flex;height: 100%" :class="{'del-blog': delDialog}">
-    <div class="u-del-blog" v-show="delDialog">
-      <div style="margin-bottom: 20px; ">确定要删帖吗？</div>
-      <el-button size="small" @click="u_confirm">确认</el-button>
-      <el-button size="small" @click="u_cancel">取消</el-button>
-    </div>
+  <div class="common-layout" style="display: flex;height: 100%">
     <aside style="height: 100%;background-color: #fff;margin-top: 15px;width:200px;border-radius: 6px;">
       <div style="position: sticky;top:60px;">
         <div style="font-size: 25px; margin: 10px 20px;height: 100%;">首页</div>
@@ -22,7 +17,13 @@
       </div>
     </aside>
     <main v-loading="loading" style="margin: 15px 10px 0 10px; padding: 0;flex: 1">
-      <SquareCell @show_delDialog="show_delDialog" @back_blog_id="back_blog_id" :cur_blog_id="cur_blog_id" :blog="blog" :index="index" v-for="(blog, index) in blogs"></SquareCell>
+      <div style="width: 100%">
+        <transition-group appear tag="div" name="u-cell">
+          <div v-for="blog in blogs" :key="blog.id">
+      <SquareCell @back_blog_id="back_blog_id" :cur_blog_id="cur_blog_id" :blog="blog"></SquareCell>
+          </div>
+        </transition-group>
+      </div>
       <div style="text-align: center; color: rgba(0,0,0,0.53)">
         <!--        <span v-loading="true"  element-loading-background="transparent" v-if="endLoading"></span>-->
         <img src="../assets/loading2.gif" alt="" style="border-radius: 20px" width="150" v-show="endLoading">
@@ -87,6 +88,9 @@ export default {
   components: {
     SquareCell
   },
+  emits:[
+      'success_callback'
+  ],
   setup(props, context) {
     const store = useStore()
     const router = useRouter()
@@ -112,9 +116,7 @@ export default {
       taste: [],
       blogs: [],
       largeImgPath: '',
-      delDialog: false,
       blog_id: null,
-      blog_index: null,
       pageNum: 1,
       pageSize: 7,
       serverPageSize: 7,
@@ -135,20 +137,6 @@ export default {
 
       to_tab: (u_id) => {
         router.push({name: 'UserPage', params: {u_id: u_id}})
-      },
-      u_confirm: async () => {
-        self.blogs.splice(self.blog_index, 1)
-        self.delDialog = false
-        const res = await instance.delete('/del_blog', {params: {blog_id: self.blog_id}})
-        context.emit('success_callback', '删除成功')
-      },
-      u_cancel: () => {
-        self.delDialog = false
-      },
-      show_delDialog: (blog_id, blog_index) => {
-        self.blog_id = blog_id
-        self.blog_index = blog_index
-        self.delDialog = true
       },
       get_blogs: async () => {
         const res2 = await instance.get('/get_blogs', {

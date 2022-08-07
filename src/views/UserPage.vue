@@ -6,12 +6,13 @@
     <div :class="[{'cut-img-mask': showCutImg},{'scale-cut-img': !showCutImg}]" @click="openCutImg"></div>
     <CutImg :imgUrl="cutImgUrl" :class="['cropper-avatar', {'scale-cut-img': !showCutImg}]"
             @closeCutImg="showCutImg=false"></CutImg>
+    <div class="u-del-blog" v-show="delDialog">
+      <div style="margin-bottom: 20px; ">确定要删帖吗？</div>
+      <el-button size="small" @click="u_confirm">确认</el-button>
+      <el-button size="small" @click="u_cancel">取消</el-button>
+    </div>
     <header style="position: relative" :class="{'del-blog': delDialog}">
-      <div class="u-del-blog" v-show="delDialog">
-        <div style="margin-bottom: 20px; ">确定要删帖吗？</div>
-        <el-button size="small" @click="u_confirm">确认</el-button>
-        <el-button size="small" @click="u_cancel">取消</el-button>
-      </div>
+
       <div style="display: flex;  align-items: center">
         <el-upload ref="upload" :beforeUpload="beforeUpload" accept=".png, .jpg, .jpeg"
                    name="file" :show-file-list="false" :headers="{authorization: 'JWT ' + token}"
@@ -36,9 +37,19 @@
         IP归属地： 湖南
       </div>
     </header>
-
-    <UserCell @show_delDialog="show_delDialog" @success_callback="success_callback" @back_blog_id="back_blog_id" :cur_blog_id="cur_blog_id" :blog="blog"
-          :index="index" v-for="(blog, index) in blogs"></UserCell>
+    <div>
+      <transition-group appear tag="ul" name="u-cell">
+        <div v-for="blog in blogs" :key="blog.id">
+          <UserCell
+              :cur_blog_id="cur_blog_id"
+              :blog="blog"
+              @show_delDialog="show_delDialog"
+              @success_callback="success_callback"
+              @back_blog_id="back_blog_id"
+          ></UserCell>
+        </div>
+      </transition-group>
+    </div>
     <div style="text-align: center; color: rgba(0,0,0,0.53)">
       <!--        <span v-loading="true"  element-loading-background="transparent" v-if="endLoading"></span>-->
       <img src="../assets/loading2.gif" alt="" style="border-radius: 20px" width="150" v-show="endLoading">
@@ -62,7 +73,7 @@ export default {
     CutImg,
     UserCell,
   },
-  emits:[
+  emits: [
     'success_callback'
   ],
   setup(props, context) {
@@ -88,14 +99,13 @@ export default {
       showCutImg: false,
       isUploadAvatarMaskShow: false,
       blog_id: null,
-      blog_index: null,
       cur_blog_id: -1,
       pageNum: 1,
       pageSize: 7,
       serverPageSize: 7,
       loading: true,
       endLoading: false,
-      success_callback:(message)=>{
+      success_callback: (message) => {
         context.emit('success_callback', message)
       },
       back_blog_id: (blog_id) => {
@@ -109,30 +119,19 @@ export default {
       noMore: computed(() => {
         return self.pageSize > self.serverPageSize || self.endLoading
       }),
-      underlineNavIndex: 0,
-      dropdownMenus: [
-      {name: '置顶', icon: 'iconfont iconfonticon_zhiding'},
-      {name: '广场可见', icon: 'iconfont iconfontpengyouquan'},
-      {name: '粉丝可见', icon: 'iconfont iconfontziyuan'},
-      {name: '仅自己可见', icon: 'iconfont iconfontyonghu'},
-      {name: '删帖', icon: 'iconfont iconfontshanchu2', fu: (blog_id, blog_index)=>{
-          self.show_delDialog(blog_id, blog_index)
-          self.back_blog_id(blog_id)
-        }},
-    ],
       u_confirm: async () => {
-        self.blogs.splice(self.blog_index, 1)
+        self.blogs = self.blogs.filter(item => item.id !== self.blog_id)
         self.delDialog = false
-        ElMessage.success('删除成功!')
         const res = await instance.delete('/del_blog', {params: {blog_id: self.blog_id}})
-
+        if (res.code === 200) {
+          context.emit('success_callback', '删除成功')
+        }
       },
       u_cancel: () => {
         self.delDialog = false
       },
-      show_delDialog: (blog_id, blog_index) => {
+      show_delDialog: (blog_id) => {
         self.blog_id = blog_id
-        self.blog_index = blog_index
         self.delDialog = true
       },
       openCutImg: () => {
@@ -167,7 +166,7 @@ export default {
         self.blogs = self.blogs.concat(res2.data)
         self.endLoading = false
       },
-      scroll() {
+      scroll: () => {
         window.onscroll = () => {
           // 整个页面的高度
           const scrollHeight = document.body.scrollHeight
@@ -253,6 +252,20 @@ export default {
   color: #f1f1f1;
   cursor: pointer;
   font-size: 4rem;
+}
+
+.u-del-blog {
+  background-color: #e5b77a;
+  padding: 20px;
+  border-radius: 10px;
+  z-index: 100;
+  position: fixed;
+  text-align: center;
+  width: 200px;
+  margin: auto;
+  left: 0;
+  right: 0;
+  top: 300px;
 }
 
 .cut-img-mask:after {

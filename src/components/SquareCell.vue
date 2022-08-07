@@ -1,5 +1,6 @@
 <template>
-  <div style="font-size: 18px;background-color: #fff;padding: 20px;margin-bottom: 8px; border-radius: 6px;position: relative">
+  <div
+      style="font-size: 18px;background-color: #fff;padding: 20px;margin-bottom: 8px; border-radius: 6px;position: relative">
     <header style="display: flex; justify-content: space-between">
       <img class="avatar" :src="blog.userInfo.avatarUrl" alt="" style="width: 40px; height: 40px; border-radius: 50%"
            @click="to_tab(blog.userInfo.id)">
@@ -12,12 +13,15 @@
         </div>
       </div>
       <div style="">
-        <i class="iconfont iconfontxialajiantouxiao" style="padding:6px; border-radius: 50%" @click="back_blog_id(blog.id)" :class="{'up-dropdown-menu': blog.id===cur_blog_id}"></i>
+        <i class="iconfont iconfontxialajiantouxiao" style="padding:6px; border-radius: 50%"
+           @click="back_blog_id(blog.id)" :class="{'up-dropdown-menu': blog.id===cur_blog_id}"></i>
         <div v-show="blog.id===cur_blog_id" style="width:150px;overflow: hidden;
         background-color: #fff;z-index: 10;position: absolute;margin-top: 2px;right:20px;border-radius: 6px; box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.25);">
-          <div style="cursor: pointer;font-size: .875rem" class="navItem_left" v-for="m in blog.dropdown_menus" @click="to_do(m, blog.id, index)">
+          <div style="cursor: pointer;font-size: .875rem" class="navItem_left" v-for="m in blog.dropdown_menus"
+               @click="to_do(m, blog.id, index)">
             <div style="padding:10px 15px">
-              <strong class="iconfont hover" :class="m.icon" style="margin-right: 10px;font-size: 14px;background-color: rgba(0,0,0,0.1); padding: 8px; border-radius: 50%"></strong>
+              <strong class="iconfont hover" :class="m.icon"
+                      style="margin-right: 10px;font-size: 14px;background-color: rgba(0,0,0,0.1); padding: 8px; border-radius: 50%"></strong>
               <span>{{ m.name }}</span>
             </div>
           </div>
@@ -107,16 +111,13 @@ import {ElMessage} from "element-plus";
 import Comment from './Comment.vue'
 
 export default {
-  name: "Cell",
+  name: "SquareCell",
   components: {
     Comment
   },
   props: {
     blog: {
       type: Object,
-    },
-    index: {
-      type: Number
     },
     cur_blog_id: {
       type: Number
@@ -135,7 +136,6 @@ export default {
     }
   },
   emits: [
-    'show_delDialog',
     'back_blog_id'
   ],
   setup(props, context) {
@@ -149,27 +149,22 @@ export default {
       userInfo: computed(() => store.state.userInfo),
       iscomment: props.iscomment,
       loading: false,
-      to_do:async (m, blog_id, blog_index)=>{
-        if (m.id===1){
+      to_do: async (m, blog_id) => {
+        if (m.id === 1) {
 
-        }else if(m.id===2){
+        } else if (m.id === 2) {
 
-        }else if(m.id===3){
+        } else if (m.id === 3) {
 
-        }else if(m.id===4){
+        } else if (m.id === 4) {
 
-        }else if(m.id===5){
-          self.show_delDialog(blog_id, blog_index)
-        }else if(m.id===6){
+        } else if (m.id === 6) {
 
         }
         self.back_blog_id(blog_id)
       },
-      back_blog_id:(blog_id)=>{
+      back_blog_id: (blog_id) => {
         context.emit('back_blog_id', blog_id)
-      },
-      show_delDialog: (blog_id, blog_index) => {
-        context.emit('show_delDialog', blog_id, blog_index)
       },
       to_cur: (index) => {
         self.cur_index = index
@@ -263,7 +258,8 @@ export default {
   position: absolute;
   cursor: pointer;
 }
-.up-dropdown-menu:after{
+
+.up-dropdown-menu:after {
   content: '';
   top: 0;
   right: 0;
@@ -273,12 +269,14 @@ export default {
   cursor: pointer;
 }
 
-.hover{
+.hover {
   color: #707070
 }
-.hover:hover{
+
+.hover:hover {
   color: #707070
 }
+
 .is-active {
   border: 3px solid $icon-hover-color;
 }

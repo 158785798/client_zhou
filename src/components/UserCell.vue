@@ -13,7 +13,6 @@
         </div>
       </div>
       <div style="">
-        <!--        <i v-if="blog.is_self" class="iconfont iconfontshanchu1" @click="show_delDialog(blog.id, index)"></i>-->
         <span style="color: rgba(0,0,0,0.47);font-size: 12px; margin-right: 5px">{{ blog.permission_text }}</span>
         <i class="iconfont iconfontxialajiantouxiao" style="padding:5px; border-radius: 50%"
            @click="back_blog_id(blog.id)" :class="{'up-dropdown-menu': blog.id===cur_blog_id}"></i>
@@ -77,31 +76,28 @@
     </div>
     <Comment v-if="blog.commentShow" :blog_id="blog.id"></Comment>
   </div>
-  <teleport to="body">
-    <div v-show="curentImgGroups.length !== 0"
-         style="display: flex;flex-direction:column;position: fixed;top:20px; bottom: 0; left: 0; right: 0;z-index: 300">
-      <div
-          style="position: relative; flex: 1;justify-content:center;align-items: center;display: flex;overflow: hidden; ">
-        <div :class="{'blog-sw': curentImgGroups.length !== 0}" @click="curentImgGroups=[]"></div>
-        <div style="z-index: 300;">
-          <img v-if="cur_each.direction==='h'" :src="cur_each.large" alt="" style="max-height: 92vh">
-          <img v-else :src="cur_each.large" alt="" style="max-width: 100vw">
-        </div>
+  <div v-show="curentImgGroups.length !== 0"
+       style="display: flex;flex-direction:column;position: fixed;top:20px; bottom: 0; left: 0; right: 0;z-index: 300">
+    <div
+        style="position: relative; flex: 1;justify-content:center;align-items: center;display: flex;overflow: hidden; ">
+      <div :class="{'blog-sw': curentImgGroups.length !== 0}" @click="curentImgGroups=[]"></div>
+      <div style="z-index: 300;">
+        <img v-if="cur_each.direction==='h'" :src="cur_each.large" alt="" style="max-height: 92vh">
+        <img v-else :src="cur_each.large" alt="" style="max-width: 100vw">
       </div>
+    </div>
 
-      <div style="display: flex; justify-content: center; background-color: rgba(0,0,0,0.8);z-index: 300">
-        <div v-for="(each, index) in curentImgGroups" @click="to_cur(index)"
-             style="margin: 15px 3px; width: 55px; height: 55px; overflow: hidden;position: relative"
-             :class="{'is-active': cur_index===index}">
-          <div :class="{'bottom-blog': cur_index!==index}">
-            <img v-if="each.direction==='h'" :src="each.middle" alt="" width="55" style="cursor: pointer;">
-            <img v-else :src="each.middle" alt="" height="55" style="cursor: pointer;">
-          </div>
+    <div style="display: flex; justify-content: center; background-color: rgba(0,0,0,0.8);z-index: 300">
+      <div v-for="(each, index) in curentImgGroups" @click="to_cur(index)"
+           style="margin: 15px 3px; width: 55px; height: 55px; overflow: hidden;position: relative"
+           :class="{'is-active': cur_index===index}">
+        <div :class="{'bottom-blog': cur_index!==index}">
+          <img v-if="each.direction==='h'" :src="each.middle" alt="" width="55" style="cursor: pointer;">
+          <img v-else :src="each.middle" alt="" height="55" style="cursor: pointer;">
         </div>
       </div>
     </div>
-  </teleport>
-
+  </div>
 </template>
 
 <script>
@@ -113,16 +109,13 @@ import {ElMessage} from "element-plus";
 import Comment from './Comment.vue'
 
 export default {
-  name: "Cell",
+  name: "UserCell",
   components: {
     Comment
   },
   props: {
     blog: {
       type: Object,
-    },
-    index: {
-      type: Number
     },
     cur_blog_id: {
       type: Number
@@ -151,12 +144,11 @@ export default {
     const self = reactive({
       curentImgGroups: [],
       cur_each: {},
-      cur_index: 0,
       pageRefresh: computed(() => store.state.pageRefresh),
       userInfo: computed(() => store.state.userInfo),
       iscomment: props.iscomment,
       loading: false,
-      to_do: async (m, blog_id, blog_index) => {
+      to_do: async (m, blog_id) => {
         console.log(m.id);
         if (m.id === 1) {
           context.emit('success_callback', '置顶成功')
@@ -167,7 +159,7 @@ export default {
         } else if (m.id === 4) {
           context.emit('success_callback', '修改成功')
         } else if (m.id === 5) {
-          self.show_delDialog(blog_id, blog_index)
+          self.show_delDialog(blog_id)
         } else if (m.id === 6) {
           context.emit('success_callback', '收藏成功')
         } else if (m.id === 7) {
@@ -178,8 +170,8 @@ export default {
       back_blog_id: (blog_id) => {
         context.emit('back_blog_id', blog_id)
       },
-      show_delDialog: (blog_id, blog_index) => {
-        context.emit('show_delDialog', blog_id, blog_index)
+      show_delDialog: (blog_id) => {
+        context.emit('show_delDialog', blog_id)
       },
       to_cur: (index) => {
         self.cur_index = index
