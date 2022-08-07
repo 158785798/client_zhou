@@ -39,12 +39,21 @@
         <a href="javascript:" @click="toTab('SignUp')" class="login" style="border: 1px solid #f9f7f8;">
           <strong>Sign up</strong></a>
       </div>
+
       <div v-else class="flex-align-items"
-           style="position: relative;color:#000;margin-left: 30px; margin-right: 20px; cursor: pointer;font-size: 14px">
-        <div @click="dropdownMenuShow=!dropdownMenuShow" class="header-link flex-align-items"
-             :class="{'dropdown-menu-sw': dropdownMenuShow}">
+           style="position: relative;color:#000;margin-left: 30px; margin-right: 20px; cursor: pointer;">
+        <div class="flex-align-items">
+          <span @click="msgCount++" style="user-select: none;margin-right: 20px;padding-right: 20px;color: rgba(0,0,0,0.5);" class="u-msg">
+          <i style=" font-size: 20px" class="iconfont iconfontyoujian u-msg"></i>
+            <span v-show="msgCount!=0" style="padding: 0 5px;font-size: 12px;background-color: red;
+            color: #fff;border-radius:10px;position: absolute;line-height: 1.2;
+            transform: translate(-8px, -5px)">{{msgCount}}</span>
+            </span>
+          <div @click="dropdownMenuShow=!dropdownMenuShow" class="header-link flex-align-items"
+               :class="{'dropdown-menu-sw': dropdownMenuShow}">
           <img :src="userInfo.avatarUrl" alt="" style="width: 24px; border-radius: 50%">
           <span class="dropdown-caret"></span>
+          </div>
         </div>
 
         <div v-show="dropdownMenuShow" class="dropdown-menu">
@@ -74,6 +83,7 @@ import {ElMessage} from "element-plus";
 
 export default {
   name: "Header",
+  props:['msgCount'],
   setup() {
     const store = useStore()
     const router = useRouter();
@@ -224,6 +234,9 @@ export default {
 
 .login:hover {
   color: #2f2b2b;
+}
+.u-msg:hover{
+  color: rgba(255, 255, 255, 0.6) !important;
 }
 
 </style>

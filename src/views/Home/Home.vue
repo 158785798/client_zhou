@@ -1,21 +1,12 @@
 <template>
   <div class="h-hrader">
-    <Header></Header>
+    <Header :msgCount="msgCount"></Header>
   </div>
   <transition name="pub">
     <Pub v-show="pub" @success_callback="success_callback" @unshift_blog="unshift_blog" @close_pub="pub=false"></Pub>
   </transition>
   <transition name="fade">
-    <div v-show="show" style="
-  color: #fff;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: fixed;
-  border-radius: 10px;
-  background-color: rgba(0,0,0,0.76); width: 200px;
-  height: 130px; left:0; right:0;top:0;bottom:0;
-  z-index: 3000; margin: auto">
+    <div v-show="show">
       <div>
         <div class="iconfont iconfonticon_succeed" style="font-size: 40px;margin: 10px; font-weight: lighter"></div>
         <div>{{ message }}</div>
@@ -50,6 +41,7 @@ export default {
 
       delDialog: false,
       blog: {},
+      msgCount: 0,
       show: false,
       message: '',
       pub: false,
@@ -79,8 +71,7 @@ export default {
   transition: opacity .5s;
 }
 
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */
-{
+.fade-enter, .fade-leave-to {
   opacity: 0;
 }
 
@@ -96,15 +87,8 @@ export default {
   transition: all .3s linear;
 }
 
-.pub-enter-from, .pub-leave-to /* .fade-leave-active below version 2.1.8 */
-{
+.pub-enter-from, .pub-leave-to {
   transform: translateY(200px) rotateX(90deg);
-
-}
-
-.pub-enter-to, .pub-leave-from /* .fade-leave-active below version 2.1.8 */
-{
-  //transform: translateY(0) rotateX(-180deg);
 }
 
 .h-hrader {
@@ -126,6 +110,24 @@ export default {
   position: fixed;
   cursor: default;
   background-color: rgba(0, 0, 0, 0.23);
+}
+
+.show {
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  border-radius: 10px;
+  background-color: rgba(0, 0, 0, 0.76);
+  width: 200px;
+  height: 130px;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 3000;
+  margin: auto
 }
 
 @media screen and (max-width: 800px) {
