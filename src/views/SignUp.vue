@@ -274,7 +274,7 @@ export default {
           ElMessage.error(res.msg)
         }else{
           store.commit('saveUserInfo', res)
-          router.push('Home')
+          await router.push('Home')
           ElMessage.success('Welcome to Candy Cats!')
         }
         self.loading = false

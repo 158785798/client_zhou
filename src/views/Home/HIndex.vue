@@ -45,7 +45,7 @@ import {onMounted, onUnmounted, reactive, toRefs} from "vue";
 import Header from "../../components/Header.vue";
 
 export default {
-  name: "Index",
+  name: "HIndex",
   emits:[
       'success_callback'
   ],

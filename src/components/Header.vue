@@ -137,7 +137,7 @@ export default {
           ],
           toTab: (route, u_id = null) => {
             self.dropdownMenuShow = false
-            router.push({name: route, params: {u_id: u_id}})
+            router.push({name: route, query: {u_id: u_id}})
           },
         }
     )

@@ -51,7 +51,6 @@
       </transition-group>
     </div>
     <div style="text-align: center; color: rgba(0,0,0,0.53)">
-      <!--        <span v-loading="true"  element-loading-background="transparent" v-if="endLoading"></span>-->
       <img src="../assets/loading2.gif" alt="" style="border-radius: 20px" width="150" v-show="endLoading">
       <span v-show="!endLoading&&!loading">我是有底线的o(*￣▽￣*)o</span>
     </div>
@@ -157,7 +156,7 @@ export default {
         const res2 = await instance.get('/get_blogs', {
           params: {
             flag: 'user',
-            u_id: route.params.u_id,
+            u_id: route.query.u_id,
             pageNum: self.pageNum,
             pageSize: self.pageSize
           }
@@ -190,7 +189,7 @@ export default {
     })
     onMounted(async () => {
       window.addEventListener('scroll', self.scroll, false)
-      const res = await instance.get('/get_userinfo', {params: {u_id: route.params.u_id}})
+      const res = await instance.get('/get_userinfo', {params: {u_id: route.query.u_id}})
       self.userInfo = res.data
       await self.get_blogs()
       self.loading = false

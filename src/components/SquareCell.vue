@@ -177,7 +177,7 @@ export default {
       },
 
       to_tab: (u_id) => {
-        router.push({name: 'UserPage', params: {u_id: u_id}})
+        router.push({name: 'UserPage', query: {u_id: u_id}})
       },
       follow_in: async (value) => {
         const res = await instance.get('/follow_in', {params: {moment_id: value.id}})
@@ -205,7 +205,7 @@ export default {
       },
       show_comment_page: (value) => {
         if (!self.iscomment) {
-          router.push({name: 'comment_page', params: {value: value}})
+          router.push({name: 'comment_page', query: {value: value}})
         }
       }
     })

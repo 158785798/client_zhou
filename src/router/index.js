@@ -1,13 +1,15 @@
 import {createRouter, createWebHashHistory} from 'vue-router'
 import Home from "../views/Home/Home.vue";
-import Index from "../views/Home/Index.vue";
+import HIndex from "../views/Home/HIndex.vue";
 import Login from "../views/Login.vue";
 import OurMeow from "../views/OurMeow.vue";
 import SignUp from "../views/SignUp.vue";
 import UserPage from "../views/UserPage.vue";
 import PasswordReset from "../views/PasswordReset.vue";
-import TiamoBlog from "../views/TiamoBlog.vue";
+import CommentPage from "../views/TiamoBlog/CommentPage.vue";
 import WeChat from "../components/WeChat.vue";
+import Square from "../views/TiamoBlog/Square.vue";
+import TiamoBlog from "../views/TiamoBlog/TIamoBlog.vue";
 
 const router = createRouter({
   history: createWebHashHistory(),
@@ -22,19 +24,19 @@ const router = createRouter({
     {
       path: '/Home',
       name: 'Home',
-      redirect: '/Index',
+      redirect: '/HIndex',
       meta: {
         title: 'Candy Cats'
       },
       component: Home,
       children: [
         {
-          path: '/Index',
-          name: 'Index',
+          path: '/HIndex',
+          name: 'HIndex',
           meta: {
-            title: 'Index'
+            title: 'HIndex'
           },
-          component: Index
+          component: HIndex
         },
         {
           path: '/OurMeow',
@@ -56,10 +58,28 @@ const router = createRouter({
         {
           path: '/TiamoBlog',
           name: 'TiamoBlog',
+          redirect: '/Square',
           meta: {
             title: 'TiamoBlog'
           },
-          component: TiamoBlog
+          component: TiamoBlog,
+          children: [
+            {
+              path: '/Square',
+              name: 'Square',
+              meta: {
+                title: 'Square'
+              },
+              component: Square,
+            },
+            {
+              path: '/CommentPage',
+              name: 'CommentPage',
+              meta: {
+                title: 'CommentPage'
+              },
+              component: CommentPage,
+            }]
         },
         {
           path: '/WeChat',
@@ -111,7 +131,7 @@ router.beforeEach((to, from, next) => {
   const arr = ['WeChat']
   if (to.name !== 'Home' && to.name !== 'Index' && to.name !== 'Login' && to.name !== 'SignUp') {
     if (!window.localStorage.getItem('token_zhou')) {
-      return next({name: 'Login', query:{next: to.name}})
+      return next({name: 'Login', query: {next: to.name}})
     }
   }
   if (to.meta.title) {
