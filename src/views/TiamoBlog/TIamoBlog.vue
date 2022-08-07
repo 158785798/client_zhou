@@ -13,7 +13,16 @@
             <span>{{ item.name }}</span>
           </div>
         </div>
-        <div style="height: 100%"></div>
+
+        <div style="margin: 20px">
+          更新日志  欢迎体验
+        </div>
+        <div>
+          <div style="display: flex;margin:0 10px 20px 10px" v-for="(item, index) in logs">
+            <div style="margin-right: 10px">{{ item.time }}</div>
+            <span>{{item.text}}</span>
+          </div>
+        </div>
       </div>
     </aside>
     <router-view :key="route.path + JSON.stringify(route.query)"></router-view>
@@ -73,6 +82,10 @@ export default {
     const router = useRouter()
     const route = useRoute()
     const self = reactive({
+      logs:[
+        {text:'消息盒子可直达blog', time: '8/08'},
+        {text:'消息盒子内头像直达个人主页', time: '8/08'},
+      ],
       nvamenus: [
         {name: '全部关注', icon: 'iconfont iconfontchahao1'},
         {name: '最新猫猫', icon: 'iconfont iconfontshanchu1'},
