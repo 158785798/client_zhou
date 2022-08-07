@@ -55,7 +55,6 @@ export default {
                 : `ws://8.141.150.118:8096/ws/${clientId}`
             self.ws = new WebSocket(url)
             self.ws.onmessage = (event) => {
-              console.log(11111,JSON.parse(event.data));
               store.commit('push_chatInfo', JSON.parse(event.data))
             }
             self.ws.onclose = () => {
