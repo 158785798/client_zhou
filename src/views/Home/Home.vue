@@ -75,7 +75,7 @@ export default {
       blog: {},
       msgCount: "99+",
       show: false,
-      msgBoxShow: true,
+      msgBoxShow: false,
       msgBox: [],
       message: '',
       pub: false,
