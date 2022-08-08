@@ -116,7 +116,7 @@ export default {
         }
         self.ws.onmessage = (event) => {
           console.log('+1了')
-          self.msgCount++
+          self.msgCount +=1
         }
         self.ws.onclose = () => {
           if (self.lockReconnect) {
