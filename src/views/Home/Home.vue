@@ -88,7 +88,7 @@ export default {
     const self = reactive({
       delDialog: false,
       blog: {},
-      msgCount: '0',
+      msgCount: 0,
       show: false,
       msgBoxShow: false,
       msgBox: [],
@@ -108,8 +108,14 @@ export default {
       initWS: (clientId) => {
         const url = process.env.NODE_ENV === 'development' ? `ws://127.0.0.1:8090/msg/${clientId}`
             : `ws://8.141.150.118:8096/msg/${clientId}`
+
+
         self.ws = new WebSocket(url)
+        self.ws.onopen =()=>{
+          console.log('连上了!', clientId)
+        }
         self.ws.onmessage = (event) => {
+          console.log('+1了')
           self.msgCount++
         }
         self.ws.onclose = () => {
@@ -148,7 +154,7 @@ export default {
     onMounted(async () => {
       const res = await instance.get('/get_msg_count')
       if (res.data> 99){
-        self.msgCount = '99+'
+        self.msgCount = 99
       }else{
         self.msgCount = res.data
       }

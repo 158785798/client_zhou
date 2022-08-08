@@ -48,7 +48,10 @@
           <i style=" font-size: 20px" class="iconfont iconfontyoujian u-msg"></i>
             <span v-show="msgCount!=0" style="padding: 0 5px;font-size: 12px;background-color: red;
             color: #fff;border-radius:10px;position: absolute;line-height: 1.2;
-            transform: translate(-8px, -5px)">{{ msgCount }}</span>
+            transform: translate(-8px, -5px)">
+              <span v-if="msgCount<=99">{{msgCount}}</span>
+              <span v-else>99+</span>
+            </span>
             </span>
           <div @click="dropdownMenuShow=!dropdownMenuShow" class="header-link flex-align-items"
                :class="{'dropdown-menu-sw': dropdownMenuShow}">
