@@ -15,7 +15,8 @@
   </transition>
   <div v-show="msgBoxShow" style="background-color: white;z-index:1000;top:180px;width: 400px;height: 500px;
   position: absolute; left: 0; right: 0; margin: auto; border-radius: 10px">
-    <i @click="msgBoxShow=false" class="iconfont iconfontchahao1" style="position: absolute; right: -30px;color: #fff;font-size: 20px "></i>
+    <i @click="msgBoxShow=false" class="iconfont iconfontchahao1"
+       style="position: absolute; right: -30px;color: #fff;font-size: 20px "></i>
     <transition name="u-cell">
       <div style="overflow: auto;width: 100%;height: 100%;padding: 20px;">
         <div v-if="msgBox.length!==0" v-for="each in msgBox"
@@ -87,7 +88,7 @@ export default {
     const self = reactive({
       delDialog: false,
       blog: {},
-      msgCount: "99+",
+      msgCount: '0',
       show: false,
       msgBoxShow: false,
       msgBox: [],
@@ -144,7 +145,14 @@ export default {
         self.delDialog = true
       }
     })
-    onMounted(() => {
+    onMounted(async () => {
+      const res = await instance.get('/get_msg_count')
+      if (res.data> 99){
+        self.msgCount = '99+'
+      }else{
+        self.msgCount = res.data
+      }
+
       self.initWS(self.clientId)
     })
     return {
