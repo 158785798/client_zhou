@@ -6,7 +6,7 @@ import OurMeow from "../views/OurMeow.vue";
 import SignUp from "../views/SignUp.vue";
 import UserPage from "../views/UserPage.vue";
 import PasswordReset from "../views/PasswordReset.vue";
-import CommentPage from "../views/TiamoBlog/CommentPage.vue";
+import CommentPage from "../views/TiamoBlog/SingleCell.vue";
 import WeChat from "../components/WeChat.vue";
 import Square from "../views/TiamoBlog/Square.vue";
 import TiamoBlog from "../views/TiamoBlog/TIamoBlog.vue";

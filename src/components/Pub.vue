@@ -77,7 +77,7 @@ import {useRoute, useRouter} from "vue-router";
 
 export default {
   name: "Pub",
-  emits: ['unshift_blog', 'show_pub'],
+  emits: ['unshift_blog', 'close_pub'],
   setup(props, context) {
     const store = useStore()
     const router = useRouter()

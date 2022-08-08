@@ -4,14 +4,16 @@
       <i class="iconfont iconfonttubiao02" style="font-size: 20px"></i>
     </el-backtop>
     <div :class="[{'cut-img-mask': showCutImg},{'scale-cut-img': !showCutImg}]" @click="openCutImg"></div>
-    <CutImg :imgUrl="cutImgUrl" :class="['cropper-avatar', {'scale-cut-img': !showCutImg}]"
-            @closeCutImg="showCutImg=false"></CutImg>
+<!--    <CutImg :imgUrl="cutImgUrl" :class="['cropper-avatar', {'scale-cut-img': !showCutImg}]"-->
+<!--            @closeCutImg="showCutImg=false"></CutImg>-->
     <div class="u-del-blog" v-show="delDialog">
       <div style="margin-bottom: 20px; ">确定要删帖吗？</div>
       <el-button size="small" @click="u_confirm">确认</el-button>
       <el-button size="small" @click="u_cancel">取消</el-button>
     </div>
-    <header style="position: relative" :class="{'del-blog': delDialog}">
+    <div style="height: 48px; margin-top:24px;background-color: #4b4a4a">我爱中国</div>
+    <div style="display: flex">
+    <aside style="position: relative; width: 200px" :class="{'del-blog': delDialog}">
 
       <div style="display: flex;  align-items: center">
         <el-upload ref="upload" :beforeUpload="beforeUpload" accept=".png, .jpg, .jpeg"
@@ -36,29 +38,33 @@
       <div style="font-size: 12px; color: rgba(0,0,0,0.49);margin: 5px">
         IP归属地： 湖南
       </div>
-    </header>
-    <div>
-      <transition-group appear tag="ul" name="u-cell">
-        <div v-for="blog in blogs" :key="blog.id">
-          <UserCell
-              :cur_blog_id="cur_blog_id"
-              :blog="blog"
-              @show_delDialog="show_delDialog"
-              @success_callback="success_callback"
-              @back_blog_id="back_blog_id"
-          ></UserCell>
-        </div>
-      </transition-group>
-    </div>
-    <div style="text-align: center; color: rgba(0,0,0,0.53)">
-      <img src="../assets/loading2.gif" alt="" style="border-radius: 20px" width="150" v-show="endLoading">
-      <span v-show="!endLoading&&!loading">我是有底线的o(*￣▽￣*)o</span>
-    </div>
+    </aside>
+    <aside>
+      <div>
+        <transition-group appear tag="ul" name="u-cell">
+          <div v-for="blog in blogs" :key="blog.id">
+            <UserCell
+                :cur_blog_id="cur_blog_id"
+                :blog="blog"
+                @show_delDialog="show_delDialog"
+                @success_callback="success_callback"
+                @back_blog_id="back_blog_id"
+            ></UserCell>
+          </div>
+        </transition-group>
+      </div>
+      <div style="text-align: center; color: rgba(0,0,0,0.53)">
+        <img src="../assets/loading2.gif" alt="" style="border-radius: 20px" width="150" v-show="endLoading">
+        <span v-show="!endLoading&&!loading">我是有底线的o(*￣▽￣*)o</span>
+      </div>
+    </aside>
+
+  </div>
   </div>
 </template>
 
 <script>
-import CutImg from "../components/CutImg.vue";
+// import CutImg from "../components/CutImg.vue";
 import {useStore} from "vuex";
 import {computed, onUnmounted, onMounted, reactive, toRefs} from "vue";
 import {useRouter, useRoute} from "vue-router";
@@ -69,7 +75,7 @@ import UserCell from "../components/UserCell.vue";
 export default {
   name: "UserPage",
   components: {
-    CutImg,
+    // CutImg,
     UserCell,
   },
   emits: [
