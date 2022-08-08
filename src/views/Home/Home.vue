@@ -106,8 +106,8 @@ export default {
         await router.push({name: to, query: query})
       },
       initWS: (clientId) => {
-        const url = process.env.NODE_ENV === 'development' ? `ws://127.0.0.1:8090/ws/${clientId}`
-            : `ws://8.141.150.118:8096/ws/${clientId}`
+        const url = process.env.NODE_ENV === 'development' ? `ws://127.0.0.1:8090/msg/${clientId}`
+            : `ws://8.141.150.118:8096/msg/${clientId}`
         self.ws = new WebSocket(url)
         self.ws.onmessage = (event) => {
           self.msgCount++
