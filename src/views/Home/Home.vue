@@ -2,9 +2,9 @@
   <div class="h-hrader" @click="">
     <Header class="header" :msgCount="msgCount" @show_msg_box="show_msg_box"></Header>
   </div>
-  <!--    <transition name="pub">-->
-  <!--      <Pub v-show="pub" @success_callback="success_callback" @unshift_blog="unshift_blog" @close_pub="pub=false"></Pub>-->
-  <!--    </transition>-->
+      <transition name="pub">
+        <Pub v-show="pub" @success_callback="success_callback" @unshift_blog="unshift_blog" @close_pub="pub=false"></Pub>
+      </transition>
   <transition name="fade">
     <div v-show="show">
       <div>
@@ -70,7 +70,7 @@
 <script>
 import Header from "../../components/Header.vue";
 import {computed, onMounted, reactive, toRefs} from "vue";
-// import Pub from "../../components/Pub.vue";
+import Pub from "../../components/Pub.vue";
 import {useStore} from "vuex";
 import instance from "../../api/request.js";
 import {useRoute, useRouter} from "vue-router";
@@ -79,7 +79,7 @@ export default {
   name: "Home",
   components: {
     Header,
-    // Pub
+    Pub
   },
   setup() {
     const store = useStore()
