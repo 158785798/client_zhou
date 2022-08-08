@@ -60,7 +60,7 @@
       </div>
 
       <div title="评论" class="content-btn">
-        <span class="btn-blog" @click="comment(blog)" :class="{'is-open': blog.commentShow}">
+        <span ref="comment_btn" class="btn-blog" @click="comment(blog)" :class="{'is-open': blog.commentShow}">
         <i class="iconfont iconfontico_pinglun"></i>
         <span v-if="blog.comments !==0" style="font-size: 13px;margin-left: 5px">{{ blog.comments }}</span>
           <span v-else style="font-size: 13px; margin-left: 5px">评论</span>
@@ -102,8 +102,8 @@
 
 <script>
 import {useStore} from "vuex";
-import {computed, reactive, toRefs} from "vue";
-import {useRouter} from "vue-router";
+import {computed, onMounted, reactive, toRefs} from "vue";
+import {useRoute, useRouter} from "vue-router";
 import instance from "../api/request.js";
 import {ElMessage} from "element-plus";
 import Comment from './Comment.vue'
@@ -119,7 +119,7 @@ export default {
     },
     cur_blog_id: {
       type: Number,
-      default(){
+      default() {
         return -1
       }
     },
@@ -144,7 +144,9 @@ export default {
   setup(props, context) {
     const store = useStore()
     const router = useRouter()
+    const route = useRoute()
     const self = reactive({
+      comment_btn: null,
       curentImgGroups: [],
       cur_each: {},
       pageRefresh: computed(() => store.state.pageRefresh),
@@ -216,6 +218,11 @@ export default {
         if (!self.iscomment) {
           router.push({name: 'comment_page', query: {value: value}})
         }
+      }
+    })
+    onMounted(() => {
+      if (route.query.flag === 'comment') {
+        self.comment_btn.click()
       }
     })
     return {

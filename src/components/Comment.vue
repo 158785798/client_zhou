@@ -24,12 +24,12 @@
       </div>
     </div>
   </el-container>
-  <div v-for="(item, index) in comments" style="font-size: 12px; margin-bottom: 10px ">
+  <div v-for="(item, index) in comments" style="font-size: 12px; margin-bottom: 20px ">
     <div style="display: flex;">
-      <img :src="item.userInfo.avatarUrl" alt="" style="width: 34px; height: 34px; border-radius: 50%">
+      <img @click="to_tab('UserPage', {u_id: item.userInfo.id})" :src="item.userInfo.avatarUrl" alt="" style="cursor: pointer;width: 34px; height: 34px; border-radius: 50%">
 
       <div style="margin-left: 10px; width: 100%">
-        <div style="margin-bottom: 5px; color:#f18e63 ">{{ item.userInfo.username }}</div>
+        <div @click="to_tab('UserPage', {u_id: item.userInfo.id})" style="cursor: pointer;margin-bottom: 5px; color:#f18e63 ">{{ item.userInfo.username }}</div>
         <div style="color: rgba(0,0,0,0.53); display: flex; justify-content: space-between">
           <span>{{ item.pub_time }}</span>
           <div style="display: flex;font-size: 12px; text-align: center">
@@ -39,27 +39,21 @@
             <div title="评论" class="btn-item" :class="{'is-open': item.commentShow}">
               <i class="iconfont iconfontico_pinglun" style="font-size: 12px"></i>
             </div>
-
             <div v-if="!item.is_like" title="点赞" class="btn-item" @click="like(item)" style="width: auto">
               <i class="iconfont iconfontxin" style="font-size: 12px"></i>
               <span v-if="item.likes !==0" style="margin-left: 5px">{{ item.likes }}</span>
               <span v-else>赞</span>
             </div>
-
-
             <div v-else title="点赞" class="btn-item" @click="like(item)" style="width: auto">
               <i class="iconfont iconfontaixin" style="color: red; font-size: 12px"></i>
               <span v-if="item.likes !==0" style="margin-left: 5px">{{ item.likes }}</span>
               <span v-else style="margin-left: 5px">赞</span>
             </div>
-
-
           </div>
-
         </div>
       </div>
     </div>
-    <div style="margin-left: 44px; margin-top: 10px" v-html="item.content"></div>
+    <div style="margin-left: 44px; margin-top: 8px" v-html="item.content"></div>
   </div>
 </template>
 
@@ -68,6 +62,8 @@ import {onMounted, reactive, toRefs} from "vue";
 import instance from "../api/request.js";
 import {ElMessage} from "element-plus";
 import {useStore} from "vuex";
+import router from "../router/index.js";
+import {useRouter} from "vue-router";
 
 export default {
   name: "Comment",
@@ -76,6 +72,7 @@ export default {
   },
   setup(props, context) {
     const store = useStore()
+    const router = useRouter()
     const self = reactive({
       loading: true,
       content: '',
@@ -83,6 +80,9 @@ export default {
       comments: [],
       isEmojiShow: false,
       blog_id: props.blog_id,
+      to_tab:(name, query)=>{
+        router.push({name: name, query: query})
+      },
       comment: async () => {
         const param = {blog_id: self.blog_id, content: self.content}
         const res = await instance.post('/comment', param)
