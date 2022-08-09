@@ -83,6 +83,7 @@ export default {
     const route = useRoute()
     const self = reactive({
       logs:[
+        {text:'聊天功能已修复', time: '8/10'},
         {text:'消息盒子可以实时提示', time: '8/09'},
         {text:'已读消息显示灰色', time: '8/09'},
         {text:'评论消息自动打开评论页面', time: '8/09'},
