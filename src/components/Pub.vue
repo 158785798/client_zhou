@@ -124,8 +124,8 @@ export default {
             }
           }
       )
-      const res1 = await instance.get('/get_emojis')
-      self.emojis = res1.data
+      // const res1 = await instance.get('/get_emojis')
+      // self.emojis = res1.data
     })
     return {
       ...toRefs(self)

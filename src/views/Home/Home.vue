@@ -2,9 +2,9 @@
   <div class="h-hrader" @click="">
     <Header class="header" :msgCount="msgCount" @show_msg_box="show_msg_box"></Header>
   </div>
-      <transition name="pub">
-        <Pub v-show="pub" @success_callback="success_callback" @unshift_blog="unshift_blog" @close_pub="pub=false"></Pub>
-      </transition>
+  <transition name="pub">
+    <Pub v-show="pub" @success_callback="success_callback" @unshift_blog="unshift_blog" @close_pub="pub=false"></Pub>
+  </transition>
   <transition name="fade">
     <div v-show="show">
       <div>
@@ -13,6 +13,7 @@
       </div>
     </div>
   </transition>
+  <button @click="send" style="position: fixed; left:0">发送</button>
   <div v-show="msgBoxShow" style="background-color: white;z-index:1000;top:180px;width: 400px;height: 500px;
   position: absolute; left: 0; right: 0; margin: auto; border-radius: 10px">
     <i @click="msgBoxShow=false" class="iconfont iconfontchahao1"
@@ -74,6 +75,9 @@ import Pub from "../../components/Pub.vue";
 import {useStore} from "vuex";
 import instance from "../../api/request.js";
 import {useRoute, useRouter} from "vue-router";
+import SocketIO from 'socket.io-client'
+import VueSocketIO from "vue-3-socket.io";
+
 
 export default {
   name: "Home",
@@ -81,11 +85,44 @@ export default {
     Header,
     Pub
   },
+  sockets: {
+    connect: function () {
+      console.log('socket to notification channel connected')
+    },
+  },
   setup() {
+    // const vueSocket = new VueSocketIO({
+    //   debug: true,
+    //   connection:
+    // });
+    const socket = SocketIO('ws://127.0.0.1:8098', {
+      transports: ['websocket'],
+      cors: {
+        origin: '*'
+      },
+      query: {c: 1},
+      // path: '/msg/',
+      timeout: 1000000,
+      // autoConnect: false,
+      reconnection: false,
+      reconnectionDelay: 2000,
+      auth: {
+        c: 22
+      }
+    })
+    socket.on('chat', (value)=>{
+      console.log(value)
+    })
+
     const store = useStore()
     const router = useRouter()
     const route = useRoute()
     const self = reactive({
+      send:()=>{
+        console.log('ssss')
+        // socket.connect()
+        socket.emit('join','2222')
+      },
       delDialog: false,
       blog: {},
       msgCount: 0,
@@ -111,12 +148,12 @@ export default {
 
 
         self.ws = new WebSocket(url)
-        self.ws.onopen =()=>{
+        self.ws.onopen = () => {
           console.log('连上了!', clientId)
         }
         self.ws.onmessage = (event) => {
           console.log('+1了')
-          self.msgCount +=1
+          self.msgCount += 1
         }
         self.ws.onclose = () => {
           if (self.lockReconnect) {
@@ -127,7 +164,7 @@ export default {
           setTimeout(() => {
             self.initWS(clientId)
             self.lockReconnect = false
-          }, 2000)
+          }, 5000)
         }
       },
       show_msg_box: async () => {
@@ -152,14 +189,14 @@ export default {
       }
     })
     onMounted(async () => {
-      const res = await instance.get('/get_msg_count')
+      /*const res = await instance.get('/get_msg_count')
       if (res.data> 99){
         self.msgCount = 99
       }else{
         self.msgCount = res.data
-      }
+      }*/
 
-      self.initWS(self.clientId)
+      // self.initWS(self.clientId)
     })
     return {
       ...toRefs(self),
