@@ -14,7 +14,7 @@
     </div>
   </transition>
   <div v-show="msgBoxShow">
-    <MsgBox @show_msg_box="show_msg_box" :msgBox="msgBox"></MsgBox>
+    <MsgBox @show_msg_box="show_msg_box" :msgBox="msgBox" :msgBoxLoading="msgBoxLoading"></MsgBox>
   </div>
   <el-container style="margin: 50px auto" :class="{'msg-box': msgBoxShow}" @click="msgBoxShow=false">
     <span @click="pub=!pub" style="position: fixed;z-index:120;transform: translate(200px, -35px)">
@@ -29,12 +29,13 @@
 
 <script>
 import Header from "../../components/Header.vue";
-import {computed, onMounted, reactive, toRefs} from "vue";
+import {getCurrentInstance, computed, onMounted, reactive, toRefs} from "vue";
 import Pub from "../../components/Pub.vue";
 import {useStore} from "vuex";
 import instance from "../../api/request.js";
 import {useRoute, useRouter} from "vue-router";
 import MsgBox from "../../components/MsgBox.vue";
+
 
 export default {
   name: "Home",
@@ -44,6 +45,10 @@ export default {
     MsgBox
   },
   setup() {
+    const socket = getCurrentInstance().proxy.$socket
+    socket.on('prompt', () => {
+      self.msgCount ++
+    })
     const store = useStore()
     const router = useRouter()
     const route = useRoute()
@@ -53,6 +58,7 @@ export default {
       msgCount: 0,
       show: false,
       msgBoxShow: false,
+      msgBoxLoading: true,
       msgBox: [],
       message: '',
       pub: false,
@@ -60,40 +66,15 @@ export default {
       clientId: computed(() => {
         return store.state.userInfo.id
       }),
-
-      initWS: (clientId) => {
-        const url = process.env.NODE_ENV === 'development' ? `ws://127.0.0.1:8090/msg/${clientId}`
-            : `ws://8.141.150.118:8096/msg/${clientId}`
-
-
-        self.ws = new WebSocket(url)
-        self.ws.onopen = () => {
-          console.log('连上了!', clientId)
-        }
-        self.ws.onmessage = (event) => {
-          console.log('+1了')
-          self.msgCount += 1
-        }
-        self.ws.onclose = () => {
-          if (self.lockReconnect) {
-            return
-          }
-          self.lockReconnect = true
-          //没连接上会一直重连，设置延迟避免请求过多
-          setTimeout(() => {
-            self.initWS(clientId)
-            self.lockReconnect = false
-          }, 2000)
-        }
-      },
       show_msg_box: async (flag) => {
-        if (flag === 'sub' || self.msgCount > 0) {
+        if (flag === 'sub' && self.msgCount > 0) {
           self.msgCount--
         }
         self.msgBoxShow = !self.msgBoxShow
         if (self.msgBoxShow) {
           const res = await instance.get('/get_box_msg')
           self.msgBox = res.data
+          self.msgBoxLoading = false
         }
       },
       success_callback: (message) => {
@@ -118,7 +99,6 @@ export default {
         self.msgCount = res.data
       }
 
-      self.initWS(self.clientId)
     })
     return {
       ...toRefs(self),

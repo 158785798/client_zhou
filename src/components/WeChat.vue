@@ -1,30 +1,32 @@
 <template>
-  <div style="margin: auto;width: 500px;">
-    <div class="container" id="container">
-      <div v-for="(item, index) in chatData" style="margin: 18px auto">
-        <div v-if="item.id===clientId"
-             style="display: flex;justify-content: right;">
+  <div style="display:flex;justify-content: center; align-items: center; margin-top: 100px;padding: 30px;">
+    <div style="width: 500px;background-color: rgba(255, 255, 255, 0.72);border-radius: 5px;">
+      <div class="container" id="container">
+        <div v-for="(item, index) in chatData" style="margin: 18px auto">
+          <div v-if="item.id===userInfo.id"
+               style="display: flex;justify-content: right;">
 
           <span class="u-content" style="background-color: #09e509;">
             {{ item.content }}
           </span>
-          <span class="content-caret-right"></span>
-          <img class="u-avatar" :src="item.avatarUrl" alt="">
+            <span class="content-caret-right"></span>
+            <img class="u-avatar" :src="item.avatarUrl" alt="">
 
-        </div>
-        <div v-else style="display: flex;justify-content: left;">
-          <img class="u-avatar" :src="item.avatarUrl" alt="">
-          <span class="content-caret-left"></span>
-          <span class="u-content" style="background-color: #fff;">
+          </div>
+          <div v-else style="display: flex;justify-content: left;">
+            <img class="u-avatar" :src="item.avatarUrl" alt="">
+            <span class="content-caret-left"></span>
+            <span class="u-content" style="background-color: #fff;">
             {{ item.content }}
           </span>
+          </div>
         </div>
-      </div>
 
+      </div>
+      <div class="textDiv" ref="textDiv" contenteditable="true" @keydown="enter_to_send"
+           aria-placeholder="Enter发送  Shift+Enter换行"></div>
+      <el-button @click="sendMessage">send</el-button>
     </div>
-    <div class="textDiv" ref="textDiv" contenteditable="true" @keydown="enter_to_send"
-         aria-placeholder="Enter发送  Shift+Enter换行"></div>
-    <el-button @click="sendMessage">send</el-button>
   </div>
 
 
@@ -32,41 +34,26 @@
 
 <script>
 import {useStore} from "vuex";
-import {computed, onMounted, onUnmounted, reactive, toRefs} from "vue";
+import {computed, onMounted, getCurrentInstance, reactive, toRefs} from "vue";
 import {ElMessage} from "element-plus";
 
 export default {
   name: "WeChat",
   setup() {
+    const socket = getCurrentInstance().proxy.$socket
+    socket.on('broadcast', (data) => {
+      store.commit('push_chatInfo', JSON.parse(data))
+    })
     const store = useStore()
     const self = reactive({
           textDiv: null,
           lockReconnect: false,
           chatData: computed(() => store.state.chatInfo),
-          clientId: computed(() => store.state.userInfo.id),
+          userInfo: computed(() => store.state.userInfo),
           enter_to_send: (event) => {
             if (!event.shiftKey && event.key === 'Enter') {
               event.preventDefault()
               self.sendMessage()
-            }
-          },
-          initWS: (clientId) => {
-            const url = process.env.NODE_ENV === 'development' ? `ws://127.0.0.1:8090/ws/${clientId}`
-                : `ws://8.141.150.118:8096/ws/${clientId}`
-            self.ws = new WebSocket(url)
-            self.ws.onmessage = (event) => {
-              store.commit('push_chatInfo', JSON.parse(event.data))
-            }
-            self.ws.onclose = () => {
-              if (self.lockReconnect) {
-                return
-              }
-              self.lockReconnect = true
-              //没连接上会一直重连，设置延迟避免请求过多
-              setTimeout(() => {
-                self.initWS(clientId)
-                self.lockReconnect = false
-              }, 2000)
             }
           },
           sendMessage: () => {
@@ -76,15 +63,19 @@ export default {
               self.textDiv.innerText = ''
               return false
             }
-            const msg = {id: self.clientId, avatarUrl: store.state.userInfo.avatarUrl, content: content}
-            self.ws.send(JSON.stringify(msg))
+            const msg = {
+              id: self.userInfo.id,
+              username: self.userInfo.username,
+              avatarUrl: self.userInfo.avatarUrl,
+              content: content
+            }
+            socket.emit('broadcast', JSON.stringify(msg))
             store.commit('push_chatInfo', msg)
             self.textDiv.innerText = ''
             return false
           }
         }
     )
-    self.initWS(self.clientId)
     onMounted(() => {
       const div = document.getElementById('container')
       div.scrollTop = div.scrollHeight;
@@ -103,8 +94,6 @@ export default {
 <style scoped>
 .container {
   text-align: left;
-  border-radius: 5px;
-  background-color: rgba(255, 255, 255, 0.72);
   height: 300px;
   color: rgba(0, 0, 0);
   overflow-y: scroll;

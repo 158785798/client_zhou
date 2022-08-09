@@ -49,7 +49,7 @@
             <span v-show="msgCount!=0" style="padding: 0 5px;font-size: 12px;background-color: red;
             color: #fff;border-radius:10px;position: absolute;line-height: 1.2;
             transform: translate(-8px, -5px)">
-              <span v-if="msgCount<=99">{{msgCount}}</span>
+              <span v-if="msgCount<=99">{{ msgCount }}</span>
               <span v-else>99+</span>
             </span>
             </span>
@@ -107,7 +107,7 @@ export default {
           play: true,
           aboutShow: false,
           dropdownMenuShow: false,
-      show_msg_box: () => {
+          show_msg_box: () => {
             context.emit('show_msg_box')
           },
           playMusic: () => {

@@ -1,17 +1,14 @@
 import {createApp} from 'vue'
 import App from './App.vue'
+import router from "./router/index.js"
+import store from "./store/index.js"
 import ElementPlus from 'element-plus'
+import socket from "./utils/socket.js";
 import 'element-plus/dist/index.css'
 import './global.scss'
 import './assets/font/iconfont.css'
 import "animate.css/animate.min.css"
 
-
-import router from "./router/index.js";
-import store from "./store/index.js";
-
-import VueSocketIO from 'vue-3-socket.io'
-import io from 'socket.io-client';
 
 // const socketIo = new VueSocketIO({
 //   debug: true,
@@ -27,7 +24,6 @@ import io from 'socket.io-client';
 //     extraHeaders: {"Access-Control-Allow-Origin": '*'},
 //   }
 // })
-
-
-createApp(App).use(ElementPlus).use(store)
-    .use(router).mount('#app')
+const app = createApp(App)
+app.config.globalProperties.$socket = socket
+app.use(ElementPlus).use(store).use(router).mount('#app')

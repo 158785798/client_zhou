@@ -1,11 +1,11 @@
 <template>
-  <div style="background-color: white;z-index:1000;top:180px;width: 400px;height: 500px;
-  position: absolute; left: 0; right: 0; margin: auto; border-radius: 10px">
+  <div v-loading="msgBoxLoading" style="background-color: white;z-index:1000;top:180px;width: 400px;height: 500px;
+  position: absolute; left: 0; right: 0; margin: auto; border-radius: 10px; overflow: hidden">
     <i @click="show_msg_box" class="iconfont iconfontchahao1"
        style="position: absolute; right: -30px;color: #fff;font-size: 20px "></i>
     <transition name="u-cell">
       <div style="overflow: auto;width: 100%;height: 100%;padding: 20px;">
-        <div v-if="msgBox.length!==0" v-for="each in msgBox"
+        <div v-show="msgBox.length!==0" v-for="each in msgBox"
              :style="{color:(each.clicked? 'rgba(0,0,0,0.5)': '#cf00ee')}"
              style="display: flex;margin-bottom: 1.5rem;cursor: pointer; align-items: center">
           <img :src="each.userInfo.avatarUrl" alt="" @click="to_tab('UserPage', {u_id: each.userInfo.id})"
@@ -35,7 +35,7 @@
         </span>
           </div>
         </div>
-        <div v-else style="text-align: center; margin-top: 100px">
+        <div v-show="msgBox.length===0 && msgBoxLoading" style="text-align: center; margin-top: 100px">
           空空如也ε=ε=ε=(~￣▽￣)~
         </div>
       </div>
@@ -50,14 +50,15 @@ import {useRouter} from "vue-router";
 
 export default {
   name: "MsgBox",
-  props:['msgBox'],
-  emits:['show_msg_box'],
-  setup(props, context){
+  props: ['msgBox', 'msgBoxLoading'],
+  emits: ['show_msg_box'],
+  setup(props, context) {
     const router = useRouter()
     const self = reactive({
-      show_msg_box:async ()=>{
+      loading: true,
+      show_msg_box: async () => {
         context.emit('show_msg_box')
-    },
+      },
       to_tab: async (to, query) => {
         context.emit('show_msg_box', 'sub')
         if (!query.clicked) {
