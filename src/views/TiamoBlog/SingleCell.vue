@@ -1,5 +1,5 @@
 <template>
-  <main v-loading="loading" style="margin: 15px 10px 0 10px; padding: 0;flex: 1">
+  <main>
     <div style="width: 100%">
       <transition-group appear tag="div" name="u-cell">
         <div v-for="blog in blogs" :key="blog.id">
@@ -22,13 +22,12 @@ export default {
     UserCell,
   },
   emits: [
-    'success_callback'
+    'success_callback', 'finish'
   ],
   setup() {
     const router = useRouter()
     const route = useRoute()
     const self = reactive({
-      loading: false,
       cur_blog_id: -1,
       blogs: [],
       show_delDialog: (blog_id) => {
@@ -50,6 +49,7 @@ export default {
     onBeforeMount(async () => {
       const res = await instance.get('/get_blog', {params: {blog_id: route.query.blog_id}})
       self.blogs.push(res.data)
+      context.emit('finish')
     })
     return {
       ...toRefs(self)

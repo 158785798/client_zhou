@@ -2,7 +2,7 @@
   <main class="main">
     <div style="margin-bottom: 40px;display: flex; justify-content: space-between">
       <strong style="font-size: 16px">快捷发布</strong>
-      <i class="iconfont iconfontchahao1" @click="close_pub"></i>
+      <i class="iconfont iconfontchahao1 cursor-pointer ico" @click="close_pub"></i>
     </div>
     <el-input
         v-model="content"
@@ -18,7 +18,7 @@
           <img v-else :src="item.img_uri" alt="" height="96">
         </div>
         <strong @click="del_img(item)">
-          <i class="iconfont iconfontchahao1 del-img"></i>
+          <i class="iconfont iconfontchahao1 del-img cursor-pointer ico"></i>
         </strong>
       </div>
       <el-upload v-if="blogImgs.length !== 0"
@@ -37,7 +37,7 @@
     <div style="display:flex;margin-top: 10px;">
       <div style="display: flex; align-items: center; flex: 1;">
             <span :class="{'item-sw': isEmojiShow}" @click="isEmojiShow=!isEmojiShow">
-              <i @click="" class="iconfont iconfontxiaolian item" style="font-size: 20px"></i>
+              <i @click="" class="iconfont iconfontxiaolian item cursor-pointer ico ico-bg" style="font-size: 20px"></i>
             </span>
         <span>
           <el-upload
@@ -46,7 +46,7 @@
               accept="image/*"
               :on-success="upload_success"
               :action="action">
-          <i class="iconfont iconfontimage item" style="font-size: 20px; display: inline-block"></i>
+          <i class="iconfont iconfontimage item cursor-pointer ico ico-bg" style="font-size: 20px; display: inline-block"></i>
       </el-upload>
 
             </span>
@@ -58,7 +58,7 @@
     <div v-show="isEmojiShow"
          style="padding: 10px;box-shadow: 0 0 10px 5px rgba(12,12,12,0.33);width: 470px;height: 330px;min-width:6.25rem;
              overflow-y:auto;position: absolute;margin: 10px; background-color: #fff; border-radius: 10px">
-                <span @click="push_emoji(item)" style="display: inline-block" v-for="item in emojis" class="emoji"
+                <span @click="push_emoji(item)" style="display: inline-block" v-for="item in emojis" class="emoji cursor-pointer ico ico-bg"
                       :key="item.id">
                     <img :src="item.url" alt="" width="24">
                 </span>
@@ -124,8 +124,8 @@ export default {
             }
           }
       )
-      // const res1 = await instance.get('/get_emojis')
-      // self.emojis = res1.data
+      const res1 = await instance.get('/get_emojis')
+      self.emojis = res1.data
     })
     return {
       ...toRefs(self)
@@ -152,7 +152,6 @@ export default {
 }
 
 .item {
-  cursor: pointer;
   border-radius: 50%;
   padding: 8px;
   color: rgba(0, 0, 0, 0.58);
@@ -170,11 +169,6 @@ export default {
   cursor: default;
 }
 
-.item:hover {
-  background-color: $icon-hover-bg-color;
-  color: $icon-hover-color;
-}
-
 .del-img {
   transform: scale(0.6);
   color: white;
@@ -184,27 +178,16 @@ export default {
   position: absolute;
   right: 0;
   top: 0;
-  cursor: pointer;
   z-index: 200
 }
 
 .del-img:hover {
-  color: $icon-hover-color !important;
   background-color: transparent !important;
 }
 
 .emoji {
-  cursor: pointer;
   border-radius: 50%;
   padding: 5px;
-}
-
-.emoji:hover {
-  background-color: $icon-hover-bg-color;
-}
-
-.iconfontchahao1:hover {
-  color: $icon-hover-color;
 }
 
 .image-picbed:hover::before {

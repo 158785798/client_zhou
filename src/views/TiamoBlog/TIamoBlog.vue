@@ -4,10 +4,10 @@
   </el-backtop>
 
   <div class="common-layout" style="display: flex;height: 100%">
-    <aside style="height: 100%;background-color: #fff;margin-top: 15px;width:200px;border-radius: 6px;">
+    <aside style="height: 100%;background-color: #fff;width:200px;border-radius: 6px;">
       <div style="position: sticky;top:60px;">
         <div style="font-size: 25px; margin: 10px 20px;height: 100%;">首页</div>
-        <div style="cursor: pointer;" class="navItem_left" v-for="item in nvamenus">
+        <div class="navItem_left cursor-pointer" v-for="item in nvamenus">
           <div style=" padding:10px 20px">
             <i :class="item.icon" style="margin-right: 18px"></i>
             <span>{{ item.name }}</span>
@@ -25,10 +25,12 @@
         </div>
       </div>
     </aside>
-    <router-view :key="route.path + JSON.stringify(route.query)"></router-view>
-    <aside style="height: 100%;margin-top: 15px;width:300px;border-radius: 6px;">
+    <main v-loading="loading" style="margin: 0 10px; flex: 1">
+    <router-view @finish="loading=false" :key="route.path + JSON.stringify(route.query)"></router-view>
+    </main>
+    <aside style="height: 100%;width:300px;border-radius: 6px;">
       <div style="position: sticky;top:-50px;">
-        <div class="right-card">
+        <div class="right-card cursor-pointer">
           <div style="margin-bottom: 10px; ">
             <span>猫猫热搜</span>
           </div>
@@ -42,16 +44,15 @@
             <span>😍</span>
           </div>
         </div>
-        <div style="background-color: #fff;
+        <div class="cursor-pointer" style="background-color: #fff;
   border-radius: 6px;
-  cursor: pointer;
   margin-bottom: 10px;">
           <div style="padding: 10px 15px 10px 15px;">
             <span>你可能感兴趣的人</span>
           </div>
           <div class="navItem_left" style="padding:20px;display: flex; align-items: center"
                v-for="item in taste">
-            <div @click="to_tab(item.id)" style="display: flex; align-items: center;flex: 1;">
+            <div @click="to_tab('UserPage', {u_id: item.id})" style="display: flex; align-items: center;flex: 1;">
               <img :src="item.avatarUrl" alt="" style="width: 50px; height: 50px; border-radius: 50%">
               <div style=" margin: 0 10px">
                 <div>{{ item.username }}</div>
@@ -72,6 +73,7 @@
 import {reactive, toRefs, onMounted} from "vue";
 import {useRouter, useRoute} from "vue-router";
 import instance from "../../api/request.js";
+import {to_tab} from "../../utils/tools.js";
 
 export default {
   name: "TIamoBlog",
@@ -110,9 +112,8 @@ export default {
         '世界只有一个中国',
       ],
       taste: [],
-      to_tab: (u_id) => {
-        router.push({name: 'UserPage', query: {u_id: u_id}})
-      },
+      loading: true,
+      to_tab: to_tab
     })
     onMounted(async () => {
       const res = await instance.get('/get_taste')
@@ -138,7 +139,6 @@ export default {
   background-color: #fff;
   padding: 10px 15px 20px 15px;
   border-radius: 6px;
-  cursor: pointer;
   margin-bottom: 10px;
 }
 

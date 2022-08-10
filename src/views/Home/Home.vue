@@ -6,7 +6,7 @@
     <Pub v-show="pub" @success_callback="success_callback" @unshift_blog="unshift_blog" @close_pub="pub=false"></Pub>
   </transition>
   <transition name="fade">
-    <div v-show="show">
+    <div v-show="show" class="show">
       <div>
         <div class="iconfont iconfonticon_succeed" style="font-size: 40px;margin: 10px; font-weight: lighter"></div>
         <div>{{ message }}</div>
@@ -20,7 +20,7 @@
     <span @click="pub=!pub" style="position: fixed;z-index:120;transform: translate(200px, -35px)">
       <i class="iconfont iconfontjiahao " style="font-size: 30px;color: red;"></i>
   </span>
-    <div style="width: 100%; position: relative" :class="{'pub': pub}" @click="pub=false">
+    <div style="width: 100%;margin: 15px 0 0 0; position: relative" :class="{'pub': pub}" @click="pub=false">
       <router-view @success_callback="success_callback" :key="route.path + JSON.stringify(route.query)"/>
     </div>
   </el-container>

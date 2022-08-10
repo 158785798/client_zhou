@@ -18,7 +18,7 @@
           :class="[
           'iconfont',
           'iconfontarrow-right',
-          'arrow',
+          'arrow','cursor-pointer',
           { showRightArrow: isShowArrow },
         ]"
           @click="next"
@@ -237,7 +237,6 @@ li {
   border: 2px solid rgba(170, 190, 202, 0.6);
   background-color: rgba(128, 170, 196);
   top: 48%;
-  cursor: pointer;
   padding: 5px;
   border-radius: 50%;
   font-size: 20px;

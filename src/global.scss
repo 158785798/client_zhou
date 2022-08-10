@@ -61,22 +61,20 @@ a:hover {
   color: red;
 }
 
-.iconfontxialajiantouxiao:hover {
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.ico:hover {
+  color: $icon-hover-color;
+
+}
+
+.ico-bg:hover {
   background-color: $icon-hover-bg-color;
-  color: $icon-hover-color
 }
 
-.iconfont {
-  cursor: pointer;
-}
-
-.iconfont:hover {
-  color: $icon-hover-color
-}
-
-.avatar {
-  cursor: pointer;
-}
 
 .iconfontduihao {
   color: green;
@@ -103,6 +101,9 @@ a:hover {
 
 li {
   list-style: none !important;
+}
+img{
+  cursor: pointer;
 }
 
 ::-webkit-scrollbar {
@@ -143,6 +144,7 @@ body {
   position: fixed;
   cursor: pointer;
 }
+
 .u-cell-enter-active {
   animation: bound-in .5s;
 }

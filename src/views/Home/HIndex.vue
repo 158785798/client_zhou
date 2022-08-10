@@ -54,7 +54,7 @@ export default {
       isVisible: false,
       aa: false,
       d: false,
-      windowScrollListener: () => {
+      scroll: () => {
         const offset = document.getElementById('sss').getBoundingClientRect()
         const offsetTop = offset.top;
         // 进入可视区域
@@ -71,10 +71,10 @@ export default {
       },
     })
     onMounted(() => {
-      window.addEventListener('scroll', self.windowScrollListener)
+      window.addEventListener('scroll', self.scroll)
     })
     onUnmounted(() => {
-      window.removeEventListener('scroll', self.windowScrollListener)
+      window.removeEventListener('scroll', self.scroll)
     })
     return {
       ...toRefs(self)

@@ -2,22 +2,22 @@
   <div
       style="font-size: 18px;background-color: #fff;padding: 20px;margin-bottom: 8px; border-radius: 6px;position: relative">
     <header style="display: flex; justify-content: space-between">
-      <img class="avatar" :src="blog.userInfo.avatarUrl" alt="" style="width: 40px; height: 40px; border-radius: 50%"
-           @click="to_tab(blog.userInfo.id)">
+      <img :src="blog.userInfo.avatarUrl" alt="" style="width: 40px; height: 40px; border-radius: 50%"
+           @click="to_tab('UserPage', {u_id: blog.userInfo.id})">
       <div style="margin: 10px; flex: 1">
         <div style="margin-bottom: 5px;">
-          <strong class="avatar" @click="to_tab(blog.userInfo.id)">{{ blog.userInfo.username }}</strong>
+          <strong class="cursor-pointer" @click="to_tab('UserPage', {u_id: blog.userInfo.id})">{{ blog.userInfo.username }}</strong>
         </div>
         <div style="color: rgba(0,0,0,0.5); font-size: 12px">
           {{ blog.pub_time }}
         </div>
       </div>
       <div style="">
-        <i class="iconfont iconfontxialajiantouxiao" style="padding:6px; border-radius: 50%"
+        <i class="iconfont iconfontxialajiantouxiao cursor-pointer ico ico-bg" style="padding:6px; border-radius: 50%"
            @click="back_blog_id(blog.id)" :class="{'up-dropdown-menu': blog.id===cur_blog_id}"></i>
         <div v-show="blog.id===cur_blog_id" style="width:150px;overflow: hidden;
         background-color: #fff;z-index: 10;position: absolute;margin-top: 2px;right:20px;border-radius: 6px; box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.25);">
-          <div style="cursor: pointer;font-size: .875rem" class="navItem_left" v-for="m in blog.dropdown_menus"
+          <div style="font-size: .875rem" class="navItem_left cursor-pointer" v-for="m in blog.dropdown_menus"
                @click="to_do(m, blog.id, index)">
             <div style="padding:10px 15px">
               <strong class="iconfont hover" :class="m.icon"
@@ -43,7 +43,7 @@
     </div>
     <div style="margin-top: 15px; display: flex; justify-content: space-between; color: #808080;">
       <div v-if="!blog.is_like" title="点赞" class="content-btn">
-        <span class="btn-blog" @click="like(blog)">
+        <span class="btn-blog cursor-pointer ico" @click="like(blog)">
           <i class="iconfont iconfontxin" style="font-size: 14px"></i>
           <span v-if="blog.likes !==0" style="font-size: 13px;margin-left: 5px">{{ blog.likes }}</span>
           <span v-else style="font-size: 13px; margin-left: 5px">赞</span>
@@ -51,7 +51,7 @@
       </div>
 
       <div v-else title="点赞" class="content-btn">
-        <span class="btn-blog" @click="like(blog)">
+        <span class="btn-blog cursor-pointer ico" @click="like(blog)">
           <i class="iconfont iconfontaixin" style="font-size: 14px;color: red"></i>
           <span v-if="blog.likes !==0" style="font-size: 13px;margin-left: 5px">{{ blog.likes }}</span>
           <span v-else style="font-size: 13px; margin-left: 5px">赞</span>
@@ -59,7 +59,7 @@
       </div>
 
       <div title="评论" class="content-btn">
-        <span class="btn-blog" @click="comment(blog)" :class="{'is-open': blog.commentShow}">
+        <span class="btn-blog cursor-pointer ico" @click="comment(blog)" :class="{'is-open': blog.commentShow}">
         <i class="iconfont iconfontico_pinglun"></i>
         <span v-if="blog.comments !==0" style="font-size: 13px;margin-left: 5px">{{ blog.comments }}</span>
           <span v-else style="font-size: 13px; margin-left: 5px">评论</span>
@@ -67,7 +67,7 @@
 
       </div>
       <div title="转发" class="content-btn">
-        <span class="btn-blog">
+        <span class="btn-blog cursor-pointer ico">
         <i class="iconfont iconfontzhuanfa1"></i>
         <span style="font-size: 13px;margin-left: 5px">405</span>
           </span>
@@ -92,8 +92,8 @@
              style="margin: 15px 3px; width: 55px; height: 55px; overflow: hidden;position: relative"
              :class="{'is-active': cur_index===index}">
           <div :class="{'bottom-blog': cur_index!==index}">
-            <img v-if="each.direction==='h'" :src="each.middle" alt="" width="55" style="cursor: pointer;">
-            <img v-else :src="each.middle" alt="" height="55" style="cursor: pointer;">
+            <img v-if="each.direction==='h'" :src="each.middle" alt="" width="55">
+            <img v-else :src="each.middle" alt="" height="55">
           </div>
         </div>
       </div>
@@ -107,8 +107,8 @@ import {useStore} from "vuex";
 import {computed, reactive, toRefs} from "vue";
 import {useRouter} from "vue-router";
 import instance from "../api/request.js";
-import {ElMessage} from "element-plus";
 import Comment from './Comment.vue'
+import {to_tab} from "../utils/tools.js";
 
 export default {
   name: "SquareCell",
@@ -176,9 +176,7 @@ export default {
         self.cur_index = index
       },
 
-      to_tab: (u_id) => {
-        router.push({name: 'UserPage', query: {u_id: u_id}})
-      },
+      to_tab: to_tab,
       follow_in: async (value) => {
         const res = await instance.get('/follow_in', {params: {moment_id: value.id}})
         if (res.message === 'success') {
@@ -229,11 +227,6 @@ export default {
   flex: 1;
   display: flex;
   justify-content: center;
-}
-
-.btn-blog:hover {
-  cursor: pointer;
-  color: $icon-hover-color;
 }
 
 .bottom-blog:after {

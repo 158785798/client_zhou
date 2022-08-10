@@ -4,62 +4,75 @@
       <i class="iconfont iconfonttubiao02" style="font-size: 20px"></i>
     </el-backtop>
     <div :class="[{'cut-img-mask': showCutImg},{'scale-cut-img': !showCutImg}]" @click="openCutImg"></div>
-<!--    <CutImg :imgUrl="cutImgUrl" :class="['cropper-avatar', {'scale-cut-img': !showCutImg}]"-->
-<!--            @closeCutImg="showCutImg=false"></CutImg>-->
+    <!--    <CutImg :imgUrl="cutImgUrl" :class="['cropper-avatar', {'scale-cut-img': !showCutImg}]"-->
+    <!--            @closeCutImg="showCutImg=false"></CutImg>-->
     <div class="u-del-blog" v-show="delDialog">
       <div style="margin-bottom: 20px; ">确定要删帖吗？</div>
       <el-button size="small" @click="u_confirm">确认</el-button>
       <el-button size="small" @click="u_cancel">取消</el-button>
     </div>
-    <div style="height: 48px; margin-top:24px;background-color: #4b4a4a">我爱中国</div>
-    <div style="display: flex">
-    <aside style="position: relative; width: 200px" :class="{'del-blog': delDialog}">
+    <div style="margin-top:24px;border-bottom: 1px solid rgba(91,167,243,0.7)">
+      <div style="display: flex;margin-left: 316px;padding: 0;font-size: 14px">
+          <span class="cursor-pointer" style="display: flex;align-items: center;height: 48px;padding:5px 8px;border-bottom: 3px solid red">
+            <strong class="iconfont iconfontshoucang1"></strong>
+            <span style="padding: 0 8px">Overview</span>
+          </span>
+        <span class="cursor-pointer" style="display: flex;align-items: center;height: 48px;padding:5px 8px;">
+            <strong class="iconfont iconfontshoucang1"></strong>
+            <span style="padding: 0 8px">Overview</span>
+          </span>
+        <span class="cursor-pointer" style="display: flex;align-items: center;height: 48px;padding:5px 8px;">
+            <strong class="iconfont iconfontshoucang1"></strong>
+            <span style="padding: 0 8px">Overview</span>
+          </span>
 
-      <div style="display: flex;  align-items: center">
-        <el-upload ref="upload" :beforeUpload="beforeUpload" accept=".png, .jpg, .jpeg"
-                   name="file" :show-file-list="false" :headers="{authorization: 'JWT ' + token}"
-                   :http-request="customRequest">
-          <div style="position: relative">
-            <img :src="userInfo.avatarUrl" alt="" style="border-radius: 50%;width: 6rem;height: 6rem"
-                 class="user-avatar">
-          </div>
-        </el-upload>
-        <div style="flex: 1;margin-left: 20px">
-          <div style="margin: 5px auto">
-            <strong>{{ userInfo.username }}</strong>
-          </div>
-          <span>粉丝 3735.8万</span>
-
+      </div>
+    </div>
+    <div style="display: flex;">
+      <aside style="width: 296px; margin-right: 20px" :class="{'del-blog': delDialog}">
+        <div style="position: relative;width: 296px;height: 280px">
+          <el-upload ref="upload" :beforeUpload="beforeUpload" accept=".png, .jpg, .jpeg"
+                     name="file" :show-file-list="false" :headers="{authorization: 'JWT ' + token}"
+                     :http-request="customRequest">
+            <div>
+              <img :src="userInfo.avatarUrl" alt="" style="position: absolute;top:-30px;
+            border-radius: 50%;width: 296px;height: 296px"
+                   class="user-avatar">
+            </div>
+          </el-upload>
+        </div>
+        <div style="font-size: 20px;display: flex; justify-content: space-between;align-items: center">
+          <span style="margin: 0 10px">{{ userInfo.username }}</span>
+          <el-button style="margin: 0 10px;border-radius: 20px" @click="success_callback('关注成功')">关注</el-button>
+        </div>
+        <div class="bio-btn cursor-pointer" style="margin: 20px 10px;border-radius: 5px; padding: 5px
+        ;background-color: #f6f8fa; text-align: center">
+          <b style="color: #51565b">Add a bio</b>
         </div>
         <div>
-          <el-button style="border-radius: 20px" @click="success_callback('关注成功')">关注</el-button>
         </div>
-      </div>
-      <div style="font-size: 12px; color: rgba(0,0,0,0.49);margin: 5px">
-        IP归属地： 湖南
-      </div>
-    </aside>
-    <aside>
-      <div>
-        <transition-group appear tag="ul" name="u-cell">
-          <div v-for="blog in blogs" :key="blog.id">
-            <UserCell
-                :cur_blog_id="cur_blog_id"
-                :blog="blog"
-                @show_delDialog="show_delDialog"
-                @success_callback="success_callback"
-                @back_blog_id="back_blog_id"
-            ></UserCell>
-          </div>
-        </transition-group>
-      </div>
-      <div style="text-align: center; color: rgba(0,0,0,0.53)">
-        <img src="../assets/loading2.gif" alt="" style="border-radius: 20px" width="150" v-show="endLoading">
-        <span v-show="!endLoading&&!loading">我是有底线的o(*￣▽￣*)o</span>
-      </div>
-    </aside>
+      </aside>
+      <aside style="flex: 1; margin-top: 20px">
+        <div>
+          <transition-group appear tag="div" name="u-cell">
+            <div v-for="blog in blogs" :key="blog.id">
+              <UserCell
+                  :cur_blog_id="cur_blog_id"
+                  :blog="blog"
+                  @show_delDialog="show_delDialog"
+                  @success_callback="success_callback"
+                  @back_blog_id="back_blog_id"
+              ></UserCell>
+            </div>
+          </transition-group>
+        </div>
+        <div style="text-align: center; color: rgba(0,0,0,0.53)">
+          <img src="../assets/loading2.gif" alt="" style="border-radius: 20px" width="150" v-show="endLoading">
+          <span v-show="!endLoading&&!loading">我是有底线的o(*￣▽￣*)o</span>
+        </div>
+      </aside>
 
-  </div>
+    </div>
   </div>
 </template>
 
@@ -211,6 +224,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.bio-btn:hover {
+  background-color: #f3f4f6 !important;
+}
+
 .cropper-avatar {
   transition-duration: 0.5s;
   position: absolute;

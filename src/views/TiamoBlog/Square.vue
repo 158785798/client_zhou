@@ -1,5 +1,5 @@
 <template>
-  <main v-loading="loading" style="margin: 15px 10px 0 10px; padding: 0;flex: 1">
+  <main>
   <div style="width: 100%">
     <transition-group appear tag="div" name="u-cell">
       <div v-for="blog in blogs" :key="blog.id">
@@ -8,7 +8,6 @@
     </transition-group>
   </div>
   <div style="text-align: center; color: rgba(0,0,0,0.53)">
-    <!--        <span v-loading="true"  element-loading-background="transparent" v-if="endLoading"></span>-->
     <img src="../../assets/loading2.gif" alt="" style="border-radius: 20px" width="150" v-show="endLoading">
     <span v-show="!endLoading&&!loading">我是有底线的o(*￣▽￣*)o</span>
   </div>
@@ -20,14 +19,14 @@
 import SquareCell from "../../components/SquareCell.vue";
 import {computed, onMounted, onUnmounted, reactive, toRefs, watch} from "vue";
 import instance from "../../api/request.js";
-import {ElMessage} from "element-plus";
-import {Sortable} from 'sortablejs'
 import {useStore} from "vuex";
 import {useRouter} from "vue-router";
 
+
 export default {
   name: "Square",
-  props: ['blog'],
+  props: ['blog', 'loading'],
+  emits:['finish'],
   components: {
     SquareCell
   },
@@ -37,12 +36,12 @@ export default {
     const router = useRouter()
     const self = reactive({
       blogs: [],
+
       largeImgPath: '',
       blog_id: null,
       pageNum: 1,
       pageSize: 7,
       serverPageSize: 7,
-      loading: true,
       endLoading: false,
       cur_blog_id: -1,
       back_blog_id: (blog_id) => {
@@ -57,9 +56,7 @@ export default {
         return self.pageSize > self.serverPageSize || self.endLoading
       }),
 
-      to_tab: (u_id) => {
-        router.push({name: 'UserPage', query: {u_id: u_id}})
-      },
+
       get_blogs: async () => {
         const res2 = await instance.get('/get_blogs', {
           params: {
@@ -102,7 +99,7 @@ export default {
       const res1 = await instance.get('/get_taste')
       self.taste = res1.data
       await self.get_blogs()
-      self.loading = false
+      context.emit('finish')
     })
     onUnmounted(() => {
       window.removeEventListener('scroll', self.scroll, false)

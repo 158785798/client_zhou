@@ -5,9 +5,9 @@
        style="position: absolute; right: -30px;color: #fff;font-size: 20px "></i>
     <transition name="u-cell">
       <div style="overflow: auto;width: 100%;height: 100%;padding: 20px;">
-        <div v-show="msgBox.length!==0" v-for="each in msgBox"
+        <div v-show="msgBox.length!==0" v-for="each in msgBox" class="cursor-pointer"
              :style="{color:(each.clicked? 'rgba(0,0,0,0.5)': '#cf00ee')}"
-             style="display: flex;margin-bottom: 1.5rem;cursor: pointer; align-items: center">
+             style="display: flex;margin-bottom: 1.5rem; align-items: center">
           <img :src="each.userInfo.avatarUrl" alt="" @click="to_tab('UserPage', {u_id: each.userInfo.id})"
                style="border-radius: 50%;width: 40px; height: 40px; margin-right: 10px">
           <div style="flex: 1;display: flex; align-items: center; justify-content: space-between; font-size: 13px;"

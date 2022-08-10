@@ -1,7 +1,7 @@
 <template>
   <div style="text-align: center">
     <img src="../assets/logo.png" alt=""
-         style="border-radius: 50%; width: 60px;margin: 100px auto 30px; cursor: pointer"
+         style="border-radius: 50%; width: 60px;margin: 100px auto 30px;"
          @click="toTab('Home')">
     <summary style="font-size: 24px">Sign in to CandyCats</summary>
     <main class="container" style="box-shadow: 0 0 20px 5px rgba(0,0,0,0.2)">

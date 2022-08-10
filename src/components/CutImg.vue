@@ -2,7 +2,7 @@
   <div class="cut-img-main">
     <div style="padding: 15px 0 0 0;display: flex; justify-content: space-between">
       <strong>Update Your Avatar</strong>
-      <i class="iconfont iconfontguanbi1 close-cut-img" @click="closeCutImg"
+      <i class="iconfont iconfontguanbi1 close-cut-img cursor-pointer" @click="closeCutImg"
       ></i>
     </div>
     <div style="width: 100%; height: 100%; display: flex;justify-content: center;">
@@ -18,13 +18,13 @@
         <div
             style="margin-left: 20px; justify-content: center; align-items: center">
           <div style="margin: 20px auto">
-            <i class="iconfont iconfontxuanzhuan-1 img-cut-tool" @click="rotateRight"></i>
-            <i class="iconfont iconfontxuanzhuan-2 img-cut-tool" @click="rotateLeft"></i>
+            <i class="iconfont iconfontxuanzhuan-1 img-cut-tool cursor-pointer" @click="rotateRight"></i>
+            <i class="iconfont iconfontxuanzhuan-2 img-cut-tool cursor-pointer" @click="rotateLeft"></i>
           </div>
 
           <div style="margin: 20px auto">
-            <i class="iconfont iconfontjiahao img-cut-tool" @click="zoomIn" style="font-size: 20px !important;"></i>
-            <i class="iconfont iconfontshouqi img-cut-tool" @click="zoomOut"></i>
+            <i class="iconfont iconfontjiahao img-cut-tool cursor-pointer" @click="zoomIn" style="font-size: 20px !important;"></i>
+            <i class="iconfont iconfontshouqi img-cut-tool cursor-pointer" @click="zoomOut"></i>
           </div>
 
         </div>
@@ -127,7 +127,6 @@ export default {
   transition-duration: 0.2s;
   transform: translate(60px, -25px);
   border-radius: 50%;
-  cursor: pointer;
 }
 
 .cut-img-loading {
@@ -165,7 +164,6 @@ export default {
   font-size: 25px !important;
   font-weight: 700;
   margin: 7px;
-  cursor: pointer;
   transition-duration: 0.2s;
 }
 

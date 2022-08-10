@@ -3,7 +3,7 @@
       style="text-align: right; padding:30px 0; font-size: 18px;
       display: flex; justify-content: space-between; align-items: center">
     <div>
-      <img src="../assets/logo.png" alt="" style="border-radius: 50%; width: 40px;cursor: pointer"
+      <img src="../assets/logo.png" alt="" style="border-radius: 50%; width: 40px"
            @click="toTab('Home')">
     </div>
     <div>
@@ -43,7 +43,7 @@
                             clearable @click="currentIndex=index+1" @focusout="checkModel(item)"
                             @focusin="item.status='1'"
                             v-model="model[item.modelItem]"/>
-                  <el-button :class="{valid: item.btnValid}" @click="extendMenu(item,index)"
+                  <el-button class="cursor-pointer" :class="{valid: item.btnValid}" @click="extendMenu(item,index)"
                              v-if="item.id===currentIndex"
                              style="background-color: transparent !important;color: rgba(128,128,128,0.57);font-size:12px;padding: 5px; margin-left: 3px;border-radius: 5px;border: 1px solid rgba(128,128,128,0.55)">
                     {{ item.btnText }}<span v-show="t!==0 && item.id===4">{{ t }}</span>
@@ -56,7 +56,7 @@
               </el-form-item>
             </div>
           </div>
-          <el-button :class="{'signup-btn-valid': signUpBtnValid}" @click="signUp"
+          <el-button class="cursor-pointer" :class="{'signup-btn-valid': signUpBtnValid}" @click="signUp"
                      style="background-color: gray;color:#fff;padding: 8px 10px;font-size: 16px;margin: 20px auto;border-radius: 50px;border: none">
             Change password
           </el-button>
@@ -292,13 +292,11 @@ export default {
 <style scoped>
 .signup-btn-valid {
   background-color: green !important;
-  cursor: pointer;
 }
 
 .valid {
   color: green !important;
   border-color: green !important;
-  cursor: pointer;
 }
 
 .container {

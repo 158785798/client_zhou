@@ -40,8 +40,8 @@
           <strong>Sign up</strong></a>
       </div>
 
-      <div v-else class="flex-align-items"
-           style="position: relative;color:#000;margin-left: 30px; margin-right: 20px; cursor: pointer;">
+      <div v-else class="flex-align-items cursor-pointer"
+           style="position: relative;color:#000;margin-left: 30px; margin-right: 20px">
         <div class="flex-align-items">
           <span @click="show_msg_box"
                 style="user-select: none;margin-right: 20px;padding-right: 20px;color: rgba(0,0,0,0.5);" class="u-msg">
