@@ -52,7 +52,7 @@
           </div>
           <div class="navItem_left" style="padding:20px;display: flex; align-items: center"
                v-for="item in taste">
-            <div @click="to_tab('UserPage', {u_id: item.id})" style="display: flex; align-items: center;flex: 1;">
+            <div @click="to_tab('UIndex', {u_id: item.id})" style="display: flex; align-items: center;flex: 1;">
               <img :src="item.avatarUrl" alt="" style="width: 50px; height: 50px; border-radius: 50%">
               <div style=" margin: 0 10px">
                 <div>{{ item.username }}</div>
@@ -76,7 +76,7 @@ import instance from "../../api/request.js";
 import {to_tab} from "../../utils/tools.js";
 
 export default {
-  name: "TIamoBlog",
+  name: "TiamoBlog",
   emits:[
       'success_callback'
   ],

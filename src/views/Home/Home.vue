@@ -21,7 +21,7 @@
       <i class="iconfont iconfontjiahao " style="font-size: 30px;color: red;"></i>
   </span>
     <div style="width: 100%;margin: 15px 0 0 0; position: relative" :class="{'pub': pub}" @click="pub=false">
-      <router-view @success_callback="success_callback" :key="route.path + JSON.stringify(route.query)"/>
+      <router-view @success_callback="success_callback"/>
     </div>
   </el-container>
 

@@ -4,12 +4,14 @@ import HIndex from "../views/Home/HIndex.vue";
 import Login from "../views/Login.vue";
 import OurMeow from "../views/OurMeow.vue";
 import SignUp from "../views/SignUp.vue";
-import UserPage from "../views/UserPage/UserPage.vue";
+import UIndex from "../views/UserPage/UIndex.vue";
 import PasswordReset from "../views/PasswordReset.vue";
 import CommentPage from "../views/TiamoBlog/SingleCell.vue";
 import WeChat from "../components/WeChat.vue";
 import Square from "../views/TiamoBlog/Square.vue";
-import TiamoBlog from "../views/TiamoBlog/TIamoBlog.vue";
+import TIndex from "../views/TiamoBlog/TIndex.vue";
+import Blog from "../views/UserPage/Blog.vue";
+import Album from "../views/UserPage/Album.vue";
 
 const router = createRouter({
   history: createWebHashHistory(),
@@ -47,22 +49,41 @@ const router = createRouter({
           component: OurMeow
         },
         {
-          path: '/UserPage',
-          name: 'UserPage',
+          path: '/UIndex',
+          name: 'UIndex',
+          redirect: '/UIndex/Blog',
           meta: {
-            title: 'UserPage'
+            title: 'UIndex'
           },
-          component: UserPage
+          component: UIndex,
+          children:[
+            {
+              path: 'Blog',
+              name: 'Blog',
+              meta: {
+                title: 'Blog'
+              },
+              component: Blog,
+            },
+            {
+              path: 'Album',
+              name: 'Album',
+              meta: {
+                title: 'Album'
+              },
+              component: Album,
+            }
+          ]
 
         },
         {
-          path: '/TiamoBlog',
-          name: 'TiamoBlog',
+          path: '/TIndex',
+          name: 'TIndex',
           redirect: '/Square',
           meta: {
-            title: 'TiamoBlog'
+            title: 'TIndex'
           },
-          component: TiamoBlog,
+          component: TIndex,
           children: [
             {
               path: '/Square',

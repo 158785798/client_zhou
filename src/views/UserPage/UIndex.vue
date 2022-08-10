@@ -12,18 +12,24 @@
       <el-button size="small" @click="delDialog=false">取消</el-button>
     </div>
     <div style="margin-top:24px;border-bottom: 1px solid hotpink">
-      <div style="display: flex;margin-left: 316px;padding: 0;font-size: 14px;">
-          <span v-for="(each, index) in nvas" :class="['cursor-pointer', {'active': index===nva_index}]"
-                @click="nva_index=index" style="height: 48px;margin:0 10px;display: flex;align-items: center;"
-                >
+      <div style="margin-left: 316px;padding: 0;">
+        <div style="display: flex;font-size: 14px;">
+          <span v-for="(each, index) in nvas" class="cursor-pointer"
+                @click="to_tab(each.to, {tab: each.tab, index: index}, index)"
+                style="width: 100px;height: 48px;margin:0 10px;display: flex;justify-content: center;align-items: center;"
+          >
             <span class="nva">
               <span :class="['iconfont', each.icon]"></span>
             <span style="padding: 0 8px">{{ each.name }}</span>
             </span>
 
           </span>
+        </div>
 
+        <div ref="underline"
+             style="width: 100px;border: 2px solid red;transform: translateX(10px);transition-duration: .3s"></div>
       </div>
+
     </div>
     <div style="display: flex;">
       <aside style="width: 296px; margin-right: 20px" :class="{'del-blog': delDialog}">
@@ -50,7 +56,7 @@
         </div>
       </aside>
       <aside style="flex: 1; margin-top: 20px">
-        <router-view></router-view>
+        <router-view :key="route.path + JSON.stringify(route.query)"></router-view>
         <div style="text-align: center; color: rgba(0,0,0,0.53)">
           <img src="../../assets/loading2.gif" alt="" style="border-radius: 20px" width="150" v-show="endLoading">
           <span v-show="!endLoading&&!loading">我是有底线的o(*￣▽￣*)o</span>
@@ -70,14 +76,12 @@ import CutImg from "../../components/CutImg.vue";
 import {scroll} from "../../utils/tools.js";
 
 export default {
-  name: "UserPage",
+  name: "UIndex",
   components: {
     CutImg,
 
   },
-  emits: [
-    'success_callback'
-  ],
+
   setup(props, context) {
     const store = useStore()
     const router = useRouter()
@@ -89,43 +93,27 @@ export default {
     }
     const self = reactive({
       upload: null,
-      blog_id: null,
-      loading: true,
-      endLoading: false,
-      delDialog: false,
+      underline: null,
       showCutImg: false,
+      delDialog: false,
       showUploadAvatarMask: false,
       isUploadAvatarMaskShow: false,
+      loading: true,
+      endLoading: false,
       nva_index: 0,
-      blogs: [],
       userInfo: {},
       cutImgUrl: '',
-      cur_blog_id: -1,
-      pageNum: 1,
-      pageSize: 7,
-      serverPageSize: 7,
-      nvas: [
-        {name: 'Overview', icon: 'iconfontchongwutubiao18', to: 'User'},
-        {name: '收藏', icon: 'iconfontshoucang1'},
-        {name: '相册', icon: 'iconfontxiangce'},
-
-      ],
-
       token: computed(() => window.localStorage.getItem('token_zhou')),
-      dd: computed(() => self.delDialog),
-      noMore: computed(() => {
-        return self.pageSize > self.serverPageSize || self.endLoading
-      }),
-
-      success_callback: (message) => {
-        context.emit('success_callback', message)
-      },
-      back_blog_id: (blog_id) => {
-        if (self.cur_blog_id === blog_id) {
-          self.cur_blog_id = -1
-        } else {
-          self.cur_blog_id = blog_id
-        }
+      nvas: [
+        {name: 'Overview', icon: 'iconfontchongwutubiao18', to: 'Blog', tab: 'blog'},
+        {name: '收藏', icon: 'iconfontshoucang1', to: 'Blog', tab: 'collection'},
+        {name: '相册', icon: 'iconfontxiangce', to: 'Album', tab: 'album'},
+      ],
+      to_tab: (to, query, index) => {
+        self.nva_index = index
+        self.underline.style.marginLeft = index * 120 + 'px'
+        query.u_id = self.userInfo.id
+        router.push({name: to, query: query})
       },
       u_confirm: async () => {
         self.blogs = self.blogs.filter(item => item.id !== self.blog_id)
@@ -135,16 +123,11 @@ export default {
           context.emit('success_callback', '删除成功')
         }
       },
-      show_delDialog: (blog_id) => {
-        self.blog_id = blog_id
-        self.delDialog = true
-      },
       openCutImg: () => {
         if (store.state.avatarUploading) {
           self.showCutImg = false
         }
       },
-
       beforeUpload(file) {
         if (file.size > 10240000) {
           alert('图片不能超过10M！')
@@ -158,33 +141,15 @@ export default {
         })
         self.showCutImg = true
       },
-      get_blogs: async () => {
-        const res2 = await instance.get('/get_blogs', {
-          params: {
-            flag: 'user',
-            u_id: route.query.u_id,
-            pageNum: self.pageNum,
-            pageSize: self.pageSize
-          }
-        })
-        self.serverPageSize = res2.data.length
-        self.blogs = self.blogs.concat(res2.data)
-        self.endLoading = false
-      },
-      scroll: scroll
     })
     onMounted(async () => {
-      window.addEventListener('scroll', self.scroll, false)
+      self.nva_index = Number(route.query.index)
       const res = await instance.get('/get_userinfo', {params: {u_id: route.query.u_id}})
       self.userInfo = res.data
-      await self.get_blogs()
-      self.loading = false
-    })
-    onUnmounted(() => {
-      window.removeEventListener('scroll', self.scroll, false)
     })
     return {
-      ...toRefs(self)
+      ...toRefs(self),
+      route
     }
   },
 }
@@ -269,12 +234,13 @@ export default {
   background: rgba(0, 0, 0, .5);
   transition-duration: 0.5s;
 }
+
 .nva {
-  padding:5px 8px;
+  padding: 5px 8px;
   border-radius: 5px;
 }
 
-.nva:hover{
+.nva:hover {
   background-color: rgba(246, 179, 150, 0.5);
 
 }

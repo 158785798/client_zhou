@@ -26,10 +26,10 @@
   </el-container>
   <div v-for="(item, index) in comments" style="font-size: 12px; margin-bottom: 20px ">
     <div style="display: flex;">
-      <img @click="to_tab('UserPage', {u_id: item.userInfo.id})" :src="item.userInfo.avatarUrl" alt="" style="width: 34px; height: 34px; border-radius: 50%">
+      <img @click="to_tab('UIndex', {u_id: item.userInfo.id})" :src="item.userInfo.avatarUrl" alt="" style="width: 34px; height: 34px; border-radius: 50%">
 
       <div style="margin-left: 10px; width: 100%">
-        <div class="cursor-pointer" @click="to_tab('UserPage', {u_id: item.userInfo.id})" style="margin-bottom: 5px; color:#f18e63 ">{{ item.userInfo.username }}</div>
+        <div class="cursor-pointer" @click="to_tab('UIndex', {u_id: item.userInfo.id})" style="margin-bottom: 5px; color:#f18e63 ">{{ item.userInfo.username }}</div>
         <div style="color: rgba(0,0,0,0.53); display: flex; justify-content: space-between">
           <span>{{ item.pub_time }}</span>
           <div style="display: flex;font-size: 12px; text-align: center">

@@ -1,7 +1,7 @@
 <template>
   <div class="header">
     <div class="flex-align-items">
-      <a href="javascript:" @click="toTab('Home')" style="display: flex; align-items: center;">
+      <a href="javascript:" @click="to_tab('Home')" style="display: flex; align-items: center;">
         <img src="../assets/logo.png" alt=""
              style="border-radius: 50%; width: 48px; margin-left: 20px">
         <strong style="margin-left: 10px">Candy Cats</strong>
@@ -27,16 +27,16 @@
         Company is better than detail than love.
       </div>
       <a href="javascript:" v-for="(item, index) in homeMenus" :key="index">
-        <a href="javascript:" class="homeMenus" @click="toTab(item.route)">
+        <a href="javascript:" class="homeMenus" @click="to_tab(item.route)">
           <strong style="margin: auto 10px;">
             {{ item.name }}
           </strong></a>
       </a>
       <div v-if="JSON.stringify(userInfo) === '{}'" style="margin-left: 20px; margin-right: 20px">
-        <a href="javascript:" class="login" @click="toTab('Login')">
+        <a href="javascript:" class="login" @click="to_tab('Login')">
           <strong>Sign in</strong>
         </a>
-        <a href="javascript:" @click="toTab('SignUp')" class="login" style="border: 1px solid #f9f7f8;">
+        <a href="javascript:" @click="to_tab('SignUp')" class="login" style="border: 1px solid #f9f7f8;">
           <strong>Sign up</strong></a>
       </div>
 
@@ -61,7 +61,7 @@
         </div>
 
         <div v-show="dropdownMenuShow" class="dropdown-menu">
-          <a @click="toTab('UserPage', userInfo.id)" href="javascript:" class="header-nva-current-user"
+          <a @click="to_tab('UIndex', userInfo.id)" href="javascript:" class="header-nva-current-user"
              style="padding: 8px 16px; display: block;white-space: nowrap">
             Signed in as <strong>
             {{ userInfo.username }}
@@ -131,16 +131,16 @@ export default {
             },
             {
               name: 'TiamoBlog',
-              route: 'TiamoBlog',
+              route: 'TIndex',
             },
             {
               name: 'WeChat',
               route: 'WeChat',
             },
           ],
-          toTab: (route, u_id = null) => {
+          to_tab: (route, u_id = null) => {
             self.dropdownMenuShow = false
-            router.push({name: route, query: {u_id: u_id}})
+            router.push({name: route, query: {u_id: u_id, index: 0}})
           },
         }
     )

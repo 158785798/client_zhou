@@ -1,5 +1,5 @@
 <template>
-<h1 style="text-align: center">照片会放在这里</h1>
+  <h1 style="text-align: center">照片会放在这里</h1>
 </template>
 
 <script>

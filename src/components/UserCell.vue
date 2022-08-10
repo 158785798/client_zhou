@@ -3,10 +3,10 @@
       style="font-size: 18px;background-color: #fff;padding: 20px;margin-bottom: 8px; border-radius: 6px;position: relative">
     <header style="display: flex; justify-content: space-between">
       <img :src="blog.userInfo.avatarUrl" alt="" style="width: 40px; height: 40px; border-radius: 50%"
-           @click="to_tab('UserPage', {u_id: blog.userInfo.id})">
+           @click="to_tab('UIndex', {u_id: blog.userInfo.id})">
       <div style="margin: 10px; flex: 1">
         <div style="margin-bottom: 5px;">
-          <strong class="cursor-pointer" @click="to_tab('UserPage', {u_id: blog.userInfo.id})">{{ blog.userInfo.username }}</strong>
+          <strong class="cursor-pointer" @click="to_tab('UIndex', {u_id: blog.userInfo.id})">{{ blog.userInfo.username }}</strong>
         </div>
         <div style="color: rgba(0,0,0,0.47); font-size: 12px">
           {{ blog.create_time }}
