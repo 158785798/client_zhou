@@ -74,7 +74,7 @@
           </span>
       </div>
     </div>
-    <Comment v-if="blog.commentShow" :blog_id="blog.id"></Comment>
+    <Comment v-if="blog.commentShow" @succ_comment="blog.comments++" :blog_id="blog.id"></Comment>
   </div>
   <div v-show="curentImgGroups.length !== 0"
        style="display: flex;flex-direction:column;position: fixed;top:20px; bottom: 0; left: 0; right: 0;z-index: 300">

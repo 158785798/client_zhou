@@ -14,7 +14,7 @@
     <div style="margin-top:24px;border-bottom: 1px solid hotpink">
       <div style="margin-left: 316px;padding: 0;">
         <div style="display: flex;font-size: 14px;">
-          <span v-for="(each, index) in nvas" class="cursor-pointer"
+          <span v-for="(each, index) in nvas" :class="['cursor-pointer', {active: index==nva_index}]"
                 @click="to_tab(each.to, {tab: each.tab, index: index}, index)"
                 style="width: 100px;height: 48px;margin:0 10px;display: flex;justify-content: center;align-items: center;"
           >
@@ -26,8 +26,8 @@
           </span>
         </div>
 
-        <div ref="underline"
-             style="width: 100px;border: 2px solid red;transform: translateX(10px);transition-duration: .3s"></div>
+        <div ref="underline" style="width: 100px;border-top: 3px solid red;
+        transform: translateX(10px);transition-duration: .3s"></div>
       </div>
 
     </div>
@@ -246,7 +246,6 @@ export default {
 }
 
 .active {
-  border-bottom: 3px solid deeppink;
   color: deeppink;
   font-weight: 600;
   transform: scale(1.1);

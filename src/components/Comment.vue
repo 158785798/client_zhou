@@ -71,6 +71,7 @@ export default {
   props: {
     blog_id: Number
   },
+  emits:['succ_comment'],
   setup(props, context) {
     const store = useStore()
     const router = useRouter()
@@ -89,6 +90,7 @@ export default {
         self.content = ''
         self.isEmojiShow = false
         ElMessage.success('发布成功！')
+        context.emit('succ_comment')
       },
       del_comment: async (comment_id, index) => {
         self.comments.splice(index, 1)

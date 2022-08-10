@@ -73,7 +73,7 @@
           </span>
       </div>
     </div>
-    <Comment v-if="blog.commentShow" :blog_id="blog.id"></Comment>
+    <Comment v-if="blog.commentShow" @succ_comment="blog.comments++" :blog_id="blog.id"></Comment>
   </div>
   <teleport to="body">
     <div v-show="curentImgGroups.length !== 0"
