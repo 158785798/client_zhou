@@ -4,26 +4,23 @@
       <i class="iconfont iconfonttubiao02" style="font-size: 20px"></i>
     </el-backtop>
     <div :class="[{'cut-img-mask': showCutImg},{'scale-cut-img': !showCutImg}]" @click="openCutImg"></div>
-        <CutImg :imgUrl="cutImgUrl" :class="['cropper-avatar', {'scale-cut-img': !showCutImg}]"
-                @closeCutImg="showCutImg=false"></CutImg>
+    <CutImg :imgUrl="cutImgUrl" :class="['cropper-avatar', {'scale-cut-img': !showCutImg}]"
+            @closeCutImg="showCutImg=false"></CutImg>
     <div class="u-del-blog" v-show="delDialog">
       <div style="margin-bottom: 20px; ">确定要删帖吗？</div>
       <el-button size="small" @click="u_confirm">确认</el-button>
-      <el-button size="small" @click="u_cancel">取消</el-button>
+      <el-button size="small" @click="delDialog=false">取消</el-button>
     </div>
-    <div style="margin-top:24px;border-bottom: 1px solid rgba(91,167,243,0.7)">
-      <div style="display: flex;margin-left: 316px;padding: 0;font-size: 14px">
-          <span class="cursor-pointer" style="display: flex;align-items: center;height: 48px;padding:5px 8px;border-bottom: 3px solid red">
-            <strong class="iconfont iconfontshoucang1"></strong>
-            <span style="padding: 0 8px">Overview</span>
-          </span>
-        <span class="cursor-pointer" style="display: flex;align-items: center;height: 48px;padding:5px 8px;">
-            <strong class="iconfont iconfontshoucang1"></strong>
-            <span style="padding: 0 8px">Overview</span>
-          </span>
-        <span class="cursor-pointer" style="display: flex;align-items: center;height: 48px;padding:5px 8px;">
-            <strong class="iconfont iconfontshoucang1"></strong>
-            <span style="padding: 0 8px">Overview</span>
+    <div style="margin-top:24px;border-bottom: 1px solid hotpink">
+      <div style="display: flex;margin-left: 316px;padding: 0;font-size: 14px;">
+          <span v-for="(each, index) in nvas" :class="['cursor-pointer', {'active': index===nva_index}]"
+                @click="nva_index=index" style="height: 48px;margin:0 10px;display: flex;align-items: center;"
+                >
+            <span class="nva">
+              <span :class="['iconfont', each.icon]"></span>
+            <span style="padding: 0 8px">{{ each.name }}</span>
+            </span>
+
           </span>
 
       </div>
@@ -53,21 +50,9 @@
         </div>
       </aside>
       <aside style="flex: 1; margin-top: 20px">
-        <div>
-          <transition-group appear tag="div" name="u-cell">
-            <div v-for="blog in blogs" :key="blog.id">
-              <UserCell
-                  :cur_blog_id="cur_blog_id"
-                  :blog="blog"
-                  @show_delDialog="show_delDialog"
-                  @success_callback="success_callback"
-                  @back_blog_id="back_blog_id"
-              ></UserCell>
-            </div>
-          </transition-group>
-        </div>
+        <router-view></router-view>
         <div style="text-align: center; color: rgba(0,0,0,0.53)">
-          <img src="../assets/loading2.gif" alt="" style="border-radius: 20px" width="150" v-show="endLoading">
+          <img src="../../assets/loading2.gif" alt="" style="border-radius: 20px" width="150" v-show="endLoading">
           <span v-show="!endLoading&&!loading">我是有底线的o(*￣▽￣*)o</span>
         </div>
       </aside>
@@ -80,15 +65,15 @@
 import {useStore} from "vuex";
 import {computed, onUnmounted, onMounted, reactive, toRefs} from "vue";
 import {useRouter, useRoute} from "vue-router";
-import instance from "../api/request.js";
-import UserCell from "../components/UserCell.vue";
-import CutImg from "../components/CutImg.vue";
+import instance from "../../api/request.js";
+import CutImg from "../../components/CutImg.vue";
+import {scroll} from "../../utils/tools.js";
 
 export default {
   name: "UserPage",
   components: {
     CutImg,
-    UserCell,
+
   },
   emits: [
     'success_callback'
@@ -103,25 +88,35 @@ export default {
       reader.onloadend = () => callback(reader.result);
     }
     const self = reactive({
-      token: computed(() => window.localStorage.getItem('token_zhou')),
-      userInfo: {},
-      showUploadAvatarMask: false,
       upload: null,
-      delDialog: false,
-      dd: computed(() => {
-        return self.delDialog
-      }),
-      blogs: [],
-      cutImgUrl: '',
-      showCutImg: false,
-      isUploadAvatarMaskShow: false,
       blog_id: null,
+      loading: true,
+      endLoading: false,
+      delDialog: false,
+      showCutImg: false,
+      showUploadAvatarMask: false,
+      isUploadAvatarMaskShow: false,
+      nva_index: 0,
+      blogs: [],
+      userInfo: {},
+      cutImgUrl: '',
       cur_blog_id: -1,
       pageNum: 1,
       pageSize: 7,
       serverPageSize: 7,
-      loading: true,
-      endLoading: false,
+      nvas: [
+        {name: 'Overview', icon: 'iconfontchongwutubiao18', to: 'User'},
+        {name: '收藏', icon: 'iconfontshoucang1'},
+        {name: '相册', icon: 'iconfontxiangce'},
+
+      ],
+
+      token: computed(() => window.localStorage.getItem('token_zhou')),
+      dd: computed(() => self.delDialog),
+      noMore: computed(() => {
+        return self.pageSize > self.serverPageSize || self.endLoading
+      }),
+
       success_callback: (message) => {
         context.emit('success_callback', message)
       },
@@ -131,11 +126,7 @@ export default {
         } else {
           self.cur_blog_id = blog_id
         }
-
       },
-      noMore: computed(() => {
-        return self.pageSize > self.serverPageSize || self.endLoading
-      }),
       u_confirm: async () => {
         self.blogs = self.blogs.filter(item => item.id !== self.blog_id)
         self.delDialog = false
@@ -143,9 +134,6 @@ export default {
         if (res.code === 200) {
           context.emit('success_callback', '删除成功')
         }
-      },
-      u_cancel: () => {
-        self.delDialog = false
       },
       show_delDialog: (blog_id) => {
         self.blog_id = blog_id
@@ -183,27 +171,7 @@ export default {
         self.blogs = self.blogs.concat(res2.data)
         self.endLoading = false
       },
-      scroll: () => {
-        window.onscroll = () => {
-          // 整个页面的高度
-          const scrollHeight = document.body.scrollHeight
-          // 当前可视区的顶部到页面顶部的高度，||是做兼容处理的
-          const scrollTop = document.body.scrollTop || document.documentElement.scrollTop
-          // 当前可视区的高度
-          const clientHeight = document.documentElement.clientHeight
-          // 可视区底部到页面底部的高度，即滚动条与底部的距离
-          const instance = scrollHeight - scrollTop - clientHeight
-          // 当滚动条与底部的距离小于100时就触发加载数据
-          if (instance < 100) {
-            if (self.noMore) return
-            self.endLoading = true
-            setTimeout(() => {
-              self.pageNum++
-              self.get_blogs()
-            }, 1000)
-          }
-        }
-      }
+      scroll: scroll
     })
     onMounted(async () => {
       window.addEventListener('scroll', self.scroll, false)
@@ -300,6 +268,23 @@ export default {
   display: block;
   background: rgba(0, 0, 0, .5);
   transition-duration: 0.5s;
+}
+.nva {
+  padding:5px 8px;
+  border-radius: 5px;
+}
+
+.nva:hover{
+  background-color: rgba(246, 179, 150, 0.5);
+
+}
+
+.active {
+  border-bottom: 3px solid deeppink;
+  color: deeppink;
+  font-weight: 600;
+  transform: scale(1.1);
+  transition-duration: 0s;
 }
 
 </style>
