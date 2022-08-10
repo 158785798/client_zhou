@@ -79,13 +79,13 @@ export default {
   name: "PasswordReset",
   setup: function () {
     onMounted(() => {
-      if (store.state.t !== 0) {
+      if (self.t !== 0) {
         const item = self.menus[self.menus.length - 1]
         item.btnValid = false
         item.btnText = 'wait...'
         const timer = setInterval(() => {
-          store.commit('set_t', store.state.t - 1)
-          if (store.state.t === 0) {
+          store.commit('local/set_t', self.t - 1)
+          if (self.t === 0) {
             clearInterval(timer)
             item.btnValid = true
             item.btnText = 'send'
@@ -110,7 +110,7 @@ export default {
         )
         return n === '2222'
       }),
-      t: computed(() => store.state.t),
+      t: computed(() => store.state.local.t),
       model: {
         email: '',
         password1: '',
@@ -167,13 +167,12 @@ export default {
         if (!item.btnValid) {
           return
         }
-        store.commit('set_t', 30)
+        store.commit('local/set_t', 30)
         item.btnValid = false
         item.btnText = 'wait...'
         const timer = setInterval(() => {
-          store.state.t--
-          store.commit('set_t', store.state.t - 1)
-          if (store.state.t === 0) {
+          store.commit('local/set_t', self.t - 1)
+          if (self.t === 0) {
             clearInterval(timer)
             item.btnValid = true
             item.btnText = 'send'

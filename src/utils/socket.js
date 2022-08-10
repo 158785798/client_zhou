@@ -16,7 +16,7 @@ const socket = SocketIo(
         origin: '*'
       },
       query: {
-        u_id: store.state.userInfo.username
+        u_id: store.state.local.userInfo.username
       }
     }
 )

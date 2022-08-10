@@ -4,8 +4,8 @@
       <i class="iconfont iconfonttubiao02" style="font-size: 20px"></i>
     </el-backtop>
     <div :class="[{'cut-img-mask': showCutImg},{'scale-cut-img': !showCutImg}]" @click="openCutImg"></div>
-    <!--    <CutImg :imgUrl="cutImgUrl" :class="['cropper-avatar', {'scale-cut-img': !showCutImg}]"-->
-    <!--            @closeCutImg="showCutImg=false"></CutImg>-->
+        <CutImg :imgUrl="cutImgUrl" :class="['cropper-avatar', {'scale-cut-img': !showCutImg}]"
+                @closeCutImg="showCutImg=false"></CutImg>
     <div class="u-del-blog" v-show="delDialog">
       <div style="margin-bottom: 20px; ">确定要删帖吗？</div>
       <el-button size="small" @click="u_confirm">确认</el-button>
@@ -77,18 +77,17 @@
 </template>
 
 <script>
-// import CutImg from "../components/CutImg.vue";
 import {useStore} from "vuex";
 import {computed, onUnmounted, onMounted, reactive, toRefs} from "vue";
 import {useRouter, useRoute} from "vue-router";
 import instance from "../api/request.js";
-import {ElMessage} from "element-plus";
 import UserCell from "../components/UserCell.vue";
+import CutImg from "../components/CutImg.vue";
 
 export default {
   name: "UserPage",
   components: {
-    // CutImg,
+    CutImg,
     UserCell,
   },
   emits: [

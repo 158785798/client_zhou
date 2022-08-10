@@ -42,14 +42,14 @@ export default {
   setup() {
     const socket = getCurrentInstance().proxy.$socket
     socket.on('broadcast', (data) => {
-      store.commit('push_chatInfo', JSON.parse(data))
+      store.commit('local/push_chatInfo', JSON.parse(data))
     })
     const store = useStore()
     const self = reactive({
           textDiv: null,
           lockReconnect: false,
-          chatData: computed(() => store.state.chatInfo),
-          userInfo: computed(() => store.state.userInfo),
+          chatData: computed(() => store.state.local.chatInfo),
+          userInfo: computed(() => store.state.local.userInfo),
           enter_to_send: (event) => {
             if (!event.shiftKey && event.key === 'Enter') {
               event.preventDefault()
@@ -70,7 +70,7 @@ export default {
               content: content
             }
             socket.emit('broadcast', JSON.stringify(msg))
-            store.commit('push_chatInfo', msg)
+            store.commit('local/push_chatInfo', msg)
             self.textDiv.innerText = ''
             return false
           }

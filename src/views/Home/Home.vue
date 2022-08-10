@@ -64,7 +64,7 @@ export default {
       pub: false,
       lockReconnect: false,
       clientId: computed(() => {
-        return store.state.userInfo.id
+        return store.state.local.userInfo.id
       }),
       show_msg_box: async (flag) => {
         if (flag === 'sub' && self.msgCount > 0) {

@@ -64,9 +64,9 @@ export default {
       },
       uploadAvatar: async (data) => {
         self.loading = true
-        const res = await instance.post('/update_avatar', {user_id: store.state.userInfo.id, file: data})
+        const res = await instance.post('/update_avatar', {user_id: store.state.local.userInfo.id, file: data})
         if (res.code === 200) {
-          store.commit('saveUserInfo', {avatarUrl: res.avatarUrl})
+          store.commit('local/saveUserInfo', {avatarUrl: res.avatarUrl})
           self.emit_finish()
         } else {
           ElMessage.error(res.msg)

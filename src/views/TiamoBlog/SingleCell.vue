@@ -24,7 +24,7 @@ export default {
   emits: [
     'success_callback', 'finish'
   ],
-  setup() {
+  setup(props, context) {
     const router = useRouter()
     const route = useRoute()
     const self = reactive({

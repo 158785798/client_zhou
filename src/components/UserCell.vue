@@ -150,7 +150,7 @@ export default {
       curentImgGroups: [],
       cur_each: {},
       pageRefresh: computed(() => store.state.pageRefresh),
-      userInfo: computed(() => store.state.userInfo),
+      userInfo: computed(() => store.state.local.userInfo),
       iscomment: props.iscomment,
       loading: false,
       to_do: async (m, blog_id) => {

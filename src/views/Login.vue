@@ -114,7 +114,7 @@ export default {
             if (res.code === 200) {
               ElMessage.success(`欢迎可爱的${res.username}!`)
               window.localStorage.setItem('token_zhou', res.token)
-              store.commit('saveUserInfo', res)
+              store.commit('local/saveUserInfo', res)
               const p = route.query.next ? route.query.next : 'Home'
               await router.push(p)
             } else {

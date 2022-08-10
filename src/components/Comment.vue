@@ -10,7 +10,7 @@
       />
       <div style="display: flex; align-items: center; flex: 1;justify-content: space-between">
             <span :class="{'item-sw': isEmojiShow}" @click="isEmojiShow=!isEmojiShow">
-              <i @click="" class="iconfont iconfontxiaolian item cursor-pointer" style="font-size: 20px"></i>
+              <i @click="" class="iconfont iconfontxiaolian item cursor-pointer ico ico-bg" style="font-size: 20px"></i>
             </span>
         <el-button :disabled="content===''" @click="comment">评论</el-button>
       </div>

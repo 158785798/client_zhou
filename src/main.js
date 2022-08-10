@@ -4,6 +4,7 @@ import router from "./router/index.js"
 import store from "./store/index.js"
 import ElementPlus from 'element-plus'
 import socket from "./utils/socket.js";
+import 'default-passive-events'
 import 'element-plus/dist/index.css'
 import './global.scss'
 import './assets/font/iconfont.css'

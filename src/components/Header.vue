@@ -97,7 +97,7 @@ export default {
             const audio = document.getElementById('audio')
             self.play = !audio.paused
             if (store.state.autoPlayTip) {
-              store.commit('set_autoPlayTip', false)
+              store.commit('local/set_autoPlayTip', false)
               ElMessage.warning('您的浏览器不支持自动播放， 请手动点击')
             }
           }, 500)
@@ -118,12 +118,12 @@ export default {
           signOut: () => {
             self.dropdownMenuShow = false
             window.localStorage.removeItem('token_zhou')
-            store.commit('set_autoPlayTip', true)
-            store.commit('clearUserInfo')
+            store.commit('local/set_autoPlayTip', true)
+            store.commit('local/clearUserInfo')
             router.push('Home')
 
           },
-          userInfo: computed(() => store.state.userInfo),
+          userInfo: computed(() => store.state.local.userInfo),
           homeMenus: [
             {
               name: 'OurMeow',
