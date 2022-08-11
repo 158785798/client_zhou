@@ -6,7 +6,7 @@ export const session = {
       text: null
     },
     dialog: {
-      show: true,
+      show: false,
       obj_id: null,
       text: null
     },
