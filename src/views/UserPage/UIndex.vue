@@ -69,7 +69,7 @@
 
 <script>
 import {useStore} from "vuex";
-import {computed, onUnmounted, onMounted, reactive, toRefs} from "vue";
+import {computed, onUnmounted, onMounted, reactive, toRefs, onBeforeMount} from "vue";
 import {useRouter, useRoute} from "vue-router";
 import instance from "../../api/request.js";
 import CutImg from "../../components/CutImg.vue";
@@ -142,10 +142,13 @@ export default {
         self.showCutImg = true
       },
     })
-    onMounted(async () => {
-      self.nva_index = Number(route.query.index)
+    onBeforeMount(async ()=>{
       const res = await instance.get('/get_userinfo', {params: {u_id: route.query.u_id}})
       self.userInfo = res.data
+    })
+    onMounted(async () => {
+      self.nva_index = Number(route.query.index)
+      self.underline.style.marginLeft = self.nva_index * 120 + 'px'
     })
     return {
       ...toRefs(self),

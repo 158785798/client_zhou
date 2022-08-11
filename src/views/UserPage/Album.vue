@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-for="(urls, month) in pictures">
+    <div v-for="item in pictures">
       <h3>{{month}}月</h3>
       <div style="display: flex;">
         <div v-for="each in urls" style="width: 100px; height: 100px; overflow: hidden">
