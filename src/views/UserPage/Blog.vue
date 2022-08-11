@@ -1,14 +1,8 @@
 <template>
   <div>
-    <transition-group appear tag="div" name="u-cell">
+    <transition-group appear tag="div" name="bound-in">
       <div v-for="blog in blogs" :key="blog.id">
-        <UserCell
-            :cur_blog_id="cur_blog_id"
-            :blog="blog"
-            @show_delDialog="show_delDialog"
-            @success_callback="success_callback"
-            @back_blog_id="back_blog_id"
-        ></UserCell>
+        <UserCell :blog="blog"></UserCell>
       </div>
     </transition-group>
   </div>
@@ -21,44 +15,23 @@ import {reactive, toRefs, computed, onMounted, onUnmounted} from "vue";
 import {useRoute, useRouter} from "vue-router";
 import {useStore} from "vuex";
 import {scroll} from "../../utils/tools.js";
+import {useMutations} from "../../utils/hooks.js";
 
 export default {
   name: "Blog",
   components: {
     UserCell,
   },
-  emits: [
-    'success_callback'
-  ],
   setup() {
     const router = useRouter()
     const route = useRoute()
     const store = useStore()
+    const mutations = useMutations('session', ['concat_blogs', 'clear_blogs', 'set_blog_id',])
     const self = reactive({
-      cur_blog_id: -1,
-      blog_id: null,
       pageNum: 1,
       pageSize: 7,
       serverPageSize: 7,
-
-      blogs: [],
-
-      dd: computed(() => self.delDialog),
-
-      success_callback: (message) => {
-        context.emit('success_callback', message)
-      },
-      back_blog_id: (blog_id) => {
-        if (self.cur_blog_id === blog_id) {
-          self.cur_blog_id = -1
-        } else {
-          self.cur_blog_id = blog_id
-        }
-      },
-      show_delDialog: (blog_id) => {
-        self.blog_id = blog_id
-        self.delDialog = true
-      },
+      blogs: computed(() => store.state.session.blogs),
       noMore: computed(() => {
         return self.pageSize > self.serverPageSize || self.endLoading
       }),
@@ -73,19 +46,22 @@ export default {
           }
         })
         self.serverPageSize = res2.data.length
-        self.blogs = self.blogs.concat(res2.data)
+        mutations.concat_blogs(res2.data)
         self.endLoading = false
       },
       scroll: scroll
     })
     onMounted(async () => {
-      await self.get_blogs(Number(route.query.index))
+      mutations.clear_blogs()
+      window.addEventListener('scroll', self.scroll(self), false)
+      await self.get_blogs(route.query.index)
       self.loading = false
     })
     onUnmounted(() => {
+        mutations.set_blog_id(null)
       window.removeEventListener('scroll', self.scroll, false)
     })
-    window.addEventListener('scroll', self.scroll, false)
+
     return {
       ...toRefs(self)
     }

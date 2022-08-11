@@ -1,27 +1,38 @@
 <template>
+  <div :class="{'g-mask': maskShow}" @click="close_mask"></div>
   <div class="h-hrader" @click="">
     <Header class="header" :msgCount="msgCount" @show_msg_box="show_msg_box"></Header>
   </div>
-  <transition name="u-cell">
-    <Pub v-show="pub" @success_callback="success_callback" @unshift_blog="unshift_blog" @close_pub="pub=false"></Pub>
+  <transition name="bound-in">
+    <Pub v-if="pub" @unshift_blog="unshift_blog" @close_pub="pub=false"></Pub>
   </transition>
   <transition name="fade">
-    <div v-show="show" class="show">
+    <div v-show="globalTip.show" class="g-tip">
       <div>
         <div class="iconfont iconfonticon_succeed" style="font-size: 40px;margin: 10px; font-weight: lighter"></div>
-        <div>{{ message }}</div>
+        <div>{{ globalTip.text }}</div>
       </div>
     </div>
   </transition>
   <div v-show="msgBoxShow">
+
     <MsgBox @show_msg_box="show_msg_box" :msgBox="msgBox" :msgBoxLoading="msgBoxLoading"></MsgBox>
+  </div>
+  <div class="g-blog" v-show="dialog.show">
+    <div style="margin-bottom: 20px; ">{{ dialog.text }}</div>
+    <el-button size="small" @click="u_confirm">确认</el-button>
+    <el-button size="small" @click="close_mask">取消</el-button>
+  </div>
+  <div v-if="imagePreview.show">
+
+  <ImagePreview ></ImagePreview>
   </div>
   <el-container style="margin: 50px auto" :class="{'msg-box': msgBoxShow}" @click="msgBoxShow=false">
     <span @click="pub=!pub" style="position: fixed;z-index:120;transform: translate(200px, -35px)">
       <i class="iconfont iconfontjiahao " style="font-size: 30px;color: red;"></i>
   </span>
     <div style="width: 100%;margin: 15px 0 0 0; position: relative" :class="{'pub': pub}" @click="pub=false">
-      <router-view @success_callback="success_callback"/>
+      <router-view/>
     </div>
   </el-container>
 
@@ -29,12 +40,14 @@
 
 <script>
 import Header from "../../components/Header.vue";
-import {getCurrentInstance, computed, onMounted, reactive, toRefs} from "vue";
+import {getCurrentInstance, computed, onMounted, reactive, toRefs, ref} from "vue";
 import Pub from "../../components/Pub.vue";
 import {useStore} from "vuex";
 import instance from "../../api/request.js";
 import {useRoute, useRouter} from "vue-router";
 import MsgBox from "../../components/MsgBox.vue";
+import ImagePreview from "../../components/ImagePreview.vue";
+import {useMutations} from "../../utils/hooks.js";
 
 
 export default {
@@ -42,21 +55,26 @@ export default {
   components: {
     Header,
     Pub,
-    MsgBox
+    MsgBox,
+    ImagePreview
   },
   setup() {
     const socket = getCurrentInstance().proxy.$socket
     socket.on('prompt', () => {
-      self.msgCount ++
+      self.msgCount++
     })
     const store = useStore()
     const router = useRouter()
     const route = useRoute()
+    const mutations = useMutations('session', ['concat_blogs', 'close_mask'])
     const self = reactive({
-      delDialog: false,
+      dialog: computed(() => store.state.session.dialog),
+      imagePreview: computed(() => store.state.session.imagePreview),
+
+      maskShow: computed(() => self.dialog.show),
       blog: {},
       msgCount: 0,
-      show: false,
+      globalTip: computed(() => store.state.session.globalTip),
       msgBoxShow: false,
       msgBoxLoading: true,
       msgBox: [],
@@ -66,6 +84,14 @@ export default {
       clientId: computed(() => {
         return store.state.local.userInfo.id
       }),
+      u_confirm: async () => {
+        mutations.remove_blog()
+        const blog_id = store.state.session.dialog.obj_id
+        const res = await instance.delete('/del_blog', {params: {blog_id: blog_id}})
+        if (res.code === 200) {
+          mutations.show_global_tip('删除成功')
+        }
+      },
       show_msg_box: async (flag) => {
         if (flag === 'sub' && self.msgCount > 0) {
           self.msgCount--
@@ -77,19 +103,9 @@ export default {
           self.msgBoxLoading = false
         }
       },
-      success_callback: (message) => {
-        self.message = message
-        self.show = true
-        setTimeout(() => {
-          self.show = false
-        }, 1000)
-      },
       unshift_blog: (value) => {
         self.blog = value
       },
-      show_delDialog: () => {
-        self.delDialog = true
-      }
     })
     onMounted(async () => {
       const res = await instance.get('/get_msg_count')
@@ -98,10 +114,10 @@ export default {
       } else {
         self.msgCount = res.data
       }
-
     })
     return {
       ...toRefs(self),
+      ...mutations,
       route
     }
   }
@@ -131,6 +147,18 @@ export default {
 
 .pub-enter-from, .pub-leave-to {
   transform: translateY(200px) rotateX(90deg);
+}
+
+.g-mask:after {
+  content: '';
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 200;
+  position: fixed;
+  cursor: default;
+  background-color: rgba(0, 0, 0, 0.6);
 }
 
 .h-hrader {
@@ -165,7 +193,7 @@ export default {
   background-color: rgba(0, 0, 0, 0.23);
 }
 
-.show {
+.g-tip {
   color: #fff;
   display: flex;
   justify-content: center;
@@ -179,8 +207,22 @@ export default {
   right: 0;
   top: 0;
   bottom: 0;
-  z-index: 3000;
+  z-index: 500;
   margin: auto
+}
+
+.g-blog {
+  background-color: #e5b77a;
+  padding: 20px;
+  border-radius: 10px;
+  z-index: 300;
+  position: fixed;
+  text-align: center;
+  width: 200px;
+  margin: auto;
+  left: 0;
+  right: 0;
+  top: 300px;
 }
 
 @media screen and (max-width: 800px) {

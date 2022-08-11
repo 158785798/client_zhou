@@ -46,9 +46,6 @@ import Header from "../../components/Header.vue";
 
 export default {
   name: "HIndex",
-  emits:[
-      'success_callback'
-  ],
   setup() {
     const self = reactive({
       isVisible: false,

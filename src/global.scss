@@ -145,17 +145,45 @@ body {
   cursor: pointer;
 }
 
-.u-cell-enter-active {
-  animation: bound-in .5s;
+.bound-in-enter-active {
+  animation: kk .3s;
 }
 
-.u-cell-leave-active {
-  animation: bound-in .3s reverse;
+.bound-in-leave-active {
+  animation: kk .3s reverse;
+}
+.bound-out-enter-active {
+  animation: bound-out .3s;
+}
+
+.bound-out-leave-active {
+  animation: bound-out .2s reverse;
 }
 
 @keyframes bound-in {
   0% {
     transform: scale(0);
+    //opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    //opacity: 1;
+  }
+}
+@keyframes kk {
+  0% {
+    transform: scaleX(0);
+    //opacity: 0;
+  }
+  100% {
+    transform: scaleX(1);
+    //opacity: 1;
+  }
+}
+
+@keyframes bound-out {
+  0% {
+    transform: scale(1.2);
     //opacity: 0;
   }
   100% {

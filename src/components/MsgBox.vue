@@ -3,7 +3,7 @@
   position: absolute; left: 0; right: 0; margin: auto; border-radius: 10px; overflow: hidden">
     <i @click="show_msg_box" class="iconfont iconfontchahao1"
        style="position: absolute; right: -30px;color: #fff;font-size: 20px "></i>
-    <transition name="u-cell">
+    <transition name="bound-in">
       <div style="overflow: auto;width: 100%;height: 100%;padding: 20px;">
         <div v-show="msgBox.length!==0" v-for="each in msgBox" class="cursor-pointer"
              :style="{color:(each.clicked? 'rgba(0,0,0,0.5)': '#cf00ee')}"

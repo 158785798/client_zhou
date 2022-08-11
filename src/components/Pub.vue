@@ -74,6 +74,7 @@ import instance from "../api/request.js";
 import {ElMessage} from "element-plus";
 import {Sortable} from "sortablejs";
 import {useRoute, useRouter} from "vue-router";
+import {useMutations} from "../utils/hooks.js";
 
 export default {
   name: "Pub",
@@ -82,6 +83,7 @@ export default {
     const store = useStore()
     const router = useRouter()
     const route = useRoute()
+    const mutations = useMutations('session', ['show_global_tip'])
     const self = reactive({
       loading: false,
       content: '',
@@ -99,14 +101,14 @@ export default {
       },
       publish_blog: async () => {
         self.loading = true
-        await router.push('TiamoBlog')
+        await router.push({name: 'TIndex'})
         const res = await instance.post('/publish_blog', {content: self.content, images: self.blogImgs})
         context.emit('unshift_blog', res.data)
         self.close_pub()
         self.loading = false
         self.blogImgs = []
         self.content = ''
-        context.emit('success_callback','发布成功')
+        mutations.show_global_tip('发布成功')
       },
       upload_success: (res) => {
         self.blogImgs.push(res)

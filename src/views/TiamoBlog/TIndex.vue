@@ -76,10 +76,7 @@ import instance from "../../api/request.js";
 import {to_tab} from "../../utils/tools.js";
 
 export default {
-  name: "TiamoBlog",
-  emits:[
-      'success_callback'
-  ],
+  name: "TIndex",
   setup(){
     const router = useRouter()
     const route = useRoute()

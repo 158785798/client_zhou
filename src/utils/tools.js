@@ -1,6 +1,7 @@
 import router from "../router/index.js";
 
 const to_tab = async (to, query) => {
+  query['index'] = 0
   await router.push({name: to, query: query})
 }
 
@@ -25,7 +26,6 @@ const scroll = (self) => {
     }
   }
 }
-
 
 export {
   to_tab,

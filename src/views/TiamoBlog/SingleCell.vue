@@ -1,7 +1,7 @@
 <template>
   <main>
     <div style="width: 100%">
-      <transition-group appear tag="div" name="u-cell">
+      <transition-group appear tag="div" name="bound-in">
         <div v-for="blog in blogs" :key="blog.id">
           <UserCell @back_blog_id="back_blog_id" :cur_blog_id="cur_blog_id" :blog="blog"></UserCell>
         </div>
@@ -15,28 +15,20 @@ import UserCell from "../../components/UserCell.vue";
 import {onBeforeMount, onMounted, reactive, toRefs} from "vue";
 import {useRoute, useRouter} from "vue-router";
 import instance from "../../api/request.js";
+import {useMutations} from "../../utils/hooks.js";
 
 export default {
   name: "CommentPage",
   components: {
     UserCell,
   },
-  emits: [
-    'success_callback', 'finish'
-  ],
   setup(props, context) {
     const router = useRouter()
     const route = useRoute()
+    const mutations = useMutations('session', ['show_global_tip'])
     const self = reactive({
       cur_blog_id: -1,
       blogs: [],
-      show_delDialog: (blog_id) => {
-        self.blog_id = blog_id
-        self.delDialog = true
-      },
-      success_callback: (message) => {
-        context.emit('success_callback', message)
-      },
       back_blog_id: (blog_id) => {
         if (self.cur_blog_id === blog_id) {
           self.cur_blog_id = -1

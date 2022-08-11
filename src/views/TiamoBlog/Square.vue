@@ -1,16 +1,16 @@
 <template>
   <main>
-  <div style="width: 100%">
-    <transition-group appear tag="div" name="u-cell">
-      <div v-for="blog in blogs" :key="blog.id">
-        <SquareCell @back_blog_id="back_blog_id" :cur_blog_id="cur_blog_id" :blog="blog"></SquareCell>
-      </div>
-    </transition-group>
-  </div>
-  <div style="text-align: center; color: rgba(0,0,0,0.53)">
-    <img src="../../assets/loading2.gif" alt="" style="border-radius: 20px" width="150" v-show="endLoading">
-    <span v-show="!endLoading&&!loading">我是有底线的o(*￣▽￣*)o</span>
-  </div>
+    <div style="width: 100%">
+      <transition-group appear tag="div" name="bound-in">
+        <div v-for="blog in blogs" :key="blog.id">
+          <SquareCell @back_blog_id="back_blog_id" :cur_blog_id="cur_blog_id" :blog="blog"></SquareCell>
+        </div>
+      </transition-group>
+    </div>
+    <div style="text-align: center; color: rgba(0,0,0,0.53)">
+      <img src="../../assets/loading2.gif" alt="" style="border-radius: 20px" width="150" v-show="endLoading">
+      <span v-show="!endLoading&&!loading">我是有底线的o(*￣▽￣*)o</span>
+    </div>
   </main>
 </template>
 
@@ -21,22 +21,23 @@ import {computed, onMounted, onUnmounted, reactive, toRefs, watch} from "vue";
 import instance from "../../api/request.js";
 import {useStore} from "vuex";
 import {useRouter} from "vue-router";
+import {useMutations} from "../../utils/hooks.js";
+import {scroll} from "../../utils/tools.js";
 
 
 export default {
   name: "Square",
-  props: ['blog', 'loading'],
-  emits:['finish'],
+  props: ['loading'],
+  emits: ['finish'],
   components: {
     SquareCell
   },
-
   setup(props, context) {
     const store = useStore()
     const router = useRouter()
+    const mutations = useMutations('session', ['concat_blogs', 'clear_blogs'])
     const self = reactive({
-      blogs: [],
-
+      blogs: computed(() => store.state.session.blogs),
       largeImgPath: '',
       blog_id: null,
       pageNum: 1,
@@ -50,12 +51,10 @@ export default {
         } else {
           self.cur_blog_id = blog_id
         }
-
       },
       noMore: computed(() => {
         return self.pageSize > self.serverPageSize || self.endLoading
       }),
-
 
       get_blogs: async () => {
         const res2 = await instance.get('/get_blogs', {
@@ -65,37 +64,14 @@ export default {
           }
         })
         self.serverPageSize = res2.data.length
-        self.blogs = self.blogs.concat(res2.data)
+        mutations.concat_blogs(res2.data)
         self.endLoading = false
       },
-      scroll() {
-        window.onscroll = () => {
-          // 整个页面的高度
-          const scrollHeight = document.body.scrollHeight
-          // 当前可视区的顶部到页面顶部的高度，||是做兼容处理的
-          const scrollTop = document.body.scrollTop || document.documentElement.scrollTop
-          // 当前可视区的高度
-          const clientHeight = document.documentElement.clientHeight
-          // 可视区底部到页面底部的高度，即滚动条与底部的距离
-          const instance = scrollHeight - scrollTop - clientHeight
-          // 当滚动条与底部的距离小于100时就触发加载数据
-          if (instance < 100) {
-            if (self.noMore) return
-            self.endLoading = true
-            setTimeout(() => {
-              self.pageNum++
-              self.get_blogs()
-            }, 1000)
-
-          }
-        }
-      }
-    })
-    watch(() => props.blog, (newBlog, oldBlog) => {
-      self.blogs.unshift(newBlog)
+      scroll: scroll,
     })
     onMounted(async () => {
-      window.addEventListener('scroll', self.scroll, false)
+      mutations.clear_blogs()
+      window.addEventListener('scroll', self.scroll(self), false)
       const res1 = await instance.get('/get_taste')
       self.taste = res1.data
       await self.get_blogs()

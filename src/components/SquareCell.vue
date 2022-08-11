@@ -34,7 +34,7 @@
     <div style="margin: 4px 50px">
       <div style="display: inline-block; margin: 4px 2px" v-for="(each, index) in blog.images"
            :data-id="each.name">
-        <div @click="set_current_groups(blog, index)"
+        <div @click="show_image_preview({images: blog.images, index: index})"
              style="overflow: hidden; width: 96px; height: 96px; border-radius: 7px">
           <img v-if="each.direction==='h'" :src="each.middle" alt="" width="96" style="cursor: zoom-in">
           <img v-else :src="each.middle" alt="" height="96" style="cursor: zoom-in">
@@ -75,30 +75,7 @@
     </div>
     <Comment v-if="blog.commentShow" @succ_comment="blog.comments++" :blog_id="blog.id"></Comment>
   </div>
-  <teleport to="body">
-    <div v-show="curentImgGroups.length !== 0"
-         style="display: flex;flex-direction:column;position: fixed;top:20px; bottom: 0; left: 0; right: 0;z-index: 300">
-      <div
-          style="position: relative; flex: 1;justify-content:center;align-items: center;display: flex;overflow: hidden; ">
-        <div :class="{'blog-sw': curentImgGroups.length !== 0}" @click="curentImgGroups=[]"></div>
-        <div style="z-index: 300;">
-          <img v-if="cur_each.direction==='h'" :src="cur_each.large" alt="" style="max-height: 92vh">
-          <img v-else :src="cur_each.large" alt="" style="max-width: 100vw">
-        </div>
-      </div>
 
-      <div style="display: flex; justify-content: center; background-color: rgba(0,0,0,0.8);z-index: 300">
-        <div v-for="(each, index) in curentImgGroups" @click="to_cur(index)"
-             style="margin: 15px 3px; width: 55px; height: 55px; overflow: hidden;position: relative"
-             :class="{'is-active': cur_index===index}">
-          <div :class="{'bottom-blog': cur_index!==index}">
-            <img v-if="each.direction==='h'" :src="each.middle" alt="" width="55">
-            <img v-else :src="each.middle" alt="" height="55">
-          </div>
-        </div>
-      </div>
-    </div>
-  </teleport>
 
 </template>
 
@@ -109,6 +86,7 @@ import {useRouter} from "vue-router";
 import instance from "../api/request.js";
 import Comment from './Comment.vue'
 import {to_tab} from "../utils/tools.js";
+import {useMutations} from "../utils/hooks.js";
 
 export default {
   name: "SquareCell",
@@ -141,10 +119,8 @@ export default {
   setup(props, context) {
     const store = useStore()
     const router = useRouter()
+    const mutations = useMutations('session', ['to_cur', 'show_image_preview'])
     const self = reactive({
-      curentImgGroups: [],
-      cur_each: {},
-      cur_index: 0,
       pageRefresh: computed(() => store.state.pageRefresh),
       userInfo: computed(() => store.state.local.userInfo),
       iscomment: props.iscomment,
@@ -165,15 +141,6 @@ export default {
       },
       back_blog_id: (blog_id) => {
         context.emit('back_blog_id', blog_id)
-      },
-      to_cur: (index) => {
-        self.cur_index = index
-        self.cur_each = self.curentImgGroups[index]
-      },
-      set_current_groups: (blog, index) => {
-        self.curentImgGroups = blog.images
-        self.cur_each = blog.images[index]
-        self.cur_index = index
       },
 
       to_tab: to_tab,
@@ -208,7 +175,8 @@ export default {
       }
     })
     return {
-      ...toRefs(self)
+      ...toRefs(self),
+      ...mutations
     }
   },
 
@@ -270,24 +238,8 @@ export default {
   color: #707070
 }
 
-.is-active {
-  border: 3px solid $icon-hover-color;
-}
-
 .is-open {
   color: $icon-hover-color
-}
-
-.blog-sw::before {
-  content: '';
-  top: 0;
-  right: 0;
-  left: 0;
-  bottom: 0;
-  z-index: 120;
-  position: fixed;
-  cursor: default;
-  background-color: rgba(0, 0, 0, 0.6);
 }
 
 </style>
