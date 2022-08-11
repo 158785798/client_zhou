@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div v-for="item in pictures">
-      <h3>{{month}}月</h3>
+    <div v-for="(urls, month) in pictures">
+      <h3>{{month}}</h3>
       <div style="display: flex;">
         <div v-for="each in urls" style="width: 100px; height: 100px; overflow: hidden">
         <img :src="each.avatarName" alt="" style="width: 96px">
