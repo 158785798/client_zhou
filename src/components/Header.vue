@@ -243,8 +243,4 @@ export default {
   color: #2f2b2b;
 }
 
-.u-msg:hover {
-  color: rgba(255, 255, 255, 0.6) !important;
-}
-
 </style>

@@ -3,9 +3,8 @@
     <el-backtop :bottom="100" class="backtop">
       <i class="iconfont iconfonttubiao02" style="font-size: 20px"></i>
     </el-backtop>
-    <div :class="[{'cut-img-mask': showCutImg},{'scale-cut-img': !showCutImg}]" @click="openCutImg"></div>
-    <CutImg :imgUrl="cutImgUrl" :class="['cropper-avatar', {'scale-cut-img': !showCutImg}]"
-            @closeCutImg="showCutImg=false"></CutImg>
+    <div :class="{'cut-img-mask': showCutImg}" @click="openCutImg"></div>
+    <CutImg v-show="showCutImg" :imgUrl="cutImgUrl" @closeCutImg="showCutImg=false"></CutImg>
     <div style="margin-top:24px;border-bottom: 1px solid hotpink">
       <div style="margin-left: 400px;padding: 0;">
         <div style="display: flex;font-size: 14px;">
@@ -95,8 +94,10 @@ export default {
     const mutations = useMutations('session', ['show_global_tip'])
     const getBase64 = (file, callback) => {
       const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onloadend = () => callback(reader.result);
+      // reader.readAsDataURL(file);
+      reader.onloadend =()=>{
+        console.log(JSON.parse(reader.result));
+      }
     }
     const self = reactive({
       upload: null,
@@ -166,20 +167,6 @@ export default {
 <style lang="scss" scoped>
 .bio-btn:hover {
   background-color: #f3f4f6 !important;
-}
-
-.cropper-avatar {
-  transition-duration: 0.5s;
-  position: absolute;
-  left: 0;
-  margin: 0 auto;
-  right: 0;
-  z-index: 1000
-}
-
-
-.scale-cut-img {
-  transform: scale(0);
 }
 
 .user-avatar:hover::after {

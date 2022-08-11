@@ -5,29 +5,14 @@
       <i class="iconfont iconfontguanbi1 close-cut-img cursor-pointer" @click="closeCutImg"
       ></i>
     </div>
-    <div style="width: 100%; height: 100%; display: flex;justify-content: center;">
-
-      <div style="position: relative">
-        <VueCropper :centerBox="false" :fixedBox="true" :canMoveBox="false" :fixedNumber="[1,1]" :fixed="true"
-                    :autoCrop="true"
-                    style="border-radius: 20px;overflow: hidden;"
+    <div style="width: 100%;">
+      <div  style="width: 100%;">
+        <VueCropper :fixed="true" :autoCropWidth="336" :autoCropHeight="336" :limitMinSize="[200, 200]"
+                    :auto-crop="true" :can-scale="false"
                     :img="imgUrl" ref="cropper" :info="false"/>
       </div>
       <div
           style="display: flex; flex-direction: column; justify-content: space-between; align-items: center; margin-left: 20px">
-        <div
-            style="margin-left: 20px; justify-content: center; align-items: center">
-          <div style="margin: 20px auto">
-            <i class="iconfont iconfontxuanzhuan-1 img-cut-tool cursor-pointer" @click="rotateRight"></i>
-            <i class="iconfont iconfontxuanzhuan-2 img-cut-tool cursor-pointer" @click="rotateLeft"></i>
-          </div>
-
-          <div style="margin: 20px auto">
-            <i class="iconfont iconfontjiahao img-cut-tool cursor-pointer" @click="zoomIn" style="font-size: 20px !important;"></i>
-            <i class="iconfont iconfontshouqi img-cut-tool cursor-pointer" @click="zoomOut"></i>
-          </div>
-
-        </div>
         <el-button v-loading="loading" @click="getCronData">Upload</el-button>
       </div>
     </div>
@@ -78,28 +63,15 @@ export default {
           context.emit('closeCutImg')
         }
       },
-
       getCronData: () => {
         if (self.loading) {
           return
         }
         self.cropper.getCropData(data => {
-
           self.uploadAvatar(data)
         })
       },
-      rotateRight: () => {
-        self.cropper.rotateRight()
-      },
-      zoomIn: () => {
-        self.cropper.changeScale(0.8)
-      },
-      zoomOut: () => {
-        self.cropper.changeScale(-0.8)
-      },
-      rotateLeft: () => {
-        self.cropper.rotateLeft()
-      },
+
     })
     return {
       ...toRefs(self)
@@ -111,9 +83,16 @@ export default {
 
 <style scoped>
 .cut-img-main {
-  z-index: 600;
-  width: 550px;
-  background: #f1f1f1;
+  z-index: 1000;
+  width: 640px;
+  height: 720px;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  position: fixed;
+  background-color: #f1f1f1;
   padding: 0 30px 50px 50px;
   border-radius: 15px;
   transition-duration: 0.5s;

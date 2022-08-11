@@ -40,12 +40,24 @@ a:hover {
 
 
 .cropper-modal {
-  background-color: rgb(233, 162, 104) !important;
+  //background-color: rgb(233, 162, 104) !important;
+  //width: 540px !important;
+  //height: 540px !important;
+}
+.cropper-drag-box .cropper-move{
+  width: 540px !important;
+  height: 540px !important;
+}
+.vue-cropper{
+  width: 540px !important;
+  height: 540px !important;
+}
+.cropper-box{
+
 }
 
 .cropper-view-box {
-  border-radius: 50% !important;
-  background-color: #f1f1f1;
+  //border-radius: 50% !important;
 }
 
 .el-input__wrapper {

@@ -8,7 +8,6 @@ import 'default-passive-events'
 import 'element-plus/dist/index.css'
 import './global.scss'
 import './assets/font/iconfont.css'
-import "animate.css/animate.min.css"
 
 
 // const socketIo = new VueSocketIO({

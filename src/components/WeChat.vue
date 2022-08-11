@@ -1,5 +1,14 @@
 <template>
   <div style="display:flex;justify-content: center; align-items: center; margin-top: 100px;padding: 30px;">
+    <div style="margin-right: 30px">
+      <div v-for="user in users" style="border-radius:6px;padding:3px 5px;display: flex;justify-content: left;background-color: #fff;">
+        <img class="u-avatar" :src="user.avatarUrl" alt="">
+        <span class="u-content">
+            {{ user.username }}
+          </span>
+      </div>
+
+    </div>
     <div style="width: 500px;background-color: rgba(255, 255, 255, 0.72);border-radius: 5px;">
       <div class="container" id="container">
         <div v-for="(item, index) in chatData" style="margin: 18px auto">
@@ -46,6 +55,12 @@ export default {
     })
     const store = useStore()
     const self = reactive({
+      users:[
+          {username: '张三', avatarUrl: 'http://8.141.150.118/static/img.png'},
+          {username: '张三', avatarUrl: 'http://8.141.150.118/static/img.png'},
+          {username: '张三', avatarUrl: 'http://8.141.150.118/static/img.png'},
+          {username: '张三', avatarUrl: 'http://8.141.150.118/static/img.png'},
+      ],
           textDiv: null,
           lockReconnect: false,
           chatData: computed(() => store.state.local.chatInfo),
