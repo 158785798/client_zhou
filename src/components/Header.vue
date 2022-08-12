@@ -9,7 +9,7 @@
     </div>
     <div>
       <audio loop="loop" id="audio" autoplay="autoplay"
-             src="http://8.141.150.118/static/cats.mp3"></audio>
+             src="https://auspollo.top/static/music/cats.mp3"></audio>
     </div>
     <div>
       <img v-if="play" src="../assets/music_start.png" alt="" style="width: 40px" @click="playMusic">
