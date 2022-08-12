@@ -3,7 +3,7 @@ import store from "../store/index.js";
 import {ElMessage} from "element-plus";
 
 
-const url = process.env.NODE_ENV === 'development' ? 'http://127.0.0.1:8090' : 'https://auspollo.top'
+const url = process.env.NODE_ENV === 'development' ? 'ws://127.0.0.1:8090' : 'wss://auspollo.top'
 
 const socket = SocketIo(
     url,
