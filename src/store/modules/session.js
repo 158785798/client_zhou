@@ -16,21 +16,46 @@ export const session = {
       item: null,
       images: null,
     },
+    cropper: {
+      show: false,
+      index: null,
+      name: null,
+      flag: null,
+      imgB64: null,
+    },
     cur_blog_id: null,
     blogs: [],
+    blogImages: []
   },
   mutations: {
     concat_blogs(state, payload) {
       state.blogs = state.blogs.concat(payload)
     },
-    clear_blogs(state, payload) {
-      state.blogs = []
+    unshift_blog(state, payload) {
+      state.blogs.unshift(payload)
     },
     remove_blog(state, payload) {
       state.blogs = state.blogs.filter(item => item.id !== state.dialog.obj_id)
       state.dialog.show = false
     },
-    set_blog_id(state, payload){
+    clear_blogs(state, payload) {
+      state.blogs = []
+    },
+
+    concat_blog_images(state, payload) {
+      state.blogImages.push(payload)
+    },
+    remove_blog_image(state, payload) {
+      state.blogImages.splice(payload, 1)
+    },
+    replace_blog_image(state, payload) {
+      state.blogImages[state.cropper.index] = payload
+    },
+    clear_blog_images(state, payload) {
+      state.blogImages = []
+    },
+
+    set_blog_id(state, payload) {
       state.cur_blog_id = payload
     },
     to_cur(state, payload) {
@@ -56,9 +81,20 @@ export const session = {
       state.dialog.obj_id = payload.obj_id
       state.dialog.show = true
     },
+    show_cropper(state, payload) {
+      state.cropper.imgB64 = payload.imgB64
+      state.cropper.index = payload.index
+      state.cropper.name = payload.name
+      state.cropper.flag = payload.flag
+      state.cropper.show = true
+    },
     close_mask(state, payload) {
       state.dialog.show = false
       state.imagePreview.show = false
+    },
+    close_cropper(state, payload) {
+      state.cropper.show = false
     }
+
   }
 }

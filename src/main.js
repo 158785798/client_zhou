@@ -1,5 +1,6 @@
 import {createApp} from 'vue'
 import App from './App.vue'
+import VueCropper from "vue-cropper";
 import router from "./router/index.js"
 import store from "./store/index.js"
 import ElementPlus from 'element-plus'
@@ -26,4 +27,4 @@ import './assets/font/iconfont.css'
 // })
 const app = createApp(App)
 app.config.globalProperties.$socket = socket
-app.use(ElementPlus).use(store).use(router).mount('#app')
+app.use(ElementPlus).use(store).use(router).use(VueCropper).mount('#app')

@@ -5,6 +5,12 @@ const to_tab = async (to, query) => {
   await router.push({name: to, query: query})
 }
 
+const getBase64 = (file, callback) => {
+  const reader = new FileReader();
+  reader.readAsDataURL(file);
+  reader.onloadend = () => callback(reader.result);
+}
+
 const scroll = (self) => {
   window.onscroll = () => {
     // 整个页面的高度
@@ -29,6 +35,6 @@ const scroll = (self) => {
 
 export {
   to_tab,
+  getBase64,
   scroll
-
 }

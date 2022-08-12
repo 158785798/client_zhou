@@ -10,7 +10,6 @@
     "@vitejs/plugin-vue": "^2.3.3",
     "Math": "0.0.1-security",
     "axios": "^0.27.2",
-    "cropperjs": "^2.0.0-beta.1",
     "default-passive-events": "^2.0.0",
     "echarts": "^5.3.0",
     "socket.io-client": "^4.1.2",
@@ -25,8 +24,8 @@
   "devDependencies": {
     "@vue/compiler-sfc": "^3.0.4",
     "element-plus": "^2.0.5",
-    "sass": "^1.53.0",
-    "sass-loader": "^7.0.2",
+    "sass": "^1.54.4",
+    "sass-loader": "^13.0.2",
     "vite": "^2.9.12"
   }
 }

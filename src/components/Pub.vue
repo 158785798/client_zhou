@@ -11,17 +11,25 @@
         placeholder="对你的猫猫说些什么？"
     />
     <div ref="dragImg" style="margin-top: 10px">
-      <div style="display: inline-block; margin: 4px 2px; cursor: move; position: relative" v-for="item in blogImgs"
-           :data-id="item.name">
+      <div style="display: inline-block; margin: 4px 2px; cursor: move; position: relative"
+           v-for="(item, index) in blogImages" :data-id="item.name">
         <div class="image-picbed" style="overflow: hidden; width: 96px; height: 96px; border-radius: 7px">
           <img v-if="item.direction==='h'" :src="item.img_uri" alt="" width="96">
           <img v-else :src="item.img_uri" alt="" height="96">
+
         </div>
-        <strong @click="del_img(item)">
+        <div class="cursor-pointer"
+             @click="show_cropper({index: index,flag:'blog', imgB64: item.imgB64, name: item.name})"
+             style="display: flex;justify-content: center; align-items: center;height: 24px;
+             background-color: rgba(0,0,0,0.2);font-size: 12px;color:#fff;width: 100%;position: absolute; text-align: center; bottom: 0;z-index: 120;">
+          <i class="iconfont iconfontdingwei1"></i>
+          <span>焦点</span>
+        </div>
+        <strong @click="remove_blog_image(index)">
           <i class="iconfont iconfontchahao1 del-img cursor-pointer ico"></i>
         </strong>
       </div>
-      <el-upload v-if="blogImgs.length !== 0"
+      <el-upload v-if="blogImages.length !== 0"
                  :show-file-list="false"
                  :headers="headers"
                  accept="image/*"
@@ -46,9 +54,9 @@
               accept="image/*"
               :on-success="upload_success"
               :action="action">
-          <i class="iconfont iconfontimage item cursor-pointer ico ico-bg" style="font-size: 20px; display: inline-block"></i>
+          <i class="iconfont iconfontimage item cursor-pointer ico ico-bg"
+             style="font-size: 20px; display: inline-block"></i>
       </el-upload>
-
             </span>
       </div>
       <el-button v-loading="loading" @click="publish_blog" :disabled="content===''"
@@ -58,12 +66,12 @@
     <div v-show="isEmojiShow"
          style="padding: 10px;box-shadow: 0 0 10px 5px rgba(12,12,12,0.33);width: 470px;height: 330px;min-width:6.25rem;
              overflow-y:auto;position: absolute;margin: 10px; background-color: #fff; border-radius: 10px">
-                <span @click="push_emoji(item)" style="display: inline-block" v-for="item in emojis" class="emoji cursor-pointer ico ico-bg"
+                <span @click="push_emoji(item)" style="display: inline-block" v-for="item in emojis"
+                      class="emoji cursor-pointer ico ico-bg"
                       :key="item.id">
                     <img :src="item.url" alt="" width="24">
                 </span>
     </div>
-
   </main>
 </template>
 
@@ -78,21 +86,22 @@ import {useMutations} from "../utils/hooks.js";
 
 export default {
   name: "Pub",
-  emits: ['unshift_blog', 'close_pub'],
+  emits: ['close_pub'],
   setup(props, context) {
     const store = useStore()
     const router = useRouter()
     const route = useRoute()
-    const mutations = useMutations('session', ['show_global_tip'])
+    const mutations = useMutations('session', ['unshift_blog', 'show_cropper', 'show_global_tip', 'concat_blog_images', 'remove_blog_image', 'clear_blog_images'])
     const self = reactive({
       loading: false,
       content: '',
       dragImg: null,
       isEmojiShow: false,
-      action: 'http://8.141.150.118:8096/api/upload_img',
+      // action: 'http://8.141.150.118:8096/api/upload_binary',
+      action: 'http://127.0.0.1:8090/api/upload_binary',
       emojis: [],
       headers: {Authorization: window.localStorage.getItem('token_zhou')},
-      blogImgs: [],
+      blogImages: computed(() => store.state.session.blogImages),
       close_pub: () => {
         context.emit('close_pub')
       },
@@ -101,21 +110,21 @@ export default {
       },
       publish_blog: async () => {
         self.loading = true
-        await router.push({name: 'TIndex'})
-        const res = await instance.post('/publish_blog', {content: self.content, images: self.blogImgs})
-        context.emit('unshift_blog', res.data)
-        self.close_pub()
-        self.loading = false
-        self.blogImgs = []
+        const res = await instance.post('/publish_blog', {content: self.content, images: self.blogImages})
+        mutations.unshift_blog(res.data)
         self.content = ''
+        self.loading = false
+        self.close_pub()
+        mutations.clear_blog_images()
         mutations.show_global_tip('发布成功')
+        if (route.name !== 'TIndex') {
+          await router.push({name: 'TIndex'})
+        }
       },
       upload_success: (res) => {
-        self.blogImgs.push(res)
+        console.log(res);
+        mutations.concat_blog_images(res)
       },
-      del_img: (item) => {
-        self.blogImgs.splice(self.blogImgs.indexOf(item), 1)
-      }
     })
     onMounted(async () => {
       const sortable = Sortable.create(self.dragImg, {
@@ -130,7 +139,8 @@ export default {
       self.emojis = res1.data
     })
     return {
-      ...toRefs(self)
+      ...toRefs(self),
+      ...mutations
     }
   }
 }

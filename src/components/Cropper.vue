@@ -2,18 +2,18 @@
   <div class="cut-img-main">
     <div style="padding: 15px 0 0 0;display: flex; justify-content: space-between">
       <strong>Update Your Avatar</strong>
-      <i class="iconfont iconfontguanbi1 close-cut-img cursor-pointer" @click="closeCutImg"
+      <i class="iconfont iconfontguanbi1 close-cut-img cursor-pointer" @click="close_cropper"
       ></i>
     </div>
     <div style="width: 100%;">
-      <div  style="width: 100%;">
-        <VueCropper :fixed="true" :autoCropWidth="336" :autoCropHeight="336" :limitMinSize="[200, 200]"
-                    :auto-crop="true" :can-scale="false"
-                    :img="imgUrl" ref="cropper" :info="false"/>
+      <div style="width: 100%;">
+        <VueCropper :fixed="true" :autoCropWidth="336" :auto-cropHeight="336"
+                    :auto-crop="true" mode="cover"
+                    :img="cropper.imgB64" ref="myCropper" :info="false"/>
       </div>
       <div
           style="display: flex; flex-direction: column; justify-content: space-between; align-items: center; margin-left: 20px">
-        <el-button v-loading="loading" @click="getCronData">Upload</el-button>
+        <el-button v-loading="loading" @click="upload">Upload</el-button>
       </div>
     </div>
   </div>
@@ -27,56 +27,57 @@ import {useStore} from "vuex";
 import instance from "../api/request.js";
 import {VueCropper} from "vue-cropper";
 import 'vue-cropper/dist/index.css';
+import {useMutations} from "../utils/hooks.js";
 
 export default {
-  name: "CutImg",
-  props: {
-    imgUrl: String
-  },
+  name: "Cropper",
   components: {
     VueCropper
   },
   setup(props, context) {
     const store = useStore()
+    const mutations = useMutations('session', ['close_cropper', 'replace_blog_image', 'close_cropper'])
     const self = reactive({
       avatarUploading: computed(() => store.state.avatarUploading !== self.showCutImgLoading),
       showCutImgLoading: false,
-      cropper: null,
+      cropper: computed(() => store.state.session.cropper),
+      myCropper: null,
       loading: false,
-      emit_finish: () => {
-        context.emit('closeCutImg')
-        ElMessage.success('update success!')
-      },
-      uploadAvatar: async (data) => {
-        self.loading = true
-        const res = await instance.post('/update_avatar', {user_id: store.state.local.userInfo.id, file: data})
-        if (res.code === 200) {
-          store.commit('local/saveUserInfo', {avatarUrl: res.avatarUrl})
-          self.emit_finish()
-        } else {
-          ElMessage.error(res.msg)
-        }
-        self.loading = false
-      },
-      closeCutImg: () => {
-        if (!store.state.avatarUploading) {
-          context.emit('closeCutImg')
-        }
-      },
-      getCronData: () => {
-        if (self.loading) {
-          return
-        }
-        self.cropper.getCropData(data => {
-          self.uploadAvatar(data)
-        })
-      },
+      upload: () => {
+        if (self.loading) return
+        self.myCropper.getCropData(async (data) => {
+          self.loading = true
+          const param = {
+            u_id: store.state.local.userInfo.id,
+            index: self.cropper.index,
+            flag: self.cropper.flag,
+            name: self.cropper.name,
+            imgB64: data
+          }
+          console.log(param);
+          const res = await instance.post('/upload_b64', param)
+          if (res.code === 200) {
+            if (self.cropper.flag === 'avatar') {
+              store.commit('local/saveUserInfo', {avatarUrl: res.avatarUrl})
+            } else {
+              mutations.replace_blog_image(res)
+              console.log(store.state.session.blogImages);
+            }
+            mutations.close_cropper()
+          } else {
+            ElMessage.error(res.msg)
+          }
+          self.loading = false
 
+        })
+
+      }
     })
     return {
-      ...toRefs(self)
+      ...toRefs(self),
+      ...mutations
     }
-  },
+  }
 }
 
 </script>

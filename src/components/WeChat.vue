@@ -1,7 +1,8 @@
 <template>
   <div style="display:flex;justify-content: center; align-items: center; margin-top: 100px;padding: 30px;">
     <div style="margin-right: 30px">
-      <div v-for="user in users" style="border-radius:6px;padding:3px 5px;display: flex;justify-content: left;background-color: #fff;">
+      <div v-for="user in users"
+           style="border-radius:6px;padding:3px 5px;display: flex;justify-content: left;background-color: #fff;">
         <img class="u-avatar" :src="user.avatarUrl" alt="">
         <span class="u-content">
             {{ user.username }}
@@ -55,14 +56,13 @@ export default {
     })
     const store = useStore()
     const self = reactive({
-      users:[
-          {username: '张三', avatarUrl: 'http://8.141.150.118/static/img.png'},
-          {username: '张三', avatarUrl: 'http://8.141.150.118/static/img.png'},
-          {username: '张三', avatarUrl: 'http://8.141.150.118/static/img.png'},
-          {username: '张三', avatarUrl: 'http://8.141.150.118/static/img.png'},
-      ],
+          users: [
+            {username: '张三', avatarUrl: 'http://8.141.150.118/static/img.png'},
+            {username: '张三', avatarUrl: 'http://8.141.150.118/static/img.png'},
+            {username: '张三', avatarUrl: 'http://8.141.150.118/static/img.png'},
+            {username: '张三', avatarUrl: 'http://8.141.150.118/static/img.png'},
+          ],
           textDiv: null,
-          lockReconnect: false,
           chatData: computed(() => store.state.local.chatInfo),
           userInfo: computed(() => store.state.local.userInfo),
           enter_to_send: (event) => {

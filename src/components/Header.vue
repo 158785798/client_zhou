@@ -153,6 +153,13 @@ export default {
 
 <style scoped>
 .header {
+  border-radius: 10px;
+  background: linear-gradient(rgba(243, 157, 47, 0.9), rgba(220, 161, 220, 0.94));
+  box-shadow: 0 0 20px 3px rgba(171, 172, 176, 0.91);
+  position: fixed;
+  width: 1250px;
+  top: 0;
+  z-index: 100;
   padding: 4px 0;
   display: flex;
   justify-content: space-between;

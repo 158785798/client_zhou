@@ -1,10 +1,8 @@
 <template>
   <div :class="{'g-mask': maskShow}" @click="close_mask"></div>
-  <div class="h-hrader" @click="">
-    <Header class="header" :msgCount="msgCount" @show_msg_box="show_msg_box"></Header>
-  </div>
+  <Header class="header" :msgCount="msgCount" @show_msg_box="show_msg_box"></Header>
   <transition name="bound-in">
-    <Pub v-if="pub" @unshift_blog="unshift_blog" @close_pub="pub=false"></Pub>
+    <Pub v-if="pub" @close_pub="pub=false"></Pub>
   </transition>
   <transition name="fade">
     <div v-show="globalTip.show" class="g-tip">
@@ -14,19 +12,14 @@
       </div>
     </div>
   </transition>
-  <div v-show="msgBoxShow">
-
-    <MsgBox @show_msg_box="show_msg_box" :msgBox="msgBox" :msgBoxLoading="msgBoxLoading"></MsgBox>
-  </div>
+  <MsgBox v-show="msgBoxShow" @show_msg_box="show_msg_box" :msgBox="msgBox" :msgBoxLoading="msgBoxLoading"></MsgBox>
   <div class="g-blog" v-show="dialog.show">
     <div style="margin-bottom: 20px; ">{{ dialog.text }}</div>
     <el-button size="small" @click="u_confirm">确认</el-button>
     <el-button size="small" @click="close_mask">取消</el-button>
   </div>
-  <div v-if="imagePreview.show">
-
-  <ImagePreview ></ImagePreview>
-  </div>
+  <ImagePreview v-if="imagePreview.show"></ImagePreview>
+  <Cropper v-show="cropper.show"></Cropper>
   <el-container style="margin: 50px auto" :class="{'msg-box': msgBoxShow}" @click="msgBoxShow=false">
     <span @click="pub=!pub" style="position: fixed;z-index:120;transform: translate(200px, -35px)">
       <i class="iconfont iconfontjiahao " style="font-size: 30px;color: red;"></i>
@@ -39,15 +32,17 @@
 </template>
 
 <script>
-import Header from "../../components/Header.vue";
-import {getCurrentInstance, computed, onMounted, reactive, toRefs, ref} from "vue";
 import Pub from "../../components/Pub.vue";
+import MsgBox from "../../components/MsgBox.vue";
+import Cropper from "../../components/Cropper.vue";
+import Header from "../../components/Header.vue";
+
 import {useStore} from "vuex";
 import instance from "../../api/request.js";
 import {useRoute, useRouter} from "vue-router";
-import MsgBox from "../../components/MsgBox.vue";
-import ImagePreview from "../../components/ImagePreview.vue";
 import {useMutations} from "../../utils/hooks.js";
+import ImagePreview from "../../components/ImagePreview.vue";
+import {getCurrentInstance, computed, onMounted, reactive, toRefs} from "vue";
 
 
 export default {
@@ -55,6 +50,7 @@ export default {
   components: {
     Header,
     Pub,
+    Cropper,
     MsgBox,
     ImagePreview
   },
@@ -70,17 +66,14 @@ export default {
     const self = reactive({
       dialog: computed(() => store.state.session.dialog),
       imagePreview: computed(() => store.state.session.imagePreview),
-
-      maskShow: computed(() => self.dialog.show),
-      blog: {},
+      cropper: computed(() => store.state.session.cropper),
+      maskShow: computed(() => self.dialog.show || self.cropper.show),
       msgCount: 0,
       globalTip: computed(() => store.state.session.globalTip),
       msgBoxShow: false,
       msgBoxLoading: true,
       msgBox: [],
-      message: '',
       pub: false,
-      lockReconnect: false,
       clientId: computed(() => {
         return store.state.local.userInfo.id
       }),
@@ -102,9 +95,6 @@ export default {
           self.msgBox = res.data
           self.msgBoxLoading = false
         }
-      },
-      unshift_blog: (value) => {
-        self.blog = value
       },
     })
     onMounted(async () => {
@@ -159,16 +149,6 @@ export default {
   position: fixed;
   cursor: default;
   background-color: rgba(0, 0, 0, 0.6);
-}
-
-.h-hrader {
-  border-radius: 10px;
-  background: linear-gradient(rgba(243, 157, 47, 0.9), rgba(220, 161, 220, 0.94));
-  box-shadow: 0 0 20px 3px rgba(171, 172, 176, 0.91);
-  position: fixed;
-  width: 1250px;
-  top: 0;
-  z-index: 100
 }
 
 .msg-box:after {

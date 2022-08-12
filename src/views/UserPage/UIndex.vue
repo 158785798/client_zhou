@@ -3,8 +3,6 @@
     <el-backtop :bottom="100" class="backtop">
       <i class="iconfont iconfonttubiao02" style="font-size: 20px"></i>
     </el-backtop>
-    <div :class="{'cut-img-mask': showCutImg}" @click="openCutImg"></div>
-    <CutImg v-show="showCutImg" :imgUrl="cutImgUrl" @closeCutImg="showCutImg=false"></CutImg>
     <div style="margin-top:24px;border-bottom: 1px solid hotpink">
       <div style="margin-left: 400px;padding: 0;">
         <div style="display: flex;font-size: 14px;">
@@ -30,11 +28,9 @@
           <el-upload ref="upload" :beforeUpload="beforeUpload" accept=".png, .jpg, .jpeg"
                      name="file" :show-file-list="false" :headers="{authorization: 'JWT ' + token}"
                      :http-request="customRequest">
-            <div>
               <img :src="userInfo.avatarUrl" alt="" style="position: absolute;top:-30px;left: 40px;
             border-radius: 50%;width: 296px;height: 296px"
                    class="user-avatar">
-            </div>
           </el-upload>
         </div>
         <div style="font-size: 20px;display: flex; justify-content: space-between;align-items: center">
@@ -73,36 +69,22 @@
 
 <script>
 import {useStore} from "vuex";
-import {computed, onUnmounted, onMounted, reactive, toRefs, onBeforeMount} from "vue";
+import {computed, onMounted, reactive, toRefs, onBeforeMount} from "vue";
 import {useRouter, useRoute} from "vue-router";
 import instance from "../../api/request.js";
-import CutImg from "../../components/CutImg.vue";
-import {scroll} from "../../utils/tools.js";
 import {useMutations} from "../../utils/hooks.js";
+import {getBase64} from "../../utils/tools.js";
 
 export default {
   name: "UIndex",
-  components: {
-    CutImg,
-
-  },
-
   setup(props, context) {
     const store = useStore()
     const router = useRouter()
     const route = useRoute()
-    const mutations = useMutations('session', ['show_global_tip'])
-    const getBase64 = (file, callback) => {
-      const reader = new FileReader();
-      // reader.readAsDataURL(file);
-      reader.onloadend =()=>{
-        console.log(JSON.parse(reader.result));
-      }
-    }
+    const mutations = useMutations('session', ['show_global_tip', 'show_cropper'])
     const self = reactive({
       upload: null,
       underline: null,
-      showCutImg: false,
       delDialog: false,
       showUploadAvatarMask: false,
       isUploadAvatarMaskShow: false,
@@ -128,11 +110,6 @@ export default {
         query.u_id = self.userInfo.id
         router.push({name: to, query: query})
       },
-      openCutImg: () => {
-        if (store.state.avatarUploading) {
-          self.showCutImg = false
-        }
-      },
       beforeUpload(file) {
         if (file.size > 10240000) {
           alert('图片不能超过10M！')
@@ -141,10 +118,9 @@ export default {
         return true
       },
       customRequest: async (info) => {
-        getBase64(info.file, cutImgUrl => {
-          self.cutImgUrl = cutImgUrl
+        getBase64(info.file, imgB64=> {
+          mutations.show_cropper({flag: 'avatar', imgB64: imgB64})
         })
-        self.showCutImg = true
       },
     })
     onBeforeMount(async () => {
@@ -201,19 +177,6 @@ export default {
   color: #f1f1f1;
   cursor: pointer;
   font-size: 4rem;
-}
-
-.cut-img-mask:after {
-  position: fixed;
-  top: 0;
-  content: "";
-  right: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 20;
-  display: block;
-  background: rgba(0, 0, 0, .5);
-  transition-duration: 0.5s;
 }
 
 .nva {
