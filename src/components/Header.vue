@@ -6,16 +6,15 @@
              style="border-radius: 50%; width: 48px; margin-left: 20px">
         <strong style="margin-left: 10px">Candy Cats</strong>
       </a>
+      <i class="iconfont iconfontjiahao cursor-pointer" style="margin: 0 30px; font-size: 20px;color: #bd02fc;" @click="pub"></i>
+      <i :class="['iconfont', 'iconfontic-music','cursor-pointer', {'play': play}]" style="transition-duration: 0.3s; font-size: 20px;"
+         @click="playMusic"></i>
+
     </div>
     <div>
       <audio loop="loop" id="audio" autoplay="autoplay"
              src="https://auspollo.top/static/music/cats.mp3"></audio>
     </div>
-    <div>
-      <img v-if="play" src="../assets/music_start.png" alt="" style="width: 40px" @click="playMusic">
-      <img v-else src="../assets/music_stop.png" alt="" style="width: 40px" @click="playMusic">
-    </div>
-
     <div class="flex-align-items" style="justify-content: space-around; margin: auto 0;position: relative">
       <a href="javascript:" class="homeMenus" @mouseenter="aboutShow=true" @mouseleave="aboutShow=false">
         <strong style="margin: auto 10px;">
@@ -88,7 +87,7 @@ import {ElMessage} from "element-plus";
 export default {
   name: "Header",
   props: ['msgCount'],
-  emits: ['show_msg_box'],
+  emits: ['show_msg_box', 'pub'],
   setup(props, context) {
     const store = useStore()
     const router = useRouter();
@@ -107,6 +106,9 @@ export default {
           play: true,
           aboutShow: false,
           dropdownMenuShow: false,
+          pub: () => {
+            context.emit('pub')
+          },
           show_msg_box: () => {
             context.emit('show_msg_box')
           },
@@ -206,6 +208,12 @@ export default {
   position: fixed;
   cursor: default;
   background-color: rgba(0, 0, 0, 0.09);
+}
+
+.play {
+  color: #bd02fc;
+  transform: rotate(-75deg);
+  font-size: 20px;
 }
 
 .sss:hover {

@@ -1,6 +1,6 @@
 <template>
   <div :class="{'g-mask': maskShow}" @click="close_mask"></div>
-  <Header class="header" :msgCount="msgCount" @show_msg_box="show_msg_box"></Header>
+  <Header class="header" :msgCount="msgCount" @pub="pub=!pub" @show_msg_box="show_msg_box"></Header>
   <transition name="bound-in">
     <Pub v-if="pub" @close_pub="pub=false"></Pub>
   </transition>
@@ -21,9 +21,6 @@
   <ImagePreview v-if="imagePreview.show"></ImagePreview>
   <Cropper v-show="cropper.show"></Cropper>
   <el-container style="margin: 50px auto" :class="{'msg-box': msgBoxShow}" @click="msgBoxShow=false">
-    <span @click="pub=!pub" style="position: fixed;z-index:120;transform: translate(200px, -35px)">
-      <i class="iconfont iconfontjiahao " style="font-size: 30px;color: red;"></i>
-  </span>
     <div style="width: 100%;margin: 15px 0 0 0; position: relative" :class="{'pub': pub}" @click="pub=false">
       <router-view/>
     </div>

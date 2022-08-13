@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "15534343",
+      "name": "ic-music",
+      "font_class": "ic-music",
+      "unicode": "e781",
+      "unicode_decimal": 59265
+    },
+    {
       "icon_id": "435991",
       "name": "相册",
       "font_class": "xiangce",
