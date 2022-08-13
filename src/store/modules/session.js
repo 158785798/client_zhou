@@ -21,6 +21,7 @@ export const session = {
       index: null,
       name: null,
       flag: null,
+      origin_b64:null,
       imgB64: null,
     },
     cur_blog_id: null,
@@ -49,7 +50,8 @@ export const session = {
       state.blogImages.splice(payload, 1)
     },
     replace_blog_image(state, payload) {
-      state.blogImages[state.cropper.index] = payload
+      state.blogImages[state.cropper.index].imgB64 = payload
+      state.blogImages[state.cropper.index].copper = true
     },
     clear_blog_images(state, payload) {
       state.blogImages = []
@@ -82,10 +84,7 @@ export const session = {
       state.dialog.show = true
     },
     show_cropper(state, payload) {
-      state.cropper.imgB64 = payload.imgB64
-      state.cropper.index = payload.index
-      state.cropper.name = payload.name
-      state.cropper.flag = payload.flag
+      state.cropper = payload
       state.cropper.show = true
     },
     close_mask(state, payload) {

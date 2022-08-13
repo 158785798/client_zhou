@@ -58,7 +58,7 @@
 </template>
 
 <script>
-import {onMounted, reactive, toRefs} from "vue";
+import {computed, onMounted, reactive, toRefs} from "vue";
 import instance from "../api/request.js";
 import {ElMessage} from "element-plus";
 import {useStore} from "vuex";
@@ -83,6 +83,7 @@ export default {
       isEmojiShow: false,
       blog_id: props.blog_id,
       to_tab:to_tab,
+      userInfo: computed(()=> store.state.local.userInfo),
       comment: async () => {
         const param = {blog_id: self.blog_id, content: self.content}
         const res = await instance.post('/comment', param)

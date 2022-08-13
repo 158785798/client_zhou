@@ -9,7 +9,7 @@
       <div style="width: 100%;">
         <VueCropper :fixed="true" :autoCropWidth="336" :auto-cropHeight="336"
                     :auto-crop="true" mode="cover"
-                    :img="cropper.imgB64" ref="myCropper" :info="false"/>
+                    :img="cropper.origin_b64" ref="myCropper" :info="false"/>
       </div>
       <div
           style="display: flex; flex-direction: column; justify-content: space-between; align-items: center; margin-left: 20px">
@@ -45,31 +45,24 @@ export default {
       loading: false,
       upload: () => {
         if (self.loading) return
-        self.myCropper.getCropData(async (data) => {
-          self.loading = true
-          const param = {
-            u_id: store.state.local.userInfo.id,
-            index: self.cropper.index,
-            flag: self.cropper.flag,
-            name: self.cropper.name,
-            imgB64: data
-          }
-          console.log(param);
-          const res = await instance.post('/upload_b64', param)
-          if (res.code === 200) {
-            if (self.cropper.flag === 'avatar') {
-              store.commit('local/saveUserInfo', {avatarUrl: res.avatarUrl})
-            } else {
-              mutations.replace_blog_image(res)
-              console.log(store.state.session.blogImages);
+        self.myCropper.getCropData(async (imgB64) => {
+              self.loading = true
+              const data = {
+                u_id: store.state.local.userInfo.id,
+                name: self.cropper.name,
+                imgB64: imgB64,
+                flag: self.cropper.flag,
+              }
+              const res = await instance.post('/upload_b64', data)
+              if (self.cropper.flag === 'avatar') {
+                store.commit('local/saveUserInfo', {avatarUrl: res.avatarUrl})
+              } else {
+                mutations.replace_blog_image(imgB64)
+              }
+              mutations.close_cropper()
+              self.loading = false
             }
-            mutations.close_cropper()
-          } else {
-            ElMessage.error(res.msg)
-          }
-          self.loading = false
-
-        })
+        )
 
       }
     })

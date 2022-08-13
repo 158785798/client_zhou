@@ -8,7 +8,8 @@
         <div v-show="msgBox.length!==0" v-for="each in msgBox" class="cursor-pointer"
              :style="{color:(each.clicked? 'rgba(0,0,0,0.5)': '#cf00ee')}"
              style="display: flex;margin-bottom: 1.5rem; align-items: center">
-          <img :src="each.userInfo.avatarUrl" alt="" @click="to_tab('UIndex', {u_id: each.userInfo.id})"
+          <img :src="each.userInfo.avatarUrl" alt=""
+               @click="to_tab('UIndex', {u_id: each.userInfo.id})"
                style="border-radius: 50%;width: 40px; height: 40px; margin-right: 10px">
           <div style="flex: 1;display: flex; align-items: center; justify-content: space-between; font-size: 13px;"
                @click="to_tab('CommentPage', {blog_id: each.blog_id,msg_id: each.id, clicked: each.clicked, flag: each.flag})">
@@ -44,9 +45,10 @@
 </template>
 
 <script>
-import {reactive, toRefs} from "vue";
+import {computed, reactive, toRefs} from "vue";
 import instance from "../api/request.js";
 import {useRouter} from "vue-router";
+import {useStore} from "vuex";
 
 export default {
   name: "MsgBox",
@@ -54,8 +56,10 @@ export default {
   emits: ['show_msg_box'],
   setup(props, context) {
     const router = useRouter()
+    const store = useStore()
     const self = reactive({
       loading: true,
+      userInfo: computed(() => store.state.local.userInfo),
       show_msg_box: async () => {
         context.emit('show_msg_box')
       },

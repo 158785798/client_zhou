@@ -6,7 +6,10 @@
            @click="to_tab('UIndex', {u_id: blog.userInfo.id})">
       <div style="margin: 10px; flex: 1">
         <div style="margin-bottom: 5px;">
-          <strong class="cursor-pointer" @click="to_tab('UIndex', {u_id: blog.userInfo.id})">{{ blog.userInfo.username }}</strong>
+          <strong class="cursor-pointer"
+                  @click="to_tab('UIndex', {u_id: blog.userInfo.id})">{{
+              blog.userInfo.username
+            }}</strong>
         </div>
         <div style="color: rgba(0,0,0,0.5); font-size: 12px">
           {{ blog.pub_time }}
@@ -36,8 +39,9 @@
            :data-id="each.name">
         <div @click="show_image_preview({images: blog.images, index: index})"
              style="overflow: hidden; width: 96px; height: 96px; border-radius: 7px">
-          <img v-if="each.direction==='h'" :src="each.middle" alt="" width="96" style="cursor: zoom-in">
-          <img v-else :src="each.middle" alt="" height="96" style="cursor: zoom-in">
+          <img v-if="each.direction==='h'" :src="each.small? each.small: each.middle" alt="" width="96"
+               style="cursor: zoom-in">
+          <img v-else :src="each.small? each.small: each.middle" alt="" height="96" style="cursor: zoom-in">
         </div>
       </div>
     </div>

@@ -39,8 +39,8 @@
            :data-id="each.name">
         <div @click="show_image_preview({images: blog.images, index: index})"
              style="overflow: hidden; width: 96px; height: 96px; border-radius: 7px">
-          <img v-if="each.direction==='h'" :src="each.middle" alt="" width="96" style="cursor: zoom-in">
-          <img v-else :src="each.middle" alt="" height="96" style="cursor: zoom-in">
+          <img v-if="each.direction==='h'" :src="each.small? each.small: each.middle" alt="" width="96" style="cursor: zoom-in">
+          <img v-else :src="each.small? each.small: each.middle" alt="" height="96" style="cursor: zoom-in">
         </div>
       </div>
     </div>

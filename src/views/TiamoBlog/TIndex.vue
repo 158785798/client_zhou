@@ -15,18 +15,18 @@
         </div>
 
         <div style="margin: 20px">
-          更新日志  欢迎体验
+          更新日志 欢迎体验
         </div>
         <div>
           <div style="display: flex;margin:0 10px 20px 10px" v-for="(item, index) in logs">
             <div style="margin-right: 10px">{{ item.time }}</div>
-            <span>{{item.text}}</span>
+            <span>{{ item.text }}</span>
           </div>
         </div>
       </div>
     </aside>
     <main v-loading="loading" style="margin: 0 10px; flex: 1">
-    <router-view @finish="loading=false" :key="route.path + JSON.stringify(route.query)"></router-view>
+      <router-view @finish="loading=false" :key="route.path + JSON.stringify(route.query)"></router-view>
     </main>
     <aside style="height: 100%;width:300px;border-radius: 6px;">
       <div style="position: sticky;top:-50px;">
@@ -52,7 +52,8 @@
           </div>
           <div class="navItem_left" style="padding:20px;display: flex; align-items: center"
                v-for="item in taste">
-            <div @click="to_tab('UIndex', {u_id: item.id})" style="display: flex; align-items: center;flex: 1;">
+            <div @click="to_tab('UIndex', {u_id: item.id})"
+                 style="display: flex; align-items: center;flex: 1;">
               <img :src="item.avatarUrl" alt="" style="width: 50px; height: 50px; border-radius: 50%">
               <div style=" margin: 0 10px">
                 <div>{{ item.username }}</div>
@@ -70,25 +71,28 @@
 </template>
 
 <script>
-import {reactive, toRefs, onMounted} from "vue";
+import {reactive, toRefs, onMounted, computed} from "vue";
 import {useRouter, useRoute} from "vue-router";
 import instance from "../../api/request.js";
 import {to_tab} from "../../utils/tools.js";
+import {useStore} from "vuex";
 
 export default {
   name: "TIndex",
-  setup(){
+  setup() {
     const router = useRouter()
     const route = useRoute()
+    const store = useStore()
     const self = reactive({
-      logs:[
-        {text:'聊天功能已修复', time: '8/10'},
-        {text:'消息盒子可以实时提示', time: '8/09'},
-        {text:'已读消息显示灰色', time: '8/09'},
-        {text:'评论消息自动打开评论页面', time: '8/09'},
-        {text:'消息盒囊括点赞和评论消息', time: '8/09'},
-        {text:'消息盒子可直达blog', time: '8/08'},
-        {text:'消息盒子内头像直达个人主页', time: '8/08'},
+      userInfo: computed(() => store.state.local.userInfo),
+      logs: [
+        {text: '聊天功能已修复', time: '8/10'},
+        {text: '消息盒子可以实时提示', time: '8/09'},
+        {text: '已读消息显示灰色', time: '8/09'},
+        {text: '评论消息自动打开评论页面', time: '8/09'},
+        {text: '消息盒囊括点赞和评论消息', time: '8/09'},
+        {text: '消息盒子可直达blog', time: '8/08'},
+        {text: '消息盒子内头像直达个人主页', time: '8/08'},
       ],
       nvamenus: [
         {name: '全部关注', icon: 'iconfont iconfontchahao1'},

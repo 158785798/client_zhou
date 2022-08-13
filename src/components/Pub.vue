@@ -14,12 +14,12 @@
       <div style="display: inline-block; margin: 4px 2px; cursor: move; position: relative"
            v-for="(item, index) in blogImages" :data-id="item.name">
         <div class="image-picbed" style="overflow: hidden; width: 96px; height: 96px; border-radius: 7px">
-          <img v-if="item.direction==='h'" :src="item.img_uri" alt="" width="96">
-          <img v-else :src="item.img_uri" alt="" height="96">
+          <img v-if="item.direction==='h'" :src="item.imgB64" alt="" width="96">
+          <img v-else :src="item.imgB64" alt="" height="96">
 
         </div>
         <div class="cursor-pointer"
-             @click="show_cropper({index: index,flag:'blog', imgB64: item.imgB64, name: item.name})"
+             @click="show_cropper({flag: 'blog',index: index, ...item})"
              style="display: flex;justify-content: center; align-items: center;height: 24px;
              background-color: rgba(0,0,0,0.2);font-size: 12px;color:#fff;width: 100%;position: absolute; text-align: center; bottom: 0;z-index: 120;">
           <i class="iconfont iconfontdingwei1"></i>
@@ -97,7 +97,7 @@ export default {
       content: '',
       dragImg: null,
       isEmojiShow: false,
-      // action: 'http://8.141.150.118:8096/api/upload_binary',
+      // action: 'https://auspollo.top/api/upload_binary',
       action: 'http://127.0.0.1:8090/api/upload_binary',
       emojis: [],
       headers: {Authorization: window.localStorage.getItem('token_zhou')},
