@@ -213,9 +213,26 @@ export default {
   border-radius: 7px;
   z-index: 100;
 }
-.image_focus:hover{
-  color: $icon-hover-color;
-  background-color: $icon-hover-bg-color;
+
+
+.image_focus {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 24px;
+  background-color: rgba(0, 0, 0, 0.2);
+  font-size: 12px;
+  color: #fff;
+  width: 100%;
+  position: absolute;
+  text-align: center;
+  bottom: 0;
+  z-index: 120;
+}
+
+.image_focus:hover {
+  color: $icon-hover-color !important;
+  background-color: $icon-hover-bg-color !important;
 }
 
 
