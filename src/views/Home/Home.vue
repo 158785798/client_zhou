@@ -62,7 +62,7 @@ export default {
     const store = useStore()
     const router = useRouter()
     const route = useRoute()
-    const mutations = useMutations('session', ['concat_blogs', 'close_mask'])
+    const mutations = useMutations('session', ['concat_blogs', 'close_mask', 'remove_blog', 'show_global_tip'])
     const self = reactive({
       dialog: computed(() => store.state.session.dialog),
       imagePreview: computed(() => store.state.session.imagePreview),
@@ -205,9 +205,4 @@ export default {
   top: 300px;
 }
 
-@media screen and (max-width: 800px) {
-  .h-hrader {
-    width: 100%;
-  }
-}
 </style>

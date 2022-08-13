@@ -72,6 +72,7 @@ export const session = {
 
     },
     show_global_tip(state, payload) {
+      state.cur_blog_id = null
       state.globalTip.text = payload
       state.globalTip.show = true
       setTimeout(() => {
@@ -79,6 +80,7 @@ export const session = {
       }, 1500)
     },
     show_dialog(state, payload) {
+      state.cur_blog_id = null
       state.dialog.text = payload.text
       state.dialog.obj_id = payload.obj_id
       state.dialog.show = true

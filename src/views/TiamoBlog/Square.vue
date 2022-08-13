@@ -3,7 +3,7 @@
     <div style="width: 100%">
       <transition-group appear tag="div" name="bound-in">
         <div v-for="blog in blogs" :key="blog.id">
-          <SquareCell @back_blog_id="back_blog_id" :cur_blog_id="cur_blog_id" :blog="blog"></SquareCell>
+          <SquareCell :blog="blog"></SquareCell>
         </div>
       </transition-group>
     </div>
@@ -44,14 +44,6 @@ export default {
       pageSize: 7,
       serverPageSize: 7,
       endLoading: false,
-      cur_blog_id: -1,
-      back_blog_id: (blog_id) => {
-        if (self.cur_blog_id === blog_id) {
-          self.cur_blog_id = -1
-        } else {
-          self.cur_blog_id = blog_id
-        }
-      },
       noMore: computed(() => {
         return self.pageSize > self.serverPageSize || self.endLoading
       }),

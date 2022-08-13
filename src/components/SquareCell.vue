@@ -17,7 +17,7 @@
       </div>
       <div style="">
         <i class="iconfont iconfontxialajiantouxiao cursor-pointer ico ico-bg" style="padding:6px; border-radius: 50%"
-           @click="back_blog_id(blog.id)" :class="{'up-dropdown-menu': blog.id===cur_blog_id}"></i>
+           @click="set_blog_id(blog.id)" :class="{'up-dropdown-menu': blog.id===cur_blog_id}"></i>
         <div v-show="blog.id===cur_blog_id" style="width:150px;overflow: hidden;
         background-color: #fff;z-index: 10;position: absolute;margin-top: 2px;right:20px;border-radius: 6px; box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.25);">
           <div style="font-size: .875rem" class="navItem_left cursor-pointer" v-for="m in blog.dropdown_menus"
@@ -89,7 +89,7 @@ import {computed, reactive, toRefs} from "vue";
 import {useRouter} from "vue-router";
 import instance from "../api/request.js";
 import Comment from './Comment.vue'
-import {to_tab} from "../utils/tools.js";
+import {to_do, to_tab} from "../utils/tools.js";
 import {useMutations} from "../utils/hooks.js";
 
 export default {
@@ -100,9 +100,6 @@ export default {
   props: {
     blog: {
       type: Object,
-    },
-    cur_blog_id: {
-      type: Number
     },
     showlikes: {
       type: Boolean,
@@ -117,36 +114,17 @@ export default {
       }
     }
   },
-  emits: [
-    'back_blog_id'
-  ],
   setup(props, context) {
     const store = useStore()
     const router = useRouter()
-    const mutations = useMutations('session', ['to_cur', 'show_image_preview'])
+    const mutations = useMutations('session', ['to_cur', 'show_image_preview', 'set_blog_id'])
     const self = reactive({
+      cur_blog_id: computed(() => store.state.session.cur_blog_id),
       pageRefresh: computed(() => store.state.pageRefresh),
       userInfo: computed(() => store.state.local.userInfo),
       iscomment: props.iscomment,
       loading: false,
-      to_do: async (m, blog_id) => {
-        if (m.id === 1) {
-
-        } else if (m.id === 2) {
-
-        } else if (m.id === 3) {
-
-        } else if (m.id === 4) {
-
-        } else if (m.id === 6) {
-
-        }
-        self.back_blog_id(blog_id)
-      },
-      back_blog_id: (blog_id) => {
-        context.emit('back_blog_id', blog_id)
-      },
-
+      to_do:  to_do,
       to_tab: to_tab,
       follow_in: async (value) => {
         const res = await instance.get('/follow_in', {params: {moment_id: value.id}})

@@ -1,8 +1,26 @@
 import router from "../router/index.js";
+import store from "../store/index.js";
 
 const to_tab = async (to, query) => {
   query['index'] = 0
   await router.push({name: to, query: query})
+}
+
+const to_do = (menu, blog_id) => {
+
+  if (menu.id === 1) {
+    store.commit('session/show_global_tip', '置顶成功')
+  } else if (menu.id === 8) {
+    store.commit('session/show_global_tip', '取消置顶')
+  } else if ([2, 3, 4].includes(menu.id)) {
+    store.commit('session/show_global_tip', '修改成功')
+  } else if (menu.id === 5) {
+    store.commit('session/show_dialog', {obj_id: blog_id, text: '确定删贴吗？'})
+  } else if (menu.id === 6) {
+    store.commit('session/show_global_tip', '收藏成功')
+  } else if (menu.id === 7) {
+    store.commit('session/show_global_tip', '已举报')
+  }
 }
 
 const getBase64 = (file, callback) => {
@@ -35,6 +53,7 @@ const scroll = (self) => {
 
 export {
   to_tab,
+  to_do,
   getBase64,
   scroll
 }

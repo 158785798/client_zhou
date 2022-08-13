@@ -46,6 +46,7 @@ export default {
           }
         })
         self.serverPageSize = res2.data.length
+        console.log(res2);
         mutations.concat_blogs(res2.data)
         self.endLoading = false
       },

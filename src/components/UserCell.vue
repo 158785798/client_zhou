@@ -17,7 +17,7 @@
       <div style="">
         <span style="color: rgba(0,0,0,0.47);font-size: 12px; margin-right: 5px">{{ blog.permission_text }}</span>
         <i class="iconfont iconfontxialajiantouxiao cursor-pointer ico ico-bg" style="padding:5px; border-radius: 50%"
-           :class="{'up-dropdown-menu': blog.id===cur_blog_id}"></i>
+           @click="set_blog_id(blog.id)" :class="{'up-dropdown-menu': blog.id===cur_blog_id}"></i>
         <div v-show="blog.id===cur_blog_id" style="width:150px;overflow: hidden;
         background-color: #fff;z-index: 10;position: absolute;margin-top: 2px;right:20px;border-radius: 6px; box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.25);">
           <div style="font-size: .875rem" class="navItem_left cursor-pointer" v-for="menu in blog.dropdown_menus"
@@ -87,7 +87,7 @@ import {computed, onMounted, onUnmounted, reactive, toRefs} from "vue";
 import {useRoute, useRouter} from "vue-router";
 import instance from "../api/request.js";
 import Comment from './Comment.vue'
-import {to_tab} from "../utils/tools.js";
+import {to_do, to_tab} from "../utils/tools.js";
 import {useMutations} from "../utils/hooks.js";
 
 export default {
@@ -98,18 +98,6 @@ export default {
   props: {
     blog: {
       type: Object,
-    },
-    cur_blog_id: {
-      type: Number,
-      default() {
-        return -1
-      }
-    },
-    showlikes: {
-      type: Boolean,
-      default() {
-        return true;
-      }
     },
     iscomment: {
       type: Boolean,
@@ -122,8 +110,7 @@ export default {
     const store = useStore()
     const router = useRouter()
     const route = useRoute()
-    const mutations = useMutations('session', ['to_cur', 'show_image_preview',
-      'show_global_tip', 'show_dialog'])
+    const mutations = useMutations('session', ['to_cur', 'show_image_preview','set_blog_id'])
     const self = reactive({
       comment_btn: null,
       cur_blog_id: computed(() => store.state.session.cur_blog_id),
@@ -131,24 +118,7 @@ export default {
       userInfo: computed(() => store.state.local.userInfo),
       iscomment: props.iscomment,
       loading: false,
-      to_do: async (menu, blog_id) => {
-        mutations.set_blog_id(blog_id)
-        if (m.id === 1) {
-          mutations.show_global_tip('置顶成功')
-        } else if (m.id === 2) {
-          mutations.show_global_tip('修改成功')
-        } else if (m.id === 3) {
-          mutations.show_global_tip('修改成功')
-        } else if (m.id === 4) {
-          mutations.show_global_tip('修改成功')
-        } else if (m.id === 5) {
-          mutations.show_dialog({obj_id: blog_id, text: '确定删贴吗？'})
-        } else if (m.id === 6) {
-          mutations.show_global_tip('收藏成功')
-        } else if (m.id === 7) {
-          mutations.show_global_tip('举报成功')
-        }
-      },
+      to_do:  to_do,
       to_tab: to_tab,
       follow_in: async (value) => {
         const res = await instance.get('/follow_in', {params: {moment_id: value.id}})
