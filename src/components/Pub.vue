@@ -10,7 +10,8 @@
         :autosize="{ minRows: 2, maxRows: 4 }"
         placeholder="对你的猫猫说些什么？"
     />
-    <div ref="dragImg" style="margin-top: 10px">
+    <div style="margin-top: 10px; ">
+    <div ref="dragImg" style="display: inline-block">
       <div style="display: inline-block; margin: 4px 2px; cursor: move; position: relative"
            v-for="(item, index) in blogImages" :data-id="item.name">
         <div class="image-picbed" style="overflow: hidden; width: 96px; height: 96px; border-radius: 7px">
@@ -18,7 +19,7 @@
           <img v-else :src="item.imgB64" alt="" height="96">
 
         </div>
-        <div class="cursor-pointer"
+        <div class="image_focus cursor-pointer"
              @click="show_cropper({flag: 'blog',index: index, ...item})"
              style="display: flex;justify-content: center; align-items: center;height: 24px;
              background-color: rgba(0,0,0,0.2);font-size: 12px;color:#fff;width: 100%;position: absolute; text-align: center; bottom: 0;z-index: 120;">
@@ -29,18 +30,20 @@
           <i class="iconfont iconfontchahao1 del-img cursor-pointer ico"></i>
         </strong>
       </div>
-      <el-upload v-if="blogImages.length !== 0"
-                 :show-file-list="false"
-                 :headers="headers"
-                 accept="image/*"
-                 :on-success="upload_success"
-                 :action="action"
-                 style="display: inline-block;margin: 4px 2px;border: 2px solid rgba(0,0,0,0.21); border-radius: 7px;vertical-align: top;">
-        <div
-            style="display: flex;  color:rgba(0,0,0,0.21); height: 92px;width: 92px;justify-content: center; align-items: center;">
-          <i class="iconfont iconfontjiahao"></i>
-        </div>
-      </el-upload>
+
+    </div>
+    <el-upload v-if="blogImages.length !== 0"
+               :show-file-list="false"
+               :headers="headers"
+               accept="image/*"
+               :on-success="upload_success"
+               :action="action"
+               style="display: inline-block;margin: 4px 2px;border: 2px solid rgba(0,0,0,0.21); border-radius: 7px;vertical-align: top;">
+      <div
+          style="display: flex;  color:rgba(0,0,0,0.21); height: 92px;width: 92px;justify-content: center; align-items: center;">
+        <i class="iconfont iconfontjiahao"></i>
+      </div>
+    </el-upload>
     </div>
     <div style="display:flex;margin-top: 10px;">
       <div style="display: flex; align-items: center; flex: 1;">
@@ -209,6 +212,10 @@ export default {
   position: absolute;
   border-radius: 7px;
   z-index: 100;
+}
+.image_focus:hover{
+  color: $icon-hover-color;
+  background-color: $icon-hover-bg-color;
 }
 
 
