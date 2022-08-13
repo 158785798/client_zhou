@@ -1,7 +1,7 @@
 <template>
   <div>
     <SelfIndex v-if="is_self"></SelfIndex>
-    <OtherIndex></OtherIndex>
+    <OtherIndex v-else></OtherIndex>
   </div>
 </template>
 
@@ -18,12 +18,12 @@ export default {
     SelfIndex,
     OtherIndex,
   },
-  setup() {
+  setup: function () {
     const router = useRouter()
     const route = useRoute()
     const store = useStore()
     const self = reactive({
-      is_self: computed(() => store.state.local.userInfo.id === route.query.u_id)
+      is_self: computed(() => store.state.local.userInfo.id == route.query.u_id)
     })
     return {
       ...toRefs(self)
