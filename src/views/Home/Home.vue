@@ -118,6 +118,7 @@ export default {
 @media screen and (max-width: 800px) {
   .header {
     width: 100%;
+    padding: 4px 20px !important;
   }
 }
 
