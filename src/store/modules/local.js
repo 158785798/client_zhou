@@ -1,13 +1,12 @@
 export const local = {
   namespaced: true,
-  state:{
+  state: {
     t: 0,
     chatInfo: [],
     userInfo: {},
     passwordReset_t: 0,
-    autoPlayTip: true,
   },
-  mutations:{
+  mutations: {
     saveUserInfo(state, payload) {
       for (let i in payload) {
         state.userInfo[i] = payload[i]
@@ -25,9 +24,6 @@ export const local = {
     },
     set_t(state, payload) {
       state.t = payload
-    },
-    set_autoPlayTip(state, payload) {
-      state.autoPlayTip = payload
     },
     set_passwordReset_t(state, payload) {
       state.passwordReset_t = payload

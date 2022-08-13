@@ -6,8 +6,10 @@
              style="border-radius: 50%; width: 48px; margin-left: 20px">
         <strong style="margin-left: 10px">Candy Cats</strong>
       </a>
-      <i class="iconfont iconfontjiahao cursor-pointer" style="margin: 0 30px; font-size: 20px;color: #bd02fc;" @click="pub"></i>
-      <i :class="['iconfont', 'iconfontic-music','cursor-pointer', {'play': play}]" style="transition-duration: 0.3s; font-size: 20px;"
+      <i class="iconfont iconfontjiahao cursor-pointer" style="margin: 0 30px; font-size: 20px;color: #bd02fc;"
+         @click="pub"></i>
+      <i :class="['iconfont', 'iconfontic-music','cursor-pointer', {'play': play}]"
+         style="transition-duration: 0.3s; font-size: 20px;"
          @click="playMusic"></i>
 
     </div>
@@ -83,6 +85,7 @@ import {computed, onMounted, reactive, toRefs} from "vue";
 import {useRouter} from "vue-router";
 import {useStore} from "vuex";
 import {ElMessage} from "element-plus";
+import {useMutations} from "../utils/hooks.js";
 
 export default {
   name: "Header",
@@ -95,10 +98,6 @@ export default {
           setTimeout(() => {
             const audio = document.getElementById('audio')
             self.play = !audio.paused
-            if (store.state.autoPlayTip) {
-              store.commit('local/set_autoPlayTip', false)
-              ElMessage.warning('您的浏览器不支持自动播放， 请手动点击')
-            }
           }, 500)
         }
     )
@@ -120,7 +119,6 @@ export default {
           signOut: () => {
             self.dropdownMenuShow = false
             window.localStorage.removeItem('token_zhou')
-            store.commit('local/set_autoPlayTip', true)
             store.commit('local/clearUserInfo')
             router.push('Home')
 
