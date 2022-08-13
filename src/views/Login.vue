@@ -56,7 +56,7 @@ import {useRoute, useRouter} from "vue-router";
 import {useStore} from "vuex";
 import {ElMessage} from "element-plus";
 import {instance} from '../api/request'
-import * as url from "url";
+import {useMutations} from "../utils/hooks.js";
 
 export default {
   name: "Login",
@@ -64,6 +64,7 @@ export default {
     const store = useStore()
     const router = useRouter()
     const route = useRoute()
+    const mutations = useMutations('session', ['show_global_tip'])
     const state = reactive({
       groups: [
         {name: 'Terms'},
@@ -112,7 +113,7 @@ export default {
             state.loading = true
             const res = await instance.post('/login', state.model)
             if (res.code === 200) {
-              ElMessage.success(`欢迎可爱的${res.username}!`)
+              mutations.show_global_tip({text:'欢迎回家😋', time: 5000})
               window.localStorage.setItem('token_zhou', res.token)
               store.commit('local/saveUserInfo', res)
               const p = route.query.next ? route.query.next : 'Home'

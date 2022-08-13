@@ -21,7 +21,7 @@ export const session = {
       index: null,
       name: null,
       flag: null,
-      origin_b64:null,
+      origin_b64: null,
       imgB64: null,
     },
     cur_blog_id: null,
@@ -46,7 +46,7 @@ export const session = {
       state.blogImages.push(payload)
     },
     concat_blog_images(state, payload) {
-      state.blogImages[state.blogImages.length-1] = payload
+      state.blogImages[state.blogImages.length - 1] = payload
     },
     remove_blog_image(state, payload) {
       state.blogImages.splice(payload, 1)
@@ -75,11 +75,13 @@ export const session = {
     },
     show_global_tip(state, payload) {
       state.cur_blog_id = null
-      state.globalTip.text = payload
+      const text = payload.text? payload.text: payload
+      state.globalTip.text = text
       state.globalTip.show = true
+      const time = payload.time ? payload.time : 1500
       setTimeout(() => {
         state.globalTip.show = false
-      }, 1500)
+      }, time)
     },
     show_dialog(state, payload) {
       state.cur_blog_id = null
