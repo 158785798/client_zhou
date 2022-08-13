@@ -23,18 +23,17 @@
 
     </div>
     <div style="display: flex;">
-      <aside style="width: 380px; margin-right: 20px">
-        <div style="position: relative;width: 296px;height: 280px">
+      <aside style="width: 380px; margin-right: 20px;">
+        <div style="position: sticky;top:100px;">
+          <div style="display: flex; justify-content: center">
+            <img :src="userInfo.avatarUrl" alt="" class="user-avatar">
+          </div>
+          <div style="font-size: 20px;display: flex; justify-content: space-between;align-items: center">
+            <span style="margin: 0 10px">{{ userInfo.username }}</span>
+            <el-button style="margin: 0 10px;border-radius: 20px" @click="show_global_tip('关注成功')">关注</el-button>
+          </div>
 
-          <img :src="userInfo.avatarUrl" alt="" style="position: absolute;top:-30px;left: 40px;
-            border-radius: 50%;width: 296px;height: 296px"
-               class="user-avatar">
-        </div>
-        <div style="font-size: 20px;display: flex; justify-content: space-between;align-items: center">
-          <span style="margin: 0 10px">{{ userInfo.username }}</span>
-          <el-button style="margin: 0 10px;border-radius: 20px" @click="show_global_tip('关注成功')">关注</el-button>
-        </div>
-        <div style="display: flex;font-size: 16px;justify-content: center;align-items: center;">
+          <div style="display: flex;font-size: 16px;justify-content: center;align-items: center;">
           <span v-for="(each, index) in nvas2" class="cursor-pointer"
                 style="color:rgba(227,23,250,0.8);width: 120px;height: 48px;display: flex;justify-content: center;align-items: center;">
             <span class="nva">
@@ -44,12 +43,12 @@
             </span>
 
           </span>
-        </div>
-        <div class="bio-btn cursor-pointer" style="margin: 20px 10px;border-radius: 5px; padding: 5px
+          </div>
+
+          <div class="bio-btn cursor-pointer" style="margin: 20px 10px;border-radius: 5px; padding: 5px
         ;background-color: #f6f8fa; text-align: center">
-          <b style="color: #51565b">Add a bio</b>
-        </div>
-        <div>
+            <b style="color: #51565b">Add a bio</b>
+          </div>
         </div>
       </aside>
       <aside style="flex: 1; margin-top: 20px">
@@ -121,6 +120,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.user-avatar {
+  border-radius: 50%;
+  width: 296px;
+  height: 296px;
+  transform: translateY(-20px);
+}
+
 .bio-btn:hover {
   background-color: #f3f4f6 !important;
 }

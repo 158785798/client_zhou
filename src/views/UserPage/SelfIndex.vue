@@ -24,15 +24,15 @@
     </div>
     <div style="display: flex;">
       <aside style="width: 380px; margin-right: 20px">
-        <div style="position: relative;width: 296px;height: 280px">
+        <div style="position: sticky;top:100px;">
+          <div style="display: flex; justify-content: center">
           <el-upload ref="upload" :beforeUpload="beforeUpload" accept=".png, .jpg, .jpeg"
                      name="file" :show-file-list="false" :headers="{authorization: 'JWT ' + token}"
                      :http-request="customRequest">
-            <img :src="userInfo.avatarUrl" alt="" style="position: absolute;top:-30px;left: 40px;
-            border-radius: 50%;width: 296px;height: 296px"
-                 class="user-avatar">
+            <img :src="userInfo.avatarUrl" alt="" class="user-avatar">
           </el-upload>
-        </div>
+          </div>
+
         <div style="font-size: 20px;display: flex; justify-content: space-between;align-items: center">
           <span style="margin: 0 10px">{{ userInfo.username }}</span>
           <el-button style="margin: 0 10px;border-radius: 20px" @click="show_global_tip('关注成功')">关注</el-button>
@@ -53,6 +53,7 @@
           <b style="color: #51565b">Add a bio</b>
         </div>
         <div>
+        </div>
         </div>
       </aside>
       <aside style="flex: 1; margin-top: 20px">
@@ -136,6 +137,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+.user-avatar {
+  border-radius: 50%;
+  width: 296px;
+  height: 296px;
+  transform: translateY(-20px);
+}
 .bio-btn:hover {
   background-color: #f3f4f6 !important;
 }
