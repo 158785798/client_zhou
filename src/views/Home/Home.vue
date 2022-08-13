@@ -115,6 +115,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@media screen and (max-width: 800px) {
+  .header {
+    width: 100%;
+  }
+}
+
+
 .fade-enter-active, .fade-leave-active {
   transition: opacity .5s;
 }

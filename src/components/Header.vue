@@ -152,12 +152,6 @@ export default {
 </script>
 
 <style scoped>
-@media screen and (max-width: 800px) {
-  .header {
-    width: 100%;
-  }
-}
-
 .header {
   border-radius: 10px;
   background: linear-gradient(rgba(243, 157, 47, 0.9), rgba(220, 161, 220, 0.94));
