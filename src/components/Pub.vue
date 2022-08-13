@@ -11,39 +11,35 @@
         placeholder="对你的猫猫说些什么？"
     />
     <div style="margin-top: 10px; ">
-    <div ref="dragImg" style="display: inline-block">
-      <div style="display: inline-block; margin: 4px 2px; cursor: move; position: relative"
-           v-for="(item, index) in blogImages" :data-id="item.name">
-        <div class="image-picbed" style="overflow: hidden; width: 96px; height: 96px; border-radius: 7px">
-          <img v-if="item.direction==='h'" :src="item.imgB64" alt="" width="96">
-          <img v-else :src="item.imgB64" alt="" height="96">
-
+      <div ref="dragImg" style="display: inline-block">
+        <div v-loading="item.loading" class="image-picbed" v-for="(item, index) in blogImages" :data-id="item.name">
+          <div v-if="item.name">
+            <img v-if="item.direction==='h'" :src="item.imgB64" alt="" width="96">
+            <img v-else :src="item.imgB64" alt="" height="96">
+            <strong @click="remove_blog_image(index)">
+              <i class="iconfont iconfontchahao1 del-img cursor-pointer ico"></i>
+            </strong>
+            <div class="image_focus cursor-pointer" @click="show_cropper({flag: 'blog',index: index, ...item})">
+              <i class="iconfont iconfontdingwei1"></i>
+              <span>焦点</span>
+            </div>
+          </div>
         </div>
-        <div class="image_focus cursor-pointer"
-             @click="show_cropper({flag: 'blog',index: index, ...item})"
-             style="display: flex;justify-content: center; align-items: center;height: 24px;
-             background-color: rgba(0,0,0,0.2);font-size: 12px;color:#fff;width: 100%;position: absolute; text-align: center; bottom: 0;z-index: 120;">
-          <i class="iconfont iconfontdingwei1"></i>
-          <span>焦点</span>
-        </div>
-        <strong @click="remove_blog_image(index)">
-          <i class="iconfont iconfontchahao1 del-img cursor-pointer ico"></i>
-        </strong>
-      </div>
 
-    </div>
-    <el-upload v-if="blogImages.length !== 0"
-               :show-file-list="false"
-               :headers="headers"
-               accept="image/*"
-               :on-success="upload_success"
-               :action="action"
-               style="display: inline-block;margin: 4px 2px;border: 2px solid rgba(0,0,0,0.21); border-radius: 7px;vertical-align: top;">
-      <div
-          style="display: flex;  color:rgba(0,0,0,0.21); height: 92px;width: 92px;justify-content: center; align-items: center;">
-        <i class="iconfont iconfontjiahao"></i>
       </div>
-    </el-upload>
+      <el-upload v-if="blogImages.length !== 0"
+                 :before-upload="beforeUpload"
+                 :show-file-list="false"
+                 :headers="headers"
+                 accept="image/*"
+                 :on-success="upload_success"
+                 :action="action"
+                 style="display: inline-block;margin: 4px 2px;border: 2px solid rgba(0,0,0,0.21); border-radius: 7px;vertical-align: top;">
+        <div
+            style="display: flex;  color:rgba(0,0,0,0.21); height: 92px;width: 92px;justify-content: center; align-items: center;">
+          <i class="iconfont iconfontjiahao"></i>
+        </div>
+      </el-upload>
     </div>
     <div style="display:flex;margin-top: 10px;">
       <div style="display: flex; align-items: center; flex: 1;">
@@ -52,6 +48,7 @@
             </span>
         <span>
           <el-upload
+              :before-upload="beforeUpload"
               :show-file-list="false"
               :headers="headers"
               accept="image/*"
@@ -93,7 +90,7 @@ export default {
     const store = useStore()
     const router = useRouter()
     const route = useRoute()
-    const mutations = useMutations('session', ['unshift_blog', 'show_cropper', 'show_global_tip', 'concat_blog_images', 'remove_blog_image', 'clear_blog_images'])
+    const mutations = useMutations('session', ['unshift_blog', 'show_cropper', 'show_global_tip', 'push_blog_images', 'concat_blog_images', 'remove_blog_image', 'clear_blog_images'])
     const self = reactive({
       loading: false,
       content: '',
@@ -122,8 +119,10 @@ export default {
           await router.push({name: 'TIndex'})
         }
       },
+      beforeUpload: () => {
+        mutations.push_blog_images({loading: true})
+      },
       upload_success: (res) => {
-        console.log(res);
         mutations.concat_blog_images(res)
       },
     })
@@ -203,15 +202,25 @@ export default {
   padding: 5px;
 }
 
+.image-picbed {
+  position: relative;
+  overflow: hidden;
+  width: 96px;
+  height: 96px;
+  border-radius: 7px;
+  display: inline-block;
+  margin: 4px 2px;
+  cursor: move;
+}
+
 .image-picbed:hover::before {
   content: "";
-  display: block;
-  height: 96px;
-  width: 96px;
+  top:0;
+  bottom:0;
+  left:0;
+  right:0;
   background-color: rgba(0, 0, 0, 0.18);
   position: absolute;
-  border-radius: 7px;
-  z-index: 100;
 }
 
 

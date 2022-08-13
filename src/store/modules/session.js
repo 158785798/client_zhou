@@ -42,9 +42,11 @@ export const session = {
     clear_blogs(state, payload) {
       state.blogs = []
     },
-
-    concat_blog_images(state, payload) {
+    push_blog_images(state, payload) {
       state.blogImages.push(payload)
+    },
+    concat_blog_images(state, payload) {
+      state.blogImages[state.blogImages.length-1] = payload
     },
     remove_blog_image(state, payload) {
       state.blogImages.splice(payload, 1)
