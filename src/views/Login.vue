@@ -116,7 +116,7 @@ export default {
               window.localStorage.setItem('token_zhou', res.token)
               store.commit('local/saveUserInfo', res)
               const p = route.query.next ? route.query.next : 'Home'
-              await router.push(p)
+              await router.push({name: p})
             } else {
               ElMessage.error(res.msg)
             }
