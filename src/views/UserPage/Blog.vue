@@ -10,7 +10,7 @@
 
 <script>
 import UserCell from "../../components/UserCell.vue";
-import instance from "../../api/request.js";
+import {instance} from "../../api/request.js";
 import {reactive, toRefs, computed, onMounted, onUnmounted} from "vue";
 import {useRoute, useRouter} from "vue-router";
 import {useStore} from "vuex";

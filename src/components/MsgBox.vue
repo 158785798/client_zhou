@@ -46,7 +46,7 @@
 
 <script>
 import {computed, reactive, toRefs} from "vue";
-import instance from "../api/request.js";
+import {instance} from "../api/request.js";
 import {useRouter} from "vue-router";
 import {useStore} from "vuex";
 

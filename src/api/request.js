@@ -1,10 +1,11 @@
 import axios from "axios";
 import router from "../router/index.js";
 import {ElMessage} from "element-plus";
+const url = process.env.NODE_ENV === 'development' ? 'http://127.0.0.1:8090/api' : 'https://auspollo.top/api'
 
 
 const instance = axios.create({
-  baseURL: process.env.NODE_ENV === 'development' ? 'http://127.0.0.1:8090/api' : 'https://auspollo.top/api',
+  baseURL: url,
 })
 
 instance.interceptors.request.use(
@@ -40,4 +41,7 @@ instance.interceptors.response.use(
       }
     }
 )
-export default instance
+export {
+  instance,
+    url
+}

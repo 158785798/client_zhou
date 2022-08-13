@@ -55,7 +55,7 @@ import {computed, reactive, ref, toRefs} from "vue";
 import {useRoute, useRouter} from "vue-router";
 import {useStore} from "vuex";
 import {ElMessage} from "element-plus";
-import instance from '../api/request'
+import {instance} from '../api/request'
 import * as url from "url";
 
 export default {

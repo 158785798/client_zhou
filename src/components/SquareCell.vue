@@ -87,7 +87,7 @@
 import {useStore} from "vuex";
 import {computed, reactive, toRefs} from "vue";
 import {useRouter} from "vue-router";
-import instance from "../api/request.js";
+import {instance} from "../api/request.js";
 import Comment from './Comment.vue'
 import {to_do, to_tab} from "../utils/tools.js";
 import {useMutations} from "../utils/hooks.js";

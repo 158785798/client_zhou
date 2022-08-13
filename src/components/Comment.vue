@@ -59,7 +59,7 @@
 
 <script>
 import {computed, onMounted, reactive, toRefs} from "vue";
-import instance from "../api/request.js";
+import {instance} from "../api/request.js";
 import {ElMessage} from "element-plus";
 import {useStore} from "vuex";
 import router from "../router/index.js";

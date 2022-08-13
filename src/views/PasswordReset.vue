@@ -73,7 +73,7 @@ import {computed, onMounted, reactive, ref, toRefs} from "vue";
 import {useStore} from "vuex";
 import {useRoute, useRouter} from "vue-router";
 import {ElMessage} from "element-plus";
-import instance from "../api/request";
+import {instance} from "../api/request";
 
 export default {
   name: "PasswordReset",

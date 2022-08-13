@@ -47,7 +47,7 @@
 
 import {onBeforeMount, onMounted, onUnmounted, reactive, toRefs, ref, computed} from "vue";
 import {useStore} from "vuex";
-import instance from "../api/request.js";
+import {instance} from "../api/request.js";
 
 export default {
   name: "CatCarousel",

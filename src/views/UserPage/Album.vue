@@ -20,7 +20,7 @@
 import {useRouter, useRoute} from "vue-router";
 import {useStore} from "vuex";
 import {reactive, toRefs, onMounted} from "vue";
-import instance from "../../api/request.js";
+import {instance} from "../../api/request.js";
 import {useMutations} from "../../utils/hooks.js";
 
 export default {

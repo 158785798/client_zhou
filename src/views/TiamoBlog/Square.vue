@@ -18,7 +18,7 @@
 
 import SquareCell from "../../components/SquareCell.vue";
 import {computed, onMounted, onUnmounted, reactive, toRefs, watch} from "vue";
-import instance from "../../api/request.js";
+import {instance} from "../../api/request.js";
 import {useStore} from "vuex";
 import {useRouter} from "vue-router";
 import {useMutations} from "../../utils/hooks.js";

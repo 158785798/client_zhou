@@ -78,8 +78,7 @@
 <script>
 import {computed, onMounted, reactive, toRefs} from "vue";
 import {useStore} from "vuex";
-import instance from "../api/request.js";
-import {ElMessage} from "element-plus";
+import {instance, url} from "../api/request.js";
 import {Sortable} from "sortablejs";
 import {useRoute, useRouter} from "vue-router";
 import {useMutations} from "../utils/hooks.js";
@@ -97,8 +96,7 @@ export default {
       content: '',
       dragImg: null,
       isEmojiShow: false,
-      // action: 'https://auspollo.top/api/upload_binary',
-      action: 'http://127.0.0.1:8090/api/upload_binary',
+      action: url + '/upload_binary',
       emojis: [],
       headers: {Authorization: window.localStorage.getItem('token_zhou')},
       blogImages: computed(() => store.state.session.blogImages),

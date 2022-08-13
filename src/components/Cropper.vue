@@ -24,7 +24,7 @@
 import {computed, reactive, toRefs} from "vue";
 import {ElMessage} from "element-plus";
 import {useStore} from "vuex";
-import instance from "../api/request.js";
+import {instance} from "../api/request.js";
 import {VueCropper} from "vue-cropper";
 import 'vue-cropper/dist/index.css';
 import {useMutations} from "../utils/hooks.js";

@@ -68,7 +68,7 @@
 import {useStore} from "vuex";
 import {computed, onMounted, reactive, toRefs, onBeforeMount} from "vue";
 import {useRouter, useRoute} from "vue-router";
-import instance from "../../api/request.js";
+import {instance} from "../../api/request.js";
 import {useMutations} from "../../utils/hooks.js";
 import {getBase64} from "../../utils/tools.js";
 

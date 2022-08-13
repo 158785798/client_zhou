@@ -73,7 +73,7 @@
 <script>
 import {reactive, toRefs, onMounted, computed} from "vue";
 import {useRouter, useRoute} from "vue-router";
-import instance from "../../api/request.js";
+import {instance} from "../../api/request.js";
 import {to_tab} from "../../utils/tools.js";
 import {useStore} from "vuex";
 

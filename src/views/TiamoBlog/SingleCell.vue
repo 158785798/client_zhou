@@ -14,7 +14,7 @@
 import UserCell from "../../components/UserCell.vue";
 import {onBeforeMount, onMounted, reactive, toRefs} from "vue";
 import {useRoute, useRouter} from "vue-router";
-import instance from "../../api/request.js";
+import {instance} from "../../api/request.js";
 import {useMutations} from "../../utils/hooks.js";
 
 export default {

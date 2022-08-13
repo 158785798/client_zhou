@@ -38,7 +38,7 @@ import Cropper from "../../components/Cropper.vue";
 import Header from "../../components/Header.vue";
 
 import {useStore} from "vuex";
-import instance from "../../api/request.js";
+import {instance} from "../../api/request.js";
 import {useRoute, useRouter} from "vue-router";
 import {useMutations} from "../../utils/hooks.js";
 import ImagePreview from "../../components/ImagePreview.vue";
