@@ -118,7 +118,7 @@ export default {
       },
       customRequest: async (info) => {
         getBase64(info.file, imgB64 => {
-          mutations.show_cropper({index: 1, flag: 'avatar', origin_b64: imgB64, name: 'ss'})
+          mutations.show_cropper({index: 1,title: 'Update Your Avatar', flag: 'avatar', origin_b64: imgB64, name: 'ss'})
         })
       },
     })

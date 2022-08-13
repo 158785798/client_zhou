@@ -33,13 +33,13 @@ a:hover {
 }
 
 .vue-cropper {
-  width: 540px !important;
+  width: 100% !important;
   height: 540px !important;
 }
 
 .cropper-drag-box .cropper-move {
-  width: 540px !important;
-  height: 540px !important;
+  //width: 540px !important;
+  //height: 540px !important;
 }
 
 .cropper-view-box {

@@ -19,7 +19,7 @@
             <strong @click="remove_blog_image(index)">
               <i class="iconfont iconfontchahao1 del-img cursor-pointer ico"></i>
             </strong>
-            <div class="image_focus cursor-pointer" @click="show_cropper({flag: 'blog',index: index, ...item})">
+            <div class="image_focus cursor-pointer" @click="show_cropper({flag: 'blog',title:'Show Your Best', index: index, ...item})">
               <i class="iconfont iconfontdingwei1"></i>
               <span>焦点</span>
             </div>
@@ -101,6 +101,9 @@ export default {
       headers: {Authorization: window.localStorage.getItem('token_zhou')},
       blogImages: computed(() => store.state.session.blogImages),
       close_pub: () => {
+        self.content = ''
+        self.loading = false
+        mutations.clear_blog_images()
         context.emit('close_pub')
       },
       push_emoji: (item) => {
@@ -110,10 +113,7 @@ export default {
         self.loading = true
         const res = await instance.post('/publish_blog', {content: self.content, images: self.blogImages})
         mutations.unshift_blog(res.data)
-        self.content = ''
-        self.loading = false
         self.close_pub()
-        mutations.clear_blog_images()
         mutations.show_global_tip('发布成功')
         if (route.name !== 'TIndex') {
           await router.push({name: 'TIndex'})

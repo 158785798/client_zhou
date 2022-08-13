@@ -1,19 +1,21 @@
 <template>
   <div class="cut-img-main">
     <div style="padding: 15px 0 0 0;display: flex; justify-content: space-between">
-      <strong>Update Your Avatar</strong>
-      <i class="iconfont iconfontguanbi1 close-cut-img cursor-pointer" @click="close_cropper"
-      ></i>
+      <strong>{{cropper.title}}</strong>
     </div>
-    <div style="width: 100%;">
-      <div style="width: 100%;">
+    <div style="position: relative; margin: 20px 0; border-radius: 15px;">
+      <div style="border-radius: 15px; overflow: hidden">
         <VueCropper :fixed="true" :autoCropWidth="336" :auto-cropHeight="336"
                     :auto-crop="true" mode="cover"
                     :img="cropper.origin_b64" ref="myCropper" :info="false"/>
       </div>
-      <div
-          style="display: flex; flex-direction: column; justify-content: space-between; align-items: center; margin-left: 20px">
-        <el-button v-loading="loading" @click="upload">Upload</el-button>
+      <div style="text-align: center; margin-top: 30px">
+        <el-button v-loading="loading" @click="close_cropper">取消</el-button>
+        <el-button type="primary" v-loading="loading" @click="upload">完成</el-button>
+      </div>
+      <div style="width: 100%;position: absolute; bottom: -80px; text-align: center">
+        <i class="iconfont iconfontguanbi1 close-cut-img cursor-pointer" @click="close_cropper"
+        ></i>
       </div>
     </div>
   </div>
@@ -75,11 +77,13 @@ export default {
 
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import "../global";
+
 .cut-img-main {
   z-index: 1000;
   width: 640px;
-  height: 720px;
+  height: 680px;
   left: 0;
   right: 0;
   top: 0;
@@ -87,19 +91,21 @@ export default {
   margin: auto;
   position: fixed;
   background-color: #f1f1f1;
-  padding: 0 30px 50px 50px;
+  padding: 0 30px 50px 30px;
   border-radius: 15px;
   transition-duration: 0.5s;
 }
 
 .close-cut-img {
-  font-size: 30px;
-  width: 30px;
+  font-size: 20px;
+  padding: 5px;
   color: #f1f1f1;
-  text-align: center;
-  transition-duration: 0.2s;
-  transform: translate(60px, -25px);
+  border: 1px solid #f1f1f1;
   border-radius: 50%;
+}
+.close-cut-img:hover{
+  color: $icon-hover-color;
+  border-color: $icon-hover-color;
 }
 
 .cut-img-loading {
