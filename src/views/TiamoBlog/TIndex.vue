@@ -89,6 +89,7 @@ export default {
     const self = reactive({
       userInfo: computed(() => store.state.local.userInfo),
       logs: [
+        {text: '已启用关注功能', time: '8/14'},
         {text: '聊天功能已修复', time: '8/10'},
         {text: '消息盒子可以实时提示', time: '8/09'},
         {text: '已读消息显示灰色', time: '8/09'},
