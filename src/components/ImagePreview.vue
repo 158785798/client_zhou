@@ -1,7 +1,7 @@
 <template>
   <div style="display: flex;flex-direction:column;position: fixed;top:20px; bottom: 0; left: 0; right: 0;z-index: 300">
     <span :class="{'g-mask': maskShow}" @click="close_mask"></span>
-    <div  style="position: relative; flex: 1;justify-content:center;align-items: center;display: flex;overflow: hidden;">
+    <div style="position: relative; flex: 1;justify-content:center;align-items: center;display: flex;overflow: hidden;">
       <div style="z-index: 300">
         <MyImg :each="i_each" flag="imgPreview"></MyImg>
       </div>
@@ -28,7 +28,7 @@ import MyImg from "./MyImg.vue";
 
 export default {
   name: "ImagePreview",
-  components:{
+  components: {
     MyImg
   },
   setup() {
@@ -55,17 +55,6 @@ export default {
 
 <style lang="scss" scoped>
 @import "../global";
-.g-mask:after {
-  content: '';
-  top: 0;
-  right: 0;
-  left: 0;
-  bottom: 0;
-  z-index: 200;
-  position: fixed;
-  cursor: default;
-  background-color: rgba(0, 0, 0, 0.6);
-}
 
 .is-active {
   border: 3px solid $icon-hover-color;

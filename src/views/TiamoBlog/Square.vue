@@ -82,8 +82,6 @@ export default {
     onMounted(async () => {
       mutations.clear_blogs()
       window.addEventListener('scroll', scroll(self), false)
-      const res = await instance.get('/get_taste')
-      self.taste = res.data
       await self.get_blogs()
       context.emit('finish')
     })

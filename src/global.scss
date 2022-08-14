@@ -139,16 +139,16 @@ body {
   margin: 0;
   background-color: #e1c39e;
 }
-
-.del-blog:after {
+.g-mask:after {
   content: '';
   top: 0;
   right: 0;
   left: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.2);
+  z-index: 200;
   position: fixed;
-  cursor: pointer;
+  cursor: default;
+  background-color: rgba(0, 0, 0, 0.6);
 }
 
 .bound-in-enter-active {
@@ -168,21 +168,21 @@ body {
 }
 
 .widening-enter-active {
-  animation: widening .2s;
+  animation: widening .3s;
 }
 
 .widening-leave-active {
-  animation: widening .2s reverse;
+  animation: widening .3s reverse;
 }
 
 
 
 @keyframes widening {
   0% {
-    width: 0;
+right: -300px;
   }
   100% {
-    width: 100%;
+    right: 0;
   }
 }
 

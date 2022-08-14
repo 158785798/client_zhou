@@ -21,7 +21,7 @@
   <ImagePreview v-if="imagePreview.show"></ImagePreview>
   <Cropper v-show="cropper.show"></Cropper>
   <el-container style="margin: 50px auto" :class="{'msg-box': msgBoxShow}" @click="msgBoxShow=false">
-    <div style="width: 100%;margin: 15px 0 0 0; position: relative" :class="{'pub': pub}" @click="pub=false">
+    <div style="width: 100%;margin: 15px 0 0 0; position: relative" :class="{'g-mask': pub}" @click="pub=false">
       <router-view/>
     </div>
   </el-container>
@@ -144,18 +144,6 @@ export default {
   transform: translateY(200px) rotateX(90deg);
 }
 
-.g-mask:after {
-  content: '';
-  top: 0;
-  right: 0;
-  left: 0;
-  bottom: 0;
-  z-index: 200;
-  position: fixed;
-  cursor: default;
-  background-color: rgba(0, 0, 0, 0.6);
-}
-
 .msg-box:after {
   content: '';
   background-color: rgba(0, 0, 0, 0.3);
@@ -165,17 +153,6 @@ export default {
   right: 0;
   z-index: 150;
   position: fixed;
-}
-
-.pub::after {
-  content: '';
-  top: 0;
-  right: 0;
-  left: 0;
-  bottom: 0;
-  position: fixed;
-  cursor: default;
-  background-color: rgba(0, 0, 0, 0.23);
 }
 
 .g-tip {

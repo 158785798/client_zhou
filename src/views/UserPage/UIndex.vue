@@ -24,8 +24,42 @@
         <SelfAside v-if="is_self" :user-info="userInfo"></SelfAside>
         <OtherAside v-else :user-info="userInfo"></OtherAside>
       </aside>
-      <aside style="flex: 1; margin-top: 20px">
+      <a-button @click="bb=!bb">sssss</a-button>
+      <aside style="flex: 1; margin-top: 20px; position: relative; overflow: hidden">
         <router-view :key="route.path + JSON.stringify(route.query)"></router-view>
+
+        <span :class="{'friend-mask':bb}"></span>
+
+        <transition name="widening">
+        <div v-show="bb" style="right: 0;top: 0;position: absolute;
+        height: 100%;z-index: 500; width: 300px;
+        background-color: #f4e6e6;
+        padding: 10px
+        ">
+          <div>
+            <span class="nva cursor-pointer" style="padding: 5px">粉丝</span>
+            <span @click="get_fans(false)" class="nva cursor-pointer" style="padding: 5px">关注</span>
+          </div>
+          <div class="navItem_left cursor-pointer" style="padding:10px;display: flex; align-items: center"
+               v-for="item in fans">
+            <div @click="to_tab('UIndex', {u_id: item.id})"
+                 style="display: flex; align-items: center;flex: 1;">
+              <img :src="item.avatarUrl" alt="" style="width: 50px; height: 50px; border-radius: 50%">
+              <div style=" margin: 0 10px">
+                <div>{{ item.username }}</div>
+                <div style="color: #939393; margin: 3px 0">无敌帅</div>
+              </div>
+            </div>
+            <span v-if="item.follow" style="font-size: 12px;">
+                <i class="iconfont iconfontduihao"></i>
+                已关注
+              </span>
+            <a-button v-else type="text" @click="follow_in(item)"
+                      style="background-color: #fff;border-radius: 20px;border-color: #f18e63; color: #f18e63">+关注
+            </a-button>
+          </div>
+        </div>
+        </transition>
         <div style="text-align: center; color: rgba(0,0,0,0.53)">
           <img src="../../assets/loading2.gif" alt="" style="border-radius: 20px" width="150" v-show="endLoading">
           <span v-show="!endLoading&&!loading">我是有底线的o(*￣▽￣*)o</span>
@@ -61,18 +95,23 @@ export default {
       is_self: computed(() => store.state.local.userInfo.id == route.query.u_id),
       underline: null,
       loading: true,
+      bb: false,
       endLoading: false,
       nva_index: 0,
       userInfo: {},
+      fans: [],
       nvas1: [
         {name: 'Overview', icon: 'iconfontchongwutubiao18', to: 'Blog', tab: 'blog'},
         {name: '收藏', icon: 'iconfontshoucang1', to: 'Blog', tab: 'collection'},
         {name: '相册', icon: 'iconfontxiangce', to: 'Album', tab: 'album'},
       ],
-      nvas2: [
-        {name: '粉丝', icon: 'iconfontchongwutubiao18', to: 'Blog', tab: 'blog'},
-        {name: '关注', icon: 'iconfontshoucang1', to: 'Blog', tab: 'collection'},
-      ],
+      // get_fans: async (be) => {
+      //   const res = await instance.get('/get_fans', {params: {be: be}})
+      //   self.fans = res.data
+      // },
+      get_fans:()=>{
+        self.bb = !self.bb
+      },
       to_tab: (to, query, index) => {
         self.nva_index = index
         self.underline.style.marginLeft = index * 120 + 'px'
@@ -103,6 +142,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.friend-mask:after {
+  content: '';
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 300;
+  position: absolute;
+  cursor: default;
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
 .follow {
   margin-left: -100%;
 }

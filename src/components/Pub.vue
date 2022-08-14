@@ -151,7 +151,7 @@ export default {
 
 .main {
   transition-duration: 0.2s;
-  z-index: 150;
+  z-index: 300;
   position: fixed;
   width: 640px;
   padding: 20px;
