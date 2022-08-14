@@ -61,7 +61,10 @@
               </div>
             </div>
             <div>
-              <el-button style="border-radius: 20px;border-color: #f18e63; color: #f18e63">+关注</el-button>
+              <a-button v-if="item.follow" type="text" style="border-radius: 20px;border-color: #9d9c9b;color: black">
+                <i class="iconfont iconfontduihao"></i>
+                已关注</a-button>
+              <a-button v-else type="text" @click="follow_in(item)" style="background-color: #fff;border-radius: 20px;border-color: #f18e63; color: #f18e63">+关注</a-button>
             </div>
           </div>
         </div>
@@ -112,6 +115,18 @@ export default {
         '世界只有一个中国',
         '世界只有一个中国',
       ],
+      follow_in: async (item) => {
+        const res = await instance.get('/follow_in', {
+          params: {
+            be_user_id: item.id,
+            follow: item.follow
+          }
+        })
+        item.follow = !item.follow
+
+        const text = item.follow ? '关注成功' : '取消关注'
+        mutations.show_global_tip(text)
+      },
       taste: [],
       loading: true,
       to_tab: to_tab

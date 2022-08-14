@@ -4,7 +4,7 @@
       <i class="iconfont iconfonttubiao02" style="font-size: 20px"></i>
     </el-backtop>
     <div style="margin-top:24px;border-bottom: 1px solid hotpink">
-      <div style="margin-left: 400px;padding: 0;">
+      <div style="margin-left: 306px;padding: 0;">
         <div style="display: flex;font-size: 14px;">
           <span v-for="(each, index) in nvas1" :class="['cursor-pointer', {active: index==nva_index}]"
                 @click="to_tab(each.to, {tab: each.tab, index: index}, index)"
@@ -23,7 +23,7 @@
 
     </div>
     <div style="display: flex;">
-      <aside style="width: 380px; margin-right: 20px">
+      <aside style="width: 296px; margin-right: 20px">
         <div style="position: sticky;top:100px;">
           <div style="display: flex; justify-content: center">
           <el-upload ref="upload" :beforeUpload="beforeUpload" accept=".png, .jpg, .jpeg"
@@ -32,23 +32,15 @@
             <img :src="userInfo.avatarUrl" alt="" class="user-avatar">
           </el-upload>
           </div>
-
-        <div style="font-size: 20px;display: flex; justify-content: space-between;align-items: center">
-          <span style="margin: 0 10px">{{ userInfo.username }}</span>
-          <el-button style="margin: 0 10px;border-radius: 20px" @click="show_global_tip('关注成功')">关注</el-button>
-        </div>
-        <div style="display: flex;font-size: 16px;justify-content: center;align-items: center;">
-          <span v-for="(each, index) in nvas2" class="cursor-pointer"
-                style="color:rgba(227,23,250,0.8);width: 120px;height: 48px;display: flex;justify-content: center;align-items: center;">
-            <span class="nva">
-              <span :class="['iconfont', each.icon]"></span>
-            <span style="padding: 0 3px">{{ each.name }}</span>
-            <span>999</span>
+          <div
+              style="color: #ff00ff;display: flex; justify-content: space-between;align-items: center; margin: 0 0 15px 0">
+            <span style="font-size: 20px;">{{ userInfo.username }}</span>
+            <span style="font-size: 14px">
+              <span class="cursor-pointer" style="margin-right: 20px">{{ userInfo.fans }} 粉丝</span>
+              <span class="cursor-pointer" style="margin: 0 5px">{{ userInfo.be_fans }} 关注</span>
             </span>
-
-          </span>
-        </div>
-        <div class="bio-btn cursor-pointer" style="margin: 20px 10px;border-radius: 5px; padding: 5px
+          </div>
+        <div class="bio-btn cursor-pointer" style="border-radius: 5px; padding: 5px
         ;background-color: #f6f8fa; text-align: center">
           <b style="color: #51565b">Add a bio</b>
         </div>
@@ -91,7 +83,7 @@ export default {
       loading: true,
       endLoading: false,
       nva_index: 0,
-      userInfo: computed(() => store.state.local.userInfo),
+      userInfo: {},
       cutImgUrl: '',
       token: computed(() => window.localStorage.getItem('token_zhou')),
       nvas1: [
@@ -122,6 +114,10 @@ export default {
           mutations.show_cropper({index: 1,title: 'Update Your Avatar', flag: 'avatar', origin_b64: imgB64, name: 'ss'})
         })
       },
+    })
+    onBeforeMount(async () => {
+      const res = await instance.get('/get_userinfo', {params: {u_id: Number(route.query.u_id)}})
+      self.userInfo = res.data
     })
     onMounted(async () => {
       self.nva_index = Number(route.query.index)
