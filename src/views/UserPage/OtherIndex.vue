@@ -4,7 +4,7 @@
       <i class="iconfont iconfonttubiao02" style="font-size: 20px"></i>
     </el-backtop>
     <div style="margin-top:24px;border-bottom: 1px solid hotpink">
-      <div style="margin-left: 400px;padding: 0;">
+      <div style="margin-left: 306px;padding: 0;">
         <div style="display: flex;font-size: 14px;">
           <span v-for="(each, index) in nvas1" :class="['cursor-pointer', {active: index==nva_index}]"
                 @click="to_tab(each.to, {tab: each.tab, index: index}, index)"
@@ -23,31 +23,44 @@
 
     </div>
     <div style="display: flex;">
-      <aside style="width: 380px; margin-right: 20px;">
+      <aside style="width: 296px; margin-right: 20px;">
         <div style="position: sticky;top:100px;">
           <div style="display: flex; justify-content: center">
             <img :src="userInfo.avatarUrl" alt="" class="user-avatar">
           </div>
-          <div style="font-size: 20px;display: flex; justify-content: space-between;align-items: center">
-            <span style="margin: 0 10px">{{ userInfo.username }}</span>
-            <el-button style="margin: 0 10px;border-radius: 20px" @click="show_global_tip('关注成功')">关注</el-button>
-          </div>
-
-          <div style="display: flex;font-size: 16px;justify-content: center;align-items: center;">
-          <span v-for="(each, index) in nvas2" class="cursor-pointer"
-                style="color:rgba(227,23,250,0.8);width: 120px;height: 48px;display: flex;justify-content: center;align-items: center;">
-            <span class="nva">
-              <span :class="['iconfont', each.icon]"></span>
-            <span style="padding: 0 3px">{{ each.name }}</span>
-            <span>999</span>
+          <div
+              style="color: #ff00ff;display: flex; justify-content: space-between;align-items: center; margin: 0 0 15px 0">
+            <span style="font-size: 20px;">{{ userInfo.username }}</span>
+            <span style="font-size: 14px">
+              <span class="cursor-pointer" style="margin-right: 20px">{{ userInfo.fans }} 粉丝</span>
+              <span class="cursor-pointer" style="margin: 0 5px">{{ userInfo.be_fans }} 关注</span>
             </span>
 
-          </span>
           </div>
+          <div style="overflow: hidden; border-radius: 10px">
+            <div v-show="userInfo.username" style="overflow: hidden;width: 592px; transition-duration: .2s"
+                 :class="{follow: userInfo.follow}">
+              <a-button type="primary" danger
+                        style="transition-duration: 0.5s;font-weight: 700;border-radius: 10px;width: 296px"
+                        @click="follow_in">
+                <i class="iconfont iconfontjiahao" style="font-size: 12px; margin-right: 5px;"></i>
+                关注
+              </a-button>
+              <div style="width: 296px; display: inline-block">
+                <div style="display: flex">
+                  <a-button type="text"
+                            style="flex: 1;margin-right:10px;font-weight: 700;background-color: rgba(145,144,144,0.2);border-radius: 10px"
+                            @click="follow_in">
+                    取消关注
+                  </a-button>
+                  <a-button type="text"
+                            style="flex: 1;font-weight: 700;background-color: rgba(145,144,144,0.2);border-radius: 10px"
+                            @click="show_global_tip('再等等')">私信
+                  </a-button>
+                </div>
+              </div>
 
-          <div class="bio-btn cursor-pointer" style="margin: 20px 10px;border-radius: 5px; padding: 5px
-        ;background-color: #f6f8fa; text-align: center">
-            <b style="color: #51565b">Add a bio</b>
+            </div>
           </div>
         </div>
       </aside>
@@ -90,15 +103,31 @@ export default {
         {name: '相册', icon: 'iconfontxiangce', to: 'Album', tab: 'album'},
       ],
       nvas2: [
-        {name: '被关注', icon: 'iconfontchongwutubiao18', to: 'Blog', tab: 'blog'},
+        {name: '粉丝', icon: 'iconfontchongwutubiao18', to: 'Blog', tab: 'blog'},
         {name: '关注', icon: 'iconfontshoucang1', to: 'Blog', tab: 'collection'},
-        {name: '私信', icon: 'iconfontxiangce', to: 'Album', tab: 'album'},
       ],
       to_tab: (to, query, index) => {
         self.nva_index = index
         self.underline.style.marginLeft = index * 120 + 'px'
         query.u_id = self.userInfo.id
         router.push({name: to, query: query})
+      },
+      follow_in: async () => {
+        const res = await instance.get('/follow_in', {
+          params: {
+            be_user_id: self.userInfo.id,
+            follow: self.userInfo.follow
+          }
+        })
+        if (self.userInfo.follow) {
+          self.userInfo.fans--
+        } else {
+          self.userInfo.fans++
+        }
+        self.userInfo.follow = !self.userInfo.follow
+
+        const text = self.userInfo.follow ? '关注成功' : '取消关注'
+        mutations.show_global_tip(text)
       },
 
     })
@@ -120,15 +149,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.follow {
+  margin-left: -100%;
+}
+
 .user-avatar {
   border-radius: 50%;
   width: 296px;
   height: 296px;
   transform: translateY(-20px);
-}
-
-.bio-btn:hover {
-  background-color: #f3f4f6 !important;
 }
 
 .nva {
@@ -138,7 +167,7 @@ export default {
 }
 
 .nva:hover {
-  background-color: rgba(246, 179, 150, 0.8);
+  //background-color: rgba(246, 179, 150, 0.8);
   color: deeppink;
 
 }

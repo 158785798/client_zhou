@@ -1,12 +1,14 @@
 import {createApp} from 'vue'
 import App from './App.vue'
-import VueCropper from "vue-cropper";
+import VueCropper from "vue-cropper"
 import router from "./router/index.js"
 import store from "./store/index.js"
 import ElementPlus from 'element-plus'
-import socket from "./utils/socket.js";
+import Antd from 'ant-design-vue'
+import socket from "./utils/socket.js"
 import 'default-passive-events'
 import 'element-plus/dist/index.css'
+import 'ant-design-vue/dist/antd.css'
 import './global.scss'
 import './assets/font/iconfont.css'
 
@@ -27,4 +29,4 @@ import './assets/font/iconfont.css'
 // })
 const app = createApp(App)
 app.config.globalProperties.$socket = socket
-app.use(ElementPlus).use(store).use(router).use(VueCropper).mount('#app')
+app.use(ElementPlus).use(store).use(router).use(VueCropper).use(Antd).mount('#app')

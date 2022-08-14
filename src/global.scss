@@ -167,14 +167,22 @@ body {
   animation: bound-out .2s reverse;
 }
 
-@keyframes bound-in {
+.widening-enter-active {
+  animation: widening .2s;
+}
+
+.widening-leave-active {
+  animation: widening .2s reverse;
+}
+
+
+
+@keyframes widening {
   0% {
-    transform: scale(0);
-    //opacity: 0;
+    width: 0;
   }
   100% {
-    transform: scale(1);
-    //opacity: 1;
+    width: 100%;
   }
 }
 

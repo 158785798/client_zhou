@@ -46,7 +46,7 @@
       </div>
     </div>
     <div style="margin-top: 15px; display: flex; justify-content: space-between; color: #808080;">
-      <div v-if="!blog.is_like" title="点赞" class="content-btn">
+      <div v-if="!blog.is_active" title="点赞" class="content-btn">
         <span class="btn-blog cursor-pointer ico" @click="like(blog)">
           <i class="iconfont iconfontxin" style="font-size: 14px"></i>
           <span v-if="blog.likes !==0" style="font-size: 13px;margin-left: 5px">{{ blog.likes }}</span>
@@ -134,13 +134,13 @@ export default {
         }
       },
       like: async (blog) => {
-        if (blog.is_like) {
+        if (blog.is_active) {
           await instance.get('/dislike', {params: {blog_id: blog.id}})
-          blog.is_like = false
+          blog.is_active = false
           blog.likes--
         } else {
           await instance.get('/like', {params: {blog_id: blog.id}})
-          blog.is_like = true
+          blog.is_active = true
           blog.likes++
         }
       },

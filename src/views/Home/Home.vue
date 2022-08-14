@@ -8,7 +8,7 @@
     <div v-show="globalTip.show" class="g-tip">
       <div>
         <div class="iconfont iconfonticon_succeed" style="font-size: 40px;margin: 10px; font-weight: lighter"></div>
-        <div>{{ globalTip.text }}</div>
+        <div style="text-align: center">{{ globalTip.text }}</div>
       </div>
     </div>
   </transition>

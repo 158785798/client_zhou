@@ -39,7 +39,7 @@
             <div title="评论" class="btn-item cursor-pointer ico ico-bg" :class="{'is-open': item.commentShow}">
               <i class="iconfont iconfontico_pinglun" style="font-size: 12px"></i>
             </div>
-            <div v-if="!item.is_like" title="点赞" class="btn-item cursor-pointer ico ico-bg" @click="like(item)" style="width: auto">
+            <div v-if="!item.is_active" title="点赞" class="btn-item cursor-pointer ico ico-bg" @click="like(item)" style="width: auto">
               <i class="iconfont iconfontxin" style="font-size: 12px"></i>
               <span v-if="item.likes !==0" style="margin-left: 5px">{{ item.likes }}</span>
               <span v-else>赞</span>
