@@ -60,12 +60,13 @@
                 <div style="color: #939393; margin: 3px 0">无敌帅</div>
               </div>
             </div>
-            <div>
-              <a-button v-if="item.follow" type="text" style="border-radius: 20px;border-color: #9d9c9b;color: black">
+            <span v-if="item.follow" style="font-size: 12px;">
                 <i class="iconfont iconfontduihao"></i>
-                已关注</a-button>
-              <a-button v-else type="text" @click="follow_in(item)" style="background-color: #fff;border-radius: 20px;border-color: #f18e63; color: #f18e63">+关注</a-button>
-            </div>
+                已关注
+              </span>
+            <a-button v-else type="text" @click="follow_in(item)"
+                      style="background-color: #fff;border-radius: 20px;border-color: #f18e63; color: #f18e63">+关注
+            </a-button>
           </div>
         </div>
       </div>

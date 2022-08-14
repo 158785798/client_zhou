@@ -5,8 +5,7 @@
         <transition-group appear tag="div" name="bound-out">
           <div :key="index" v-for="(each, index) in urls" @click="show_image_preview({images: urls, index: index})"
                style="display: inline-block;margin:5px;overflow: hidden; width: 160px; height: 160px; border-radius: 7px">
-            <img v-if="each.direction==='h'" :src="each.middle" alt="" width="160" style="cursor: zoom-in">
-            <img v-else :src="each.middle" alt="" height="160" style="cursor: zoom-in">
+            <MyImg :each="each" width="160"></MyImg>
         </div>
         </transition-group>
 
@@ -22,9 +21,13 @@ import {useStore} from "vuex";
 import {reactive, toRefs, onMounted} from "vue";
 import {instance} from "../../api/request.js";
 import {useMutations} from "../../utils/hooks.js";
+import MyImg from "../../components/MyImg.vue";
 
 export default {
   name: "Album",
+  components:{
+    MyImg
+  },
   setup() {
     const router = useRouter()
     const route = useRoute()

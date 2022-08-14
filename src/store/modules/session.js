@@ -60,7 +60,12 @@ export const session = {
     },
 
     set_blog_id(state, payload) {
-      state.cur_blog_id = payload
+      if (state.cur_blog_id){
+        state.cur_blog_id = null
+      }else{
+        state.cur_blog_id = payload
+      }
+
     },
     to_cur(state, payload) {
       state.imagePreview.index = payload

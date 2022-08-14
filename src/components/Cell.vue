@@ -15,22 +15,7 @@
           {{ blog.pub_time }}
         </div>
       </div>
-      <div style="">
-        <i class="iconfont iconfontxialajiantouxiao cursor-pointer ico ico-bg" style="padding:6px; border-radius: 50%"
-           @click="set_blog_id(blog.id)" :class="{'up-dropdown-menu': blog.id===cur_blog_id}"></i>
-        <div v-show="blog.id===cur_blog_id" style="width:150px;overflow: hidden;
-        background-color: #fff;z-index: 10;position: absolute;margin-top: 2px;right:20px;border-radius: 6px; box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.25);">
-          <div style="font-size: .875rem" class="navItem_left cursor-pointer" v-for="m in blog.dropdown_menus"
-               @click="to_do(m, blog.id, index)">
-            <div style="padding:10px 15px">
-              <strong class="iconfont hover" :class="m.icon"
-                      style="margin-right: 10px;font-size: 14px;background-color: rgba(0,0,0,0.1); padding: 8px; border-radius: 50%"></strong>
-              <span>{{ m.name }}</span>
-            </div>
-          </div>
-        </div>
-
-      </div>
+      <slot></slot>
     </header>
     <div class="content" style="font-size: 14px;margin-left: 50px;line-height: 1.5" v-html="blog.content">
     </div>
@@ -39,9 +24,7 @@
            :data-id="each.name">
         <div @click="show_image_preview({images: blog.images, index: index})"
              style="overflow: hidden; width: 96px; height: 96px; border-radius: 7px">
-          <img v-if="each.direction==='h'" :src="each.small? each.small: each.middle" alt="" width="96"
-               style="cursor: zoom-in">
-          <img v-else :src="each.small? each.small: each.middle" alt="" height="96" style="cursor: zoom-in">
+          <MyImg width="96" :each="each"></MyImg>
         </div>
       </div>
     </div>
@@ -91,11 +74,13 @@ import {instance} from "../api/request.js";
 import Comment from './Comment.vue'
 import {to_do, to_tab} from "../utils/tools.js";
 import {useMutations} from "../utils/hooks.js";
+import MyImg from "./MyImg.vue";
 
 export default {
-  name: "SquareCell",
+  name: "Cell",
   components: {
-    Comment
+    Comment,
+    MyImg
   },
   props: {
     blog: {

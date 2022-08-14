@@ -1,9 +1,9 @@
 <template>
   <div style="display: flex;flex-direction:column;position: fixed;top:20px; bottom: 0; left: 0; right: 0;z-index: 300">
-    <div :class="{'g-mask': maskShow}" @click="close_mask" style="position: relative; flex: 1;justify-content:center;align-items: center;display: flex;overflow: hidden;">
+    <span :class="{'g-mask': maskShow}" @click="close_mask"></span>
+    <div  style="position: relative; flex: 1;justify-content:center;align-items: center;display: flex;overflow: hidden;">
       <div style="z-index: 300">
-        <img v-if="i_each.direction==='h'" :src="i_each.middle" alt="" style="max-height: 92vh">
-        <img v-else :src="i_each.middle" alt="" style="max-width: 100vw">
+        <MyImg :each="i_each" flag="imgPreview"></MyImg>
       </div>
     </div>
 
@@ -12,8 +12,7 @@
            style="margin: 15px 3px; width: 55px; height: 55px; overflow: hidden;position: relative"
            :class="{'is-active': i_index===index}">
         <div :class="{'bottom-blog': i_index!==index}">
-          <img v-if="each.direction==='h'" :src="each.middle" alt="" width="55">
-          <img v-else :src="each.middle" alt="" height="55">
+          <MyImg :each="each" width="55"></MyImg>
         </div>
       </div>
     </div>
@@ -25,9 +24,13 @@ import {reactive, toRefs, onMounted, computed} from "vue";
 import {useStore} from "vuex";
 import {useRouter, useRoute} from "vue-router";
 import {useMutations} from "../utils/hooks.js";
+import MyImg from "./MyImg.vue";
 
 export default {
   name: "ImagePreview",
+  components:{
+    MyImg
+  },
   setup() {
     const router = useRouter()
     const route = useRoute()
