@@ -22,7 +22,7 @@
   <Cropper v-show="cropper.show"></Cropper>
   <el-container style="margin: 50px auto" :class="{'msg-box': msgBoxShow}" @click="msgBoxShow=false">
     <div style="width: 100%;margin: 15px 0 0 0; position: relative" :class="{'g-mask': pub}" @click="pub=false">
-      <router-view/>
+      <router-view :key="route.path + JSON.stringify(route.query)"/>
     </div>
   </el-container>
 
