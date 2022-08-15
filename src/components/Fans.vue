@@ -20,7 +20,7 @@
                style="width: 50px; height: 50px; border-radius: 50%">
           <div style=" margin: 0 10px">
             <div @click="to_tab('UIndex', {u_id: item.id})" class="cursor-pointer">{{ item.username }}</div>
-            <div style="color: #939393; margin: 3px 0">无敌帅</div>
+            <div style="color: #939393; margin: 3px 0">{{item.bio}}</div>
           </div>
         </div>
         <div v-if="is_self">

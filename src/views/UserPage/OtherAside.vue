@@ -4,6 +4,9 @@
       <img v-if="cur_userInfo" :src="cur_userInfo.avatarUrl" @error="set_default" alt="" class="user-avatar">
     </div>
     <InfoNva v-if="cur_userInfo"></InfoNva>
+    <div v-if="cur_userInfo" style="font-size: 20px;margin: 20px 0;color: deeppink">
+      <strong>{{ cur_userInfo.bio }}</strong>
+    </div>
     <div style="overflow: hidden; border-radius: 10px">
       <div v-if="cur_userInfo" style="overflow: hidden;width: 592px; transition-duration: .2s"
            :class="{follow: cur_userInfo.follow}">

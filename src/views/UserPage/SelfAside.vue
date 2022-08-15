@@ -8,8 +8,16 @@
       </el-upload>
     </div>
     <InfoNva v-if="cur_userInfo"></InfoNva>
+    <div v-if="cur_userInfo" style="font-size: 20px;margin: 20px 0;color: deeppink">
+    <strong>{{ cur_userInfo.bio }}</strong>
+      </div>
+    <div v-show="bioShow">
+      <a-input v-model:value="bio" style="border-radius: 8px" placeholder="Add your bio"></a-input>
+      <a-button style="border-radius: 8px;color: white; background-color: #55a532" @click="save_bio">save</a-button>
+      <a-button style="border-radius: 8px;margin-left: 10px" @click="close_bio">cancel</a-button>
+    </div>
     <div class="bio-btn cursor-pointer" style="border-radius: 5px; padding: 5px
-        ;background-color: #f6f8fa; text-align: center">
+        ;background-color: #f6f8fa; text-align: center" @click="bioShow=true" v-show="!bioShow">
       <b style="color: #51565b">Add a bio</b>
     </div>
     <div>
@@ -36,9 +44,11 @@ export default {
     const store = useStore()
     const router = useRouter()
     const route = useRoute()
-    const mutations = useMutations('session', ['show_global_tip', 'show_cropper', 'set_cur_user_info'])
+    const mutations = useMutations('session', ['set_bio','show_global_tip', 'show_cropper', 'set_cur_user_info'])
     const self = reactive({
       upload: null,
+      bioShow: false,
+      bio: '',
       cur_userInfo: computed(() => store.state.session.cur_userInfo),
       token: computed(() => window.localStorage.getItem('token_zhou')),
       beforeUpload(file) {
@@ -47,6 +57,17 @@ export default {
           return false
         }
         return true
+      },
+      save_bio: async () => {
+        console.log(self.bio)
+        const res = instance.get('/save_bio', {params: {bio: self.bio}})
+        mutations.set_bio(self.bio)
+        self.bio = ''
+        self.bioShow = false
+      },
+      close_bio: () => {
+        self.bio = ''
+        self.bioShow = false
       },
       customRequest: async (info) => {
         getBase64(info.file, imgB64 => {

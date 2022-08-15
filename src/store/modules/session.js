@@ -36,6 +36,9 @@ export const session = {
     blogImages: []
   },
   mutations: {
+    set_bio(state, payload){
+      state.cur_userInfo.bio = payload
+    },
     set_cur_user_info(state, payload){
       state.cur_userInfo = payload
     },

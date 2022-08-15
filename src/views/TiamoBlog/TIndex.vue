@@ -57,7 +57,7 @@
               <img :src="item.avatarUrl" alt="" style="width: 50px; height: 50px; border-radius: 50%">
               <div style=" margin: 0 10px">
                 <div>{{ item.username }}</div>
-                <div style="color: #939393; margin: 3px 0">无敌帅</div>
+                <div style="color: #939393; margin: 3px 0">{{item.bio}}</div>
               </div>
             </div>
             <span v-if="item.follow" style="font-size: 12px;">
