@@ -24,8 +24,8 @@
           </div>
         </div>
         <div v-if="is_self">
-          <a-button v-if="fans.index===0" type="text"
-                    style="margin-right:10px;font-weight: 700;background-color: rgba(145,144,144,0.2);border-radius: 10px"
+          <a-button v-if="fans.index===0" :type="item.follow? 'text':'primary'" :danger="!item.follow"
+                    style="margin-right:10px;font-weight: 700;border-radius: 10px"
                     @click="follow_in(item)">
             {{ item.follow ? '互相关注' : '回关' }}
           </a-button>
@@ -36,8 +36,8 @@
           </a-button>
         </div>
         <div v-else>
-          <a-button v-if="item.id!==userInfo.id" type="text"
-                    style="margin-right:10px;font-weight: 700;background-color: rgba(145,144,144,0.2);border-radius: 10px"
+          <a-button v-if="item.id!==userInfo.id" :type="item.follow? 'text':'primary'" :danger="!item.follow"
+                    style="margin-right:10px;font-weight: 700;border-radius: 10px"
                     @click="follow_in(item)">
             {{ item.follow ? '已关注' : '关注' }}
           </a-button>
