@@ -1,20 +1,13 @@
 <template>
   <div style="position: sticky;top:100px;">
     <div style="display: flex; justify-content: center">
-      <el-upload ref="upload" :beforeUpload="beforeUpload" accept=".png, .jpg, .jpeg"
+      <el-upload class="user-avatar" ref="upload" :beforeUpload="beforeUpload" accept=".png, .jpg, .jpeg"
                  name="file" :show-file-list="false" :headers="{authorization: 'JWT ' + token}"
                  :http-request="customRequest">
-        <img :src="userInfo.avatarUrl" alt="" class="user-avatar">
+        <img v-if="userInfo" :src="userInfo.avatarUrl" @error="set_default" alt="" class="user-avatar">
       </el-upload>
     </div>
-    <div
-        style="color: #ff00ff;display: flex; justify-content: space-between;align-items: center; margin: 0 0 15px 0">
-      <span style="font-size: 20px;">{{ userInfo.username }}</span>
-      <span style="font-size: 14px">
-              <span class="cursor-pointer nva" style="margin-right: 20px">{{ userInfo.fans }} 粉丝</span>
-              <span class="cursor-pointer nva" style="margin: 0 5px">{{ userInfo.be_fans }} 关注</span>
-            </span>
-    </div>
+    <InfoNva v-if="userInfo" :userInfo="userInfo"></InfoNva>
     <div class="bio-btn cursor-pointer" style="border-radius: 5px; padding: 5px
         ;background-color: #f6f8fa; text-align: center">
       <b style="color: #51565b">Add a bio</b>
@@ -29,19 +22,24 @@ import {useStore} from "vuex";
 import {computed, reactive, toRefs, onMounted} from "vue";
 import {useRouter, useRoute} from "vue-router";
 import {useMutations} from "../../utils/hooks.js";
-import {getBase64} from "../../utils/tools.js";
+import {get_fans, getBase64, set_default} from "../../utils/tools.js";
 import {instance} from "../../api/request.js";
+import InfoNva from "./InfoNva.vue";
+
 
 export default {
   name: "SelfIndex",
+  components: {
+    InfoNva
+  },
   setup(props, context) {
     const store = useStore()
     const router = useRouter()
     const route = useRoute()
-    const mutations = useMutations('session', ['show_global_tip', 'show_cropper'])
+    const mutations = useMutations('session', ['show_global_tip', 'show_cropper', 'set_cur_user_info'])
     const self = reactive({
       upload: null,
-      userInfo: {},
+      userInfo: computed(() => store.state.session.cur_userInfo),
       token: computed(() => window.localStorage.getItem('token_zhou')),
       beforeUpload(file) {
         if (file.size > 10240000) {
@@ -63,12 +61,15 @@ export default {
       },
     })
     onMounted(async () => {
+      console.log(self.userInfo);
       const res = await instance.get('/get_userinfo', {params: {u_id: Number(route.query.u_id)}})
-      self.userInfo = res.data
+      mutations.set_cur_user_info(res.data)
     })
     return {
       ...toRefs(self),
       ...mutations,
+      get_fans,
+      set_default,
       route
     }
   },

@@ -84,8 +84,8 @@
 import {computed, onMounted, reactive, toRefs} from "vue";
 import {useRouter} from "vue-router";
 import {useStore} from "vuex";
-import {ElMessage} from "element-plus";
-import {useMutations} from "../utils/hooks.js";
+// import {set_default} from "../utils/tools.js";
+
 
 export default {
   name: "Header",
@@ -145,7 +145,8 @@ export default {
         }
     )
     return {
-      ...toRefs(self)
+      ...toRefs(self),
+      // set_default
     }
   }
 }

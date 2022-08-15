@@ -2,7 +2,8 @@
   <div
       style="font-size: 18px;background-color: #fff;padding: 20px;margin-bottom: 8px; border-radius: 6px;position: relative">
     <header style="display: flex; justify-content: space-between">
-      <img :src="blog.userInfo.avatarUrl" alt="" style="width: 40px; height: 40px; border-radius: 50%"
+      <img :src="blog.userInfo.avatarUrl" @error="set_default" alt=""
+           style="width: 40px; height: 40px; border-radius: 50%"
            @click="to_tab('UIndex', {u_id: blog.userInfo.id})">
       <div style="margin: 10px; flex: 1">
         <div style="margin-bottom: 5px;">
@@ -72,7 +73,7 @@ import {computed, reactive, toRefs} from "vue";
 import {useRouter} from "vue-router";
 import {instance} from "../api/request.js";
 import Comment from './Comment.vue'
-import {to_do, to_tab} from "../utils/tools.js";
+import {to_do, to_tab, set_default} from "../utils/tools.js";
 import {useMutations} from "../utils/hooks.js";
 import MyImg from "./MyImg.vue";
 
@@ -109,7 +110,7 @@ export default {
       userInfo: computed(() => store.state.local.userInfo),
       iscomment: props.iscomment,
       loading: false,
-      to_do:  to_do,
+      to_do: to_do,
       to_tab: to_tab,
       follow_in: async (value) => {
         const res = await instance.get('/follow_in', {params: {moment_id: value.id}})
@@ -143,6 +144,7 @@ export default {
     })
     return {
       ...toRefs(self),
+      set_default,
       ...mutations
     }
   },

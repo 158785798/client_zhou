@@ -33,7 +33,6 @@ import Pub from "../../components/Pub.vue";
 import MsgBox from "../../components/MsgBox.vue";
 import Cropper from "../../components/Cropper.vue";
 import Header from "../../components/Header.vue";
-
 import {useStore} from "vuex";
 import {instance} from "../../api/request.js";
 import {useRoute, useRouter} from "vue-router";
@@ -169,7 +168,7 @@ export default {
   right: 0;
   top: 0;
   bottom: 0;
-  z-index: 500;
+  z-index: 800;
   margin: auto
 }
 

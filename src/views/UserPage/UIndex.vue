@@ -3,6 +3,11 @@
     <el-backtop :bottom="100" class="backtop">
       <i class="iconfont iconfonttubiao02" style="font-size: 20px"></i>
     </el-backtop>
+
+    <div :class="{'g-mask': fans.show}" @click="show_fans({show: false})"></div>
+    <transition name="widening">
+      <Fans v-if="fans.show"></Fans>
+    </transition>
     <div style="margin-top:24px;border-bottom: 1px solid hotpink">
       <div style="margin-left: 306px;padding: 0;">
         <div style="display: flex;font-size: 14px;">
@@ -20,46 +25,12 @@
       </div>
     </div>
     <div style="display: flex;">
-      <aside style="width: 296px; margin-right: 20px;">
+      <aside style="width: 296px; margin-right: 20px">
         <SelfAside v-if="is_self"></SelfAside>
         <OtherAside v-else></OtherAside>
       </aside>
-      <a-button @click="bb=!bb">sssss</a-button>
-      <aside style="flex: 1; margin-top: 20px; position: relative; overflow: hidden">
+      <aside style="flex: 1; margin-top: 20px;">
         <router-view :key="route.path + JSON.stringify(route.query)"></router-view>
-
-        <span :class="{'friend-mask':bb}"></span>
-
-        <transition name="widening">
-          <div v-show="bb" style="right: 0;top: 0;position: absolute;
-        height: 100%;z-index: 500; width: 300px;
-        background-color: #f4e6e6;
-        padding: 10px
-        ">
-            <div>
-              <span class="nva cursor-pointer" style="padding: 5px">粉丝</span>
-              <span @click="get_fans(false)" class="nva cursor-pointer" style="padding: 5px">关注</span>
-            </div>
-            <div class="navItem_left cursor-pointer" style="padding:10px;display: flex; align-items: center"
-                 v-for="item in fans">
-              <div @click="to_tab('UIndex', {u_id: item.id})"
-                   style="display: flex; align-items: center;flex: 1;">
-                <img :src="item.avatarUrl" alt="" style="width: 50px; height: 50px; border-radius: 50%">
-                <div style=" margin: 0 10px">
-                  <div>{{ item.username }}</div>
-                  <div style="color: #939393; margin: 3px 0">无敌帅</div>
-                </div>
-              </div>
-              <span v-if="item.follow" style="font-size: 12px;">
-                <i class="iconfont iconfontduihao"></i>
-                已关注
-              </span>
-              <a-button v-else type="text" @click="follow_in(item)"
-                        style="background-color: #fff;border-radius: 20px;border-color: #f18e63; color: #f18e63">+关注
-              </a-button>
-            </div>
-          </div>
-        </transition>
       </aside>
     </div>
   </div>
@@ -72,35 +43,35 @@ import {useRouter, useRoute} from "vue-router";
 import {useMutations} from "../../utils/hooks.js";
 import SelfAside from "./SelfAside.vue";
 import OtherAside from "./OtherAside.vue";
+import Fans from "../../components/Fans.vue";
 
 
 export default {
   name: "OtherIndex",
   components: {
     SelfAside,
-    OtherAside
+    OtherAside,
+    Fans
   },
   setup(props, context) {
     const store = useStore()
     const router = useRouter()
     const route = useRoute()
-    const mutations = useMutations('session', ['show_global_tip', 'show_cropper'])
+    const mutations = useMutations('session', ['show_global_tip', 'show_cropper', 'show_fans',])
     const self = reactive({
       is_self: computed(() => store.state.local.userInfo.id == route.query.u_id),
       underline: null,
       bb: false,
       nva_index: 0,
-      fans: [],
+      fans: computed(() => store.state.session.fans),
       nvas1: [
         {name: 'Overview', icon: 'iconfontchongwutubiao18', to: 'Blog', tab: 'blog'},
         {name: '收藏', icon: 'iconfontshoucang1', to: 'Blog', tab: 'collection'},
         {name: '相册', icon: 'iconfontxiangce', to: 'Album', tab: 'album'},
       ],
-      // get_fans: async (be) => {
-      //   const res = await instance.get('/get_fans', {params: {be: be}})
-      //   self.fans = res.data
-      // },
+
       get_fans: () => {
+        document.getElementById('app').style.overflow = 'hidden'
         self.bb = !self.bb
       },
       to_tab: (to, query, index) => {
@@ -150,6 +121,7 @@ export default {
 }
 
 .nva {
+  transition-duration: .2s;
   padding: 5px 8px;
   border-radius: 5px;
   font-weight: 600;

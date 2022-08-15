@@ -1,16 +1,9 @@
 <template>
   <div style="position: sticky;top:100px;">
     <div style="display: flex; justify-content: center">
-      <img :src="userInfo.avatarUrl" alt="" class="user-avatar">
+      <img :src="userInfo.avatarUrl" @error="set_default" alt="" class="user-avatar">
     </div>
-    <div
-        style="color: #ff00ff;display: flex; justify-content: space-between;align-items: center; margin: 0 0 15px 0">
-      <span style="font-size: 20px;">{{ userInfo.username }}</span>
-      <span style="font-size: 14px">
-              <span class="cursor-pointer nva" style="margin-right: 20px">{{ userInfo.fans }} 粉丝</span>
-              <span class="cursor-pointer nva" style="margin: 0 5px">{{ userInfo.be_fans }} 关注</span>
-            </span>
-    </div>
+    <InfoNva :userInfo="userInfo"></InfoNva>
     <div style="overflow: hidden; border-radius: 10px">
       <div v-show="userInfo.username" style="overflow: hidden;width: 592px; transition-duration: .2s"
            :class="{follow: userInfo.follow}">
@@ -25,7 +18,7 @@
             <a-button type="text"
                       style="flex: 1;margin-right:10px;font-weight: 700;background-color: rgba(145,144,144,0.2);border-radius: 10px"
                       @click="follow_in">
-              取消关注
+              已关注
             </a-button>
             <a-button type="text"
                       style="flex: 1;font-weight: 700;background-color: rgba(145,144,144,0.2);border-radius: 10px"
@@ -40,22 +33,28 @@
 
 <script>
 import {useStore} from "vuex";
-import {reactive, toRefs, onMounted} from "vue";
+import {reactive, toRefs, onMounted, computed} from "vue";
 import {useRouter, useRoute} from "vue-router";
 import {instance} from "../../api/request.js";
 import {useMutations} from "../../utils/hooks.js";
+import {get_fans, set_default} from "../../utils/tools.js";
+import InfoNva from "./InfoNva.vue";
 
 export default {
   name: "OtherIndex",
+  components: {
+    InfoNva
+  },
+
   setup(props, context) {
     const store = useStore()
     const router = useRouter()
     const route = useRoute()
-    const mutations = useMutations('session', ['show_global_tip'])
+    const mutations = useMutations('session', ['show_global_tip', 'set_cur_user_info'])
     const self = reactive({
       loading: true,
       endLoading: false,
-      userInfo: {},
+      userInfo: computed(()=> store.state.session.cur_userInfo),
       follow_in: async () => {
         const res = await instance.get('/follow_in', {
           params: {
@@ -75,10 +74,12 @@ export default {
     })
     onMounted(async () => {
       const res = await instance.get('/get_userinfo', {params: {u_id: Number(route.query.u_id)}})
-      self.userInfo = res.data
+      mutations.set_cur_user_info(res.data)
     })
     return {
       ...toRefs(self),
+      get_fans,
+      set_default,
       ...mutations,
     }
   },

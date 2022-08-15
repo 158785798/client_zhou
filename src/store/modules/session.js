@@ -24,11 +24,39 @@ export const session = {
       origin_b64: null,
       imgB64: null,
     },
+    fans: {
+      index: 0,
+      loading: true,
+      value: [],
+      show: false
+    },
+    cur_userInfo: null,
     cur_blog_id: null,
     blogs: [],
     blogImages: []
   },
   mutations: {
+    set_cur_user_info(state, payload){
+      state.cur_userInfo = payload
+    },
+    concat_fans(state, payload) {
+      state.fans.value = state.fans.value.concat(payload)
+      state.fans.loading = false
+    },
+    clear_fans(state, payload){
+      state.fans.value = []
+    },
+    show_fans(state, payload) {
+      state.fans.loading = true
+      state.fans.index = payload.index
+      state.fans.show = payload.show
+      if (payload.show) {
+        document.getElementById('app').style.overflow = 'hidden'
+      } else {
+        state.fans.value = []
+        document.getElementById('app').style.overflow = 'auto'
+      }
+    },
     concat_blogs(state, payload) {
       state.blogs = state.blogs.concat(payload)
     },
@@ -60,9 +88,9 @@ export const session = {
     },
 
     set_blog_id(state, payload) {
-      if (state.cur_blog_id){
+      if (state.cur_blog_id) {
         state.cur_blog_id = null
-      }else{
+      } else {
         state.cur_blog_id = payload
       }
 
@@ -80,7 +108,7 @@ export const session = {
     },
     show_global_tip(state, payload) {
       state.cur_blog_id = null
-      const text = payload.text? payload.text: payload
+      const text = payload.text ? payload.text : payload
       state.globalTip.text = text
       state.globalTip.show = true
       const time = payload.time ? payload.time : 1500

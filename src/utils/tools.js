@@ -1,5 +1,17 @@
 import router from "../router/index.js";
 import store from "../store/index.js";
+import d from "../assets/error.jpg";
+import {instance} from "../api/request.js";
+
+const set_default = (e) => {
+  e.srcElement.src = d
+}
+
+const get_fans = async (u_id, index) => {
+  store.commit('session/show_fans', {show: true, index: index})
+  const res = await instance.get('/get_fans', {params: {u_id: u_id, index: index}})
+  store.commit('session/concat_fans', res.data)
+}
 
 const to_tab = async (to, query) => {
   query['index'] = 0
@@ -52,6 +64,8 @@ const scroll = (self) => {
 }
 
 export {
+  get_fans,
+  set_default,
   to_tab,
   to_do,
   getBase64,
