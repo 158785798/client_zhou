@@ -14,6 +14,7 @@ const get_fans = async (u_id, index, is_self) => {
 }
 
 const to_tab = async (to, query) => {
+  store.commit('session/show_fans', {show: false})
   query['index'] = 0
   await router.push({name: to, query: query})
 }
