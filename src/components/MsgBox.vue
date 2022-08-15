@@ -27,8 +27,7 @@
               <div>{{ each.pub_time }}</div>
             </div>
             <span v-if="each.img" style="overflow: hidden; width: 56px; height: 56px; border-radius: 7px">
-            <img v-if="each.direction==='h'" :src="each.middle" alt="" width="56">
-            <img v-else :src="each.middle" alt="" height="56">
+            <MyImg width="56"></MyImg>
           </span>
             <span v-html="each.blog_content" style="overflow: hidden;text-overflow: ellipsis;-webkit-line-clamp:2;
       -webkit-box-orient:vertical;display:-webkit-box; font-size: 12px;width: 56px;
@@ -49,9 +48,12 @@ import {computed, reactive, toRefs} from "vue";
 import {instance} from "../api/request.js";
 import {useRouter} from "vue-router";
 import {useStore} from "vuex";
+import MyImg from "./MyImg.vue";
 
 export default {
   name: "MsgBox",
+  components: {MyImg},
+
   props: ['msgBox', 'msgBoxLoading'],
   emits: ['show_msg_box'],
   setup(props, context) {

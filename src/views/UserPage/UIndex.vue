@@ -21,8 +21,8 @@
     </div>
     <div style="display: flex;">
       <aside style="width: 296px; margin-right: 20px;">
-        <SelfAside v-if="is_self" :user-info="userInfo"></SelfAside>
-        <OtherAside v-else :user-info="userInfo"></OtherAside>
+        <SelfAside v-if="is_self"></SelfAside>
+        <OtherAside v-else></OtherAside>
       </aside>
       <a-button @click="bb=!bb">sssss</a-button>
       <aside style="flex: 1; margin-top: 20px; position: relative; overflow: hidden">
@@ -31,54 +31,48 @@
         <span :class="{'friend-mask':bb}"></span>
 
         <transition name="widening">
-        <div v-show="bb" style="right: 0;top: 0;position: absolute;
+          <div v-show="bb" style="right: 0;top: 0;position: absolute;
         height: 100%;z-index: 500; width: 300px;
         background-color: #f4e6e6;
         padding: 10px
         ">
-          <div>
-            <span class="nva cursor-pointer" style="padding: 5px">粉丝</span>
-            <span @click="get_fans(false)" class="nva cursor-pointer" style="padding: 5px">关注</span>
-          </div>
-          <div class="navItem_left cursor-pointer" style="padding:10px;display: flex; align-items: center"
-               v-for="item in fans">
-            <div @click="to_tab('UIndex', {u_id: item.id})"
-                 style="display: flex; align-items: center;flex: 1;">
-              <img :src="item.avatarUrl" alt="" style="width: 50px; height: 50px; border-radius: 50%">
-              <div style=" margin: 0 10px">
-                <div>{{ item.username }}</div>
-                <div style="color: #939393; margin: 3px 0">无敌帅</div>
-              </div>
+            <div>
+              <span class="nva cursor-pointer" style="padding: 5px">粉丝</span>
+              <span @click="get_fans(false)" class="nva cursor-pointer" style="padding: 5px">关注</span>
             </div>
-            <span v-if="item.follow" style="font-size: 12px;">
+            <div class="navItem_left cursor-pointer" style="padding:10px;display: flex; align-items: center"
+                 v-for="item in fans">
+              <div @click="to_tab('UIndex', {u_id: item.id})"
+                   style="display: flex; align-items: center;flex: 1;">
+                <img :src="item.avatarUrl" alt="" style="width: 50px; height: 50px; border-radius: 50%">
+                <div style=" margin: 0 10px">
+                  <div>{{ item.username }}</div>
+                  <div style="color: #939393; margin: 3px 0">无敌帅</div>
+                </div>
+              </div>
+              <span v-if="item.follow" style="font-size: 12px;">
                 <i class="iconfont iconfontduihao"></i>
                 已关注
               </span>
-            <a-button v-else type="text" @click="follow_in(item)"
-                      style="background-color: #fff;border-radius: 20px;border-color: #f18e63; color: #f18e63">+关注
-            </a-button>
+              <a-button v-else type="text" @click="follow_in(item)"
+                        style="background-color: #fff;border-radius: 20px;border-color: #f18e63; color: #f18e63">+关注
+              </a-button>
+            </div>
           </div>
-        </div>
         </transition>
-        <div style="text-align: center; color: rgba(0,0,0,0.53)">
-          <img src="../../assets/loading2.gif" alt="" style="border-radius: 20px" width="150" v-show="endLoading">
-          <span v-show="!endLoading&&!loading">我是有底线的o(*￣▽￣*)o</span>
-        </div>
       </aside>
-
     </div>
   </div>
 </template>
 
 <script>
 import {useStore} from "vuex";
-import {computed, onMounted, reactive, toRefs, onUnmounted} from "vue";
+import {computed, onMounted, reactive, toRefs} from "vue";
 import {useRouter, useRoute} from "vue-router";
-import {instance} from "../../api/request.js";
 import {useMutations} from "../../utils/hooks.js";
 import SelfAside from "./SelfAside.vue";
 import OtherAside from "./OtherAside.vue";
-import {scroll} from "../../utils/tools.js";
+
 
 export default {
   name: "OtherIndex",
@@ -94,11 +88,8 @@ export default {
     const self = reactive({
       is_self: computed(() => store.state.local.userInfo.id == route.query.u_id),
       underline: null,
-      loading: true,
       bb: false,
-      endLoading: false,
       nva_index: 0,
-      userInfo: {},
       fans: [],
       nvas1: [
         {name: 'Overview', icon: 'iconfontchongwutubiao18', to: 'Blog', tab: 'blog'},
@@ -109,28 +100,21 @@ export default {
       //   const res = await instance.get('/get_fans', {params: {be: be}})
       //   self.fans = res.data
       // },
-      get_fans:()=>{
+      get_fans: () => {
         self.bb = !self.bb
       },
       to_tab: (to, query, index) => {
         self.nva_index = index
         self.underline.style.marginLeft = index * 120 + 'px'
-        query.u_id = self.userInfo.id
+        query.u_id = route.query.u_id
         router.push({name: to, query: query})
       },
     })
     onMounted(async () => {
-      const res = await instance.get('/get_userinfo', {params: {u_id: Number(route.query.u_id)}})
-      self.userInfo = res.data
-      // window.addEventListener('scroll', scroll(self), false)
       self.nva_index = Number(route.query.index)
       self.underline.style.marginLeft = self.nva_index * 120 + 'px'
-
     })
-    onUnmounted(() => {
-      window.removeEventListener('scroll', scroll, false)
 
-    })
 
     return {
       ...toRefs(self),

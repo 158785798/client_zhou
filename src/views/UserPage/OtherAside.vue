@@ -40,24 +40,22 @@
 
 <script>
 import {useStore} from "vuex";
-import {reactive, toRefs} from "vue";
+import {reactive, toRefs, onMounted} from "vue";
 import {useRouter, useRoute} from "vue-router";
 import {instance} from "../../api/request.js";
 import {useMutations} from "../../utils/hooks.js";
 
 export default {
   name: "OtherIndex",
-  props: ['userInfo'],
   setup(props, context) {
     const store = useStore()
     const router = useRouter()
     const route = useRoute()
     const mutations = useMutations('session', ['show_global_tip'])
     const self = reactive({
-      underline: null,
       loading: true,
       endLoading: false,
-      nva_index: 0,
+      userInfo: {},
       follow_in: async () => {
         const res = await instance.get('/follow_in', {
           params: {
@@ -74,6 +72,10 @@ export default {
         const text = props.userInfo.follow ? '关注成功' : '取消关注'
         mutations.show_global_tip(text)
       },
+    })
+    onMounted(async () => {
+      const res = await instance.get('/get_userinfo', {params: {u_id: Number(route.query.u_id)}})
+      self.userInfo = res.data
     })
     return {
       ...toRefs(self),

@@ -23,6 +23,10 @@
         </Cell>
       </div>
     </transition-group>
+    <div style="text-align: center; color: rgba(0,0,0,0.53)">
+      <img src="../../assets/loading2.gif" alt="" style="border-radius: 20px" width="150" v-show="endLoading">
+      <span v-show="!endLoading&&!loading">我是有底线的o(*￣▽￣*)o</span>
+    </div>
   </div>
 </template>
 
@@ -32,7 +36,7 @@ import {reactive, toRefs, computed, onMounted, onUnmounted} from "vue";
 import {useRoute, useRouter} from "vue-router";
 import {useStore} from "vuex";
 import {useMutations} from "../../utils/hooks.js";
-import {to_do} from "../../utils/tools.js";
+import {scroll, to_do} from "../../utils/tools.js";
 import Cell from "../../components/Cell.vue";
 
 export default {
@@ -48,6 +52,8 @@ export default {
     const self = reactive({
       cur_blog_id: computed(() => store.state.session.cur_blog_id),
       pageNum: 1,
+      loading: true,
+      endLoading: true,
       pageSize: 7,
       serverPageSize: 7,
       blogs: computed(() => store.state.session.blogs),
@@ -71,11 +77,13 @@ export default {
       },
     })
     onMounted(async () => {
+      window.addEventListener('scroll', scroll(self), false)
       mutations.clear_blogs()
       await self.get_blogs(route.query.index)
       self.loading = false
     })
     onUnmounted(() => {
+      window.removeEventListener('scroll', scroll, false)
         mutations.set_blog_id(null)
     })
 

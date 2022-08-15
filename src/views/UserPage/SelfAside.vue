@@ -26,14 +26,14 @@
 
 <script>
 import {useStore} from "vuex";
-import {computed, reactive, toRefs} from "vue";
+import {computed, reactive, toRefs, onMounted} from "vue";
 import {useRouter, useRoute} from "vue-router";
 import {useMutations} from "../../utils/hooks.js";
 import {getBase64} from "../../utils/tools.js";
+import {instance} from "../../api/request.js";
 
 export default {
   name: "SelfIndex",
-  props: ['userInfo'],
   setup(props, context) {
     const store = useStore()
     const router = useRouter()
@@ -41,6 +41,7 @@ export default {
     const mutations = useMutations('session', ['show_global_tip', 'show_cropper'])
     const self = reactive({
       upload: null,
+      userInfo: {},
       token: computed(() => window.localStorage.getItem('token_zhou')),
       beforeUpload(file) {
         if (file.size > 10240000) {
@@ -60,6 +61,10 @@ export default {
           })
         })
       },
+    })
+    onMounted(async () => {
+      const res = await instance.get('/get_userinfo', {params: {u_id: Number(route.query.u_id)}})
+      self.userInfo = res.data
     })
     return {
       ...toRefs(self),
