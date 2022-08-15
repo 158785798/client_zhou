@@ -4,10 +4,10 @@
       <el-upload class="user-avatar" ref="upload" :beforeUpload="beforeUpload" accept=".png, .jpg, .jpeg"
                  name="file" :show-file-list="false" :headers="{authorization: 'JWT ' + token}"
                  :http-request="customRequest">
-        <img v-if="userInfo" :src="userInfo.avatarUrl" @error="set_default" alt="" class="user-avatar">
+        <img v-if="cur_userInfo" :src="cur_userInfo.avatarUrl" @error="set_default" alt="" class="user-avatar">
       </el-upload>
     </div>
-    <InfoNva v-if="userInfo" :userInfo="userInfo"></InfoNva>
+    <InfoNva v-if="cur_userInfo"></InfoNva>
     <div class="bio-btn cursor-pointer" style="border-radius: 5px; padding: 5px
         ;background-color: #f6f8fa; text-align: center">
       <b style="color: #51565b">Add a bio</b>
@@ -39,7 +39,7 @@ export default {
     const mutations = useMutations('session', ['show_global_tip', 'show_cropper', 'set_cur_user_info'])
     const self = reactive({
       upload: null,
-      userInfo: computed(() => store.state.session.cur_userInfo),
+      cur_userInfo: computed(() => store.state.session.cur_userInfo),
       token: computed(() => window.localStorage.getItem('token_zhou')),
       beforeUpload(file) {
         if (file.size > 10240000) {
@@ -61,7 +61,6 @@ export default {
       },
     })
     onMounted(async () => {
-      console.log(self.userInfo);
       const res = await instance.get('/get_userinfo', {params: {u_id: Number(route.query.u_id)}})
       mutations.set_cur_user_info(res.data)
     })

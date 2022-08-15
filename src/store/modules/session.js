@@ -39,9 +39,19 @@ export const session = {
     set_cur_user_info(state, payload){
       state.cur_userInfo = payload
     },
+    update_cur_userInfo(state, payload){
+      if (payload){
+        state.cur_userInfo.be_fans ++
+      }else{
+        state.cur_userInfo.be_fans --
+      }
+    },
     concat_fans(state, payload) {
       state.fans.value = state.fans.value.concat(payload)
       state.fans.loading = false
+    },
+    remove_fans(state, payload){
+      state.fans.value = state.fans.value.filter(item => item.id !== payload)
     },
     clear_fans(state, payload){
       state.fans.value = []

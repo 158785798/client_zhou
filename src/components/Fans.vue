@@ -23,17 +23,26 @@
             <div style="color: #939393; margin: 3px 0">无敌帅</div>
           </div>
         </div>
+        <div v-if="is_self">
+          <a-button v-if="fans.index===0" type="text"
+                    style="margin-right:10px;font-weight: 700;background-color: rgba(145,144,144,0.2);border-radius: 10px"
+                    @click="follow_in(item)">
+            {{ item.follow ? '互相关注' : '回关' }}
+          </a-button>
+          <a-button v-else type="text"
+                    style="margin-right:10px;font-weight: 700;background-color: rgba(145,144,144,0.2);border-radius: 10px"
+                    @click="follow_in(item)">
+            {{ item.follow ? '互相关注' : '已关注' }}
+          </a-button>
+        </div>
+        <div v-else>
+          <a-button v-if="item.id!==userInfo.id" type="text"
+                    style="margin-right:10px;font-weight: 700;background-color: rgba(145,144,144,0.2);border-radius: 10px"
+                    @click="follow_in(item)">
+            {{ item.follow ? '已关注' : '关注' }}
+          </a-button>
+        </div>
 
-        <a-button v-if="fans.index===0" type="text"
-                  style="margin-right:10px;font-weight: 700;background-color: rgba(145,144,144,0.2);border-radius: 10px"
-                  @click="follow_in(item)">
-          {{ item.follow ? '互相关注':'回关' }}
-        </a-button>
-        <a-button v-else type="text"
-                  style="margin-right:10px;font-weight: 700;background-color: rgba(145,144,144,0.2);border-radius: 10px"
-                  @click="follow_in(item)">
-          {{ item.follow ? '互相关注':'已关注' }}
-        </a-button>
       </div>
     </div>
     <div class="bottom-linear"></div>
@@ -54,31 +63,57 @@ export default {
     const router = useRouter()
     const route = useRoute()
     const store = useStore()
-    const mutations = useMutations('session', ['clear_fans', 'show_fans', 'show_global_tip'])
+    const mutations = useMutations('session', ['update_cur_userInfo', 'clear_fans', 'show_fans', 'remove_fans', 'show_global_tip'])
     const self = reactive({
       fans: computed(() => store.state.session.fans),
-      userInfo: computed(() => store.state.session.cur_userInfo),
+      is_self: computed(() => self.cur_userInfo.id === self.userInfo.id),
+      cur_userInfo: computed(() => store.state.session.cur_userInfo),
+      userInfo: computed(() => store.state.local.userInfo),
       underline: null,
       nva: [
         {name: '粉丝'},
         {name: '关注'}
       ],
       follow_in: async (item) => {
-        const res = await instance.get('/follow_in', {
-          params: {
-            be_user_id: item.id,
-            follow: item.follow
+        if (self.fans.index === 0) {
+          if (item.follow) {
+            if (self.is_self) {
+              mutations.update_cur_userInfo(false)
+            }
+            const res = await instance.get('/follow_out', {
+              params: {
+                be_user_id: item.id,
+              }
+            })
+          } else {
+            mutations.update_cur_userInfo(true)
+            const res = await instance.get('/follow_in', {
+              params: {
+                be_user_id: item.id,
+              }
+            })
           }
-        })
-        item.follow = !item.follow
+        } else {
 
+          if (self.is_self) {
+            mutations.update_cur_userInfo(false)
+            mutations.remove_fans(item.id)
+          }
+
+          const res = await instance.get('/follow_out', {
+            params: {
+              be_user_id: item.id,
+            }
+          })
+        }
+        item.follow = !item.follow
         const text = item.follow ? '关注成功' : '取消关注'
         mutations.show_global_tip(text)
       },
       to_nva: async (index) => {
         self.underline.style.marginLeft = index * 56 + 'px'
         mutations.clear_fans()
-        await get_fans(self.userInfo.id, index)
+        await get_fans(self.cur_userInfo.id, index, self.is_self)
       },
     })
     onMounted(() => {

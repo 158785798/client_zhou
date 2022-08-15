@@ -7,9 +7,9 @@ const set_default = (e) => {
   e.srcElement.src = d
 }
 
-const get_fans = async (u_id, index) => {
+const get_fans = async (u_id, index, is_self) => {
   store.commit('session/show_fans', {show: true, index: index})
-  const res = await instance.get('/get_fans', {params: {u_id: u_id, index: index}})
+  const res = await instance.get('/get_fans', {params: {u_id: u_id, index: index, is_self: is_self}})
   store.commit('session/concat_fans', res.data)
 }
 

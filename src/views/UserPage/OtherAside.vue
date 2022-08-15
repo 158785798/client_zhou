@@ -1,12 +1,12 @@
 <template>
   <div style="position: sticky;top:100px;">
     <div style="display: flex; justify-content: center">
-      <img :src="userInfo.avatarUrl" @error="set_default" alt="" class="user-avatar">
+      <img v-if="cur_userInfo" :src="cur_userInfo.avatarUrl" @error="set_default" alt="" class="user-avatar">
     </div>
-    <InfoNva :userInfo="userInfo"></InfoNva>
+    <InfoNva v-if="cur_userInfo"></InfoNva>
     <div style="overflow: hidden; border-radius: 10px">
-      <div v-show="userInfo.username" style="overflow: hidden;width: 592px; transition-duration: .2s"
-           :class="{follow: userInfo.follow}">
+      <div v-if="cur_userInfo" style="overflow: hidden;width: 592px; transition-duration: .2s"
+           :class="{follow: cur_userInfo.follow}">
         <a-button type="primary" danger
                   style="transition-duration: 0.5s;font-weight: 700;border-radius: 10px;width: 296px"
                   @click="follow_in">
@@ -54,21 +54,21 @@ export default {
     const self = reactive({
       loading: true,
       endLoading: false,
-      userInfo: computed(()=> store.state.session.cur_userInfo),
+      cur_userInfo: computed(() => store.state.session.cur_userInfo),
       follow_in: async () => {
         const res = await instance.get('/follow_in', {
           params: {
-            be_user_id: props.userInfo.id,
-            follow: props.userInfo.follow
+            be_user_id: self.cur_userInfo.id,
+            follow: self.cur_userInfo.follow
           }
         })
-        if (props.userInfo.follow) {
-          props.userInfo.fans--
+        if (self.cur_userInfo.follow) {
+          self.cur_userInfo.fans--
         } else {
-          props.userInfo.fans++
+          self.cur_userInfo.fans++
         }
-        props.userInfo.follow = !props.userInfo.follow
-        const text = props.userInfo.follow ? '关注成功' : '取消关注'
+        self.cur_userInfo.follow = !self.cur_userInfo.follow
+        const text = self.cur_userInfo.follow ? '关注成功' : '取消关注'
         mutations.show_global_tip(text)
       },
     })
