@@ -118,20 +118,26 @@ export default {
         '世界只有一个中国',
       ],
       follow_in: async (item) => {
-        const res = await instance.get('/follow_in', {
-          params: {
-            be_user_id: item.id,
-            follow: item.follow
-          }
-        })
-        item.follow = !item.follow
+        if (item.follow) {
+          const res = await instance.get('/follow_out', {
+            params: {
+              be_user_id: item.id,
+            }
+          })
+        } else {
+          const res = await instance.get('/follow_in', {
+            params: {
+              be_user_id: item.id,
+            }
+          })
+        }
 
+        item.follow = !item.follow
         const text = item.follow ? '关注成功' : '取消关注'
         mutations.show_global_tip(text)
       },
       taste: [],
       loading: true,
-      to_tab: to_tab
     })
     onMounted(async () => {
       const res = await instance.get('/get_taste')
@@ -140,6 +146,7 @@ export default {
 
     return {
       ...toRefs(self),
+      to_tab,
       route
     }
   }
