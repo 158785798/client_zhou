@@ -101,7 +101,7 @@ export const session = {
     },
 
     set_blog_id(state, payload) {
-      if (state.cur_blog_id && state.cur_blog_id !== payload) {
+      if (state.cur_blog_id === payload) {
         state.cur_blog_id = null
       } else {
         state.cur_blog_id = payload
