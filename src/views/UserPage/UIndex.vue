@@ -3,7 +3,6 @@
     <el-backtop :bottom="100" class="backtop">
       <i class="iconfont iconfonttubiao02" style="font-size: 20px"></i>
     </el-backtop>
-
     <div :class="{'g-mask': fans.show}" @click="show_fans({show: false})"></div>
     <transition name="widening">
       <Fans v-if="fans.show"></Fans>
@@ -111,13 +110,6 @@ export default {
 
 .follow {
   margin-left: -100%;
-}
-
-.user-avatar {
-  border-radius: 50%;
-  width: 296px;
-  height: 296px;
-  transform: translateY(-20px);
 }
 
 .nva {

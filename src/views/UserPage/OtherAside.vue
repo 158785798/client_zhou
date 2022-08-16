@@ -1,7 +1,7 @@
 <template>
   <div style="position: sticky;top:100px;">
     <div style="display: flex; justify-content: center">
-      <img v-if="cur_userInfo" :src="cur_userInfo.avatarUrl" @error="set_default" alt="" class="user-avatar">
+      <img v-if="cur_userInfo" :src="cur_userInfo.avatarUrl" @error="set_default" alt="" class="user-avatar main-bg">
     </div>
     <InfoNva v-if="cur_userInfo"></InfoNva>
     <div v-if="cur_userInfo" style="font-size: 20px;margin: 20px 0;color: deeppink">

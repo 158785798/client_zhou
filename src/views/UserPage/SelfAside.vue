@@ -4,7 +4,7 @@
       <el-upload class="user-avatar" ref="upload" :beforeUpload="beforeUpload" accept=".png, .jpg, .jpeg"
                  name="file" :show-file-list="false" :headers="{authorization: 'JWT ' + token}"
                  :http-request="customRequest">
-        <img v-if="cur_userInfo" :src="cur_userInfo.avatarUrl" @error="set_default" alt="" class="user-avatar">
+        <img class="user-avatar main-bg" v-if="cur_userInfo" :src="cur_userInfo.avatarUrl" @error="set_default" alt="">
       </el-upload>
     </div>
     <InfoNva v-if="cur_userInfo"></InfoNva>
@@ -16,9 +16,9 @@
       <a-button style="border-radius: 8px;color: white; background-color: #55a532" @click="save_bio">save</a-button>
       <a-button style="border-radius: 8px;margin-left: 10px" @click="close_bio">cancel</a-button>
     </div>
-    <div class="bio-btn cursor-pointer" style="border-radius: 5px; padding: 5px
-        ;background-color: #f6f8fa; text-align: center" @click="bioShow=true" v-show="!bioShow">
-      <b style="color: #51565b">Add a bio</b>
+    <div class="bio-btn main-bg cursor-pointer" style="border-radius: 5px; padding: 5px
+        ;text-align: center" @click="bioShow=true" v-show="!bioShow">
+      <b  style="color: #51565b">Add a bio</b>
     </div>
     <div>
     </div>
