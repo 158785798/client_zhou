@@ -3,13 +3,21 @@
 </template>
 
 <script>
-import Header from "./components/Header.vue";
+import {reactive, toRefs} from "vue";
 
 export default {
   name: 'App',
-  components: {
-    Header
+  setup (){
+    const self = reactive({
+      ss: (e)=>{
+        console.log(e.clientY)
+      }
+    })
+    return {
+      ...toRefs(self)
+    }
   }
+
 }
 </script>
 <style lang="scss">

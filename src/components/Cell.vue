@@ -1,6 +1,7 @@
 <template>
-  <div
-      style="font-size: 18px;background-color: #fff;padding: 20px;margin-bottom: 8px; border-radius: 6px;position: relative">
+  <div ref="cell" @mousemove="ss" @mouseleave="dd"
+      style="">
+    <div style="font-size: 18px;padding: 20px;margin-bottom: 8px;background-color: rgba(255,255,255,0.76); border-radius: 6px;position: relative" >
     <header style="display: flex; justify-content: space-between">
       <img :src="blog.userInfo.avatarUrl" @error="set_default" alt=""
            style="width: 40px; height: 40px; border-radius: 50%"
@@ -63,6 +64,7 @@
     </div>
     <Comment v-if="blog.commentShow" @succ_comment="blog.comments++" :blog_id="blog.id"></Comment>
   </div>
+  </div>
 
 
 </template>
@@ -105,6 +107,14 @@ export default {
     const router = useRouter()
     const mutations = useMutations('session', ['to_cur', 'show_image_preview', 'set_blog_id'])
     const self = reactive({
+      cell: null,
+      ss:(e)=>{
+        const s = `radial-gradient(circle at ${e.layerX}px ${e.layerY}px,deeppink, rgba(79,20,204,0) calc(0% + 150px)) no-repeat border-box border-box rgba(255,255,255, 0.1)`
+        self.cell.style.background =  s
+      },
+      dd:()=>{
+        self.cell.style.background =  ''
+      },
       cur_blog_id: computed(() => store.state.session.cur_blog_id),
       pageRefresh: computed(() => store.state.pageRefresh),
       userInfo: computed(() => store.state.local.userInfo),
