@@ -22,6 +22,9 @@ const socket = SocketIo(
 )
 socket.on('connect', () => {
   console.log('连接成功！')
+  if (window.init){
+    window.init()
+  }
 })
 socket.on('online', (value) => {
   ElMessage.success(value+ '上线了 快去找 Ta 聊天吧！')

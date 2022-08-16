@@ -174,6 +174,42 @@ export default {
           nearest.popped = true
         }
       },
+      init:()=>{
+        let box = self.paw.getBoundingClientRect()
+        let radius = self.paw.querySelector('#bubbleradius').getBoundingClientRect().width
+        let max = (box.width * box.height) / 300 / Math.pow(radius, 1.2)
+        for (let i = 0; i < max; i++) {
+
+          self.circles.push({
+            key: Math.random(),
+            y: Math.random() * box.height,
+            x: Math.random() * box.width,
+            vx: Math.random() / 5,
+            vy: Math.random() / 5,
+            hue: Math.random() * 360,
+            collisionFree: false,
+            mass: 1,
+            radius: radius,
+            popped: false
+          });
+        }
+        self.globalID = requestAnimationFrame(self.update)
+
+        let hidden, visibilityChange;
+        if (typeof document.hidden !== "undefined") { // Opera 12.10 and Firefox 18 and later support
+          hidden = "hidden";
+          visibilityChange = "visibilitychange";
+        } else if (typeof document.msHidden !== "undefined") {
+          hidden = "msHidden";
+          visibilityChange = "msvisibilitychange";
+        } else if (typeof document.webkitHidden !== "undefined") {
+          hidden = "webkitHidden";
+          visibilityChange = "webkitvisibilitychange";
+        }
+        self.hiddenProperty = hidden
+        self.visibilityChangeEvent = visibilityChange
+        document.addEventListener(self.visibilityChangeEvent, self.handleVisibilityChange, false)
+      },
       circles: [],
       lastExec: null,
       hue: 250,
@@ -183,40 +219,8 @@ export default {
       moving: true
     })
     onMounted(() => {
-      let box = self.paw.getBoundingClientRect()
-      let radius = self.paw.querySelector('#bubbleradius').getBoundingClientRect().width
-      let max = (box.width * box.height) / 300 / Math.pow(radius, 1.2)
-      for (let i = 0; i < max; i++) {
-
-        self.circles.push({
-          key: Math.random(),
-          y: Math.random() * box.height,
-          x: Math.random() * box.width,
-          vx: Math.random() / 5,
-          vy: Math.random() / 5,
-          hue: Math.random() * 360,
-          collisionFree: false,
-          mass: 1,
-          radius: radius,
-          popped: false
-        });
-      }
-      self.globalID = requestAnimationFrame(self.update)
-
-      let hidden, visibilityChange;
-      if (typeof document.hidden !== "undefined") { // Opera 12.10 and Firefox 18 and later support
-        hidden = "hidden";
-        visibilityChange = "visibilitychange";
-      } else if (typeof document.msHidden !== "undefined") {
-        hidden = "msHidden";
-        visibilityChange = "msvisibilitychange";
-      } else if (typeof document.webkitHidden !== "undefined") {
-        hidden = "webkitHidden";
-        visibilityChange = "webkitvisibilitychange";
-      }
-      self.hiddenProperty = hidden
-      self.visibilityChangeEvent = visibilityChange
-      document.addEventListener(self.visibilityChangeEvent, self.handleVisibilityChange, false)
+      // self.init()
+      window.init = self.init
     })
     return {
       ...toRefs(self)
