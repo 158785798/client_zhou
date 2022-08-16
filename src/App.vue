@@ -1,17 +1,20 @@
 <template>
-    <router-view/>
+  <router-view/>
+  <Paw></Paw>
 </template>
 
 <script>
-import {reactive, toRefs} from "vue";
+import {onMounted, reactive, toRefs} from "vue";
+import Paw from "./components/Paw.vue";
 
 export default {
   name: 'App',
+  components:{
+    Paw
+  },
   setup (){
     const self = reactive({
-      ss: (e)=>{
-        console.log(e.clientY)
-      }
+
     })
     return {
       ...toRefs(self)

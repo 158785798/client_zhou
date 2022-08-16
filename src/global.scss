@@ -2,8 +2,12 @@ $color: #333;
 $body-width: 1250px;
 $icon-hover-color: #f18e63;
 $icon-hover-bg-color: rgba(246, 179, 150, 0.28);
+$main_bg_color: rgba(255,255,255,0.7);
 .backtop:hover {
   color: $icon-hover-color;
+}
+.main-bg{
+  background-color: $main_bg_color;
 }
 
 #app {

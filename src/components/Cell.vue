@@ -1,7 +1,7 @@
 <template>
   <div ref="cell" @mousemove="ss" @mouseleave="dd"
       style="">
-    <div style="font-size: 18px;padding: 20px;margin-bottom: 8px;background-color: rgba(255,255,255,0.76); border-radius: 6px;position: relative" >
+    <div class="main-bg" style="font-size: 18px;padding: 20px;margin-bottom: 8px;border-radius: 6px;position: relative" >
     <header style="display: flex; justify-content: space-between">
       <img :src="blog.userInfo.avatarUrl" @error="set_default" alt=""
            style="width: 40px; height: 40px; border-radius: 50%"
@@ -75,7 +75,7 @@ import {computed, reactive, toRefs} from "vue";
 import {useRouter} from "vue-router";
 import {instance} from "../api/request.js";
 import Comment from './Comment.vue'
-import {to_do, to_tab, set_default} from "../utils/tools.js";
+import {set_default, to_do, to_tab} from "../utils/tools.js";
 import {useMutations} from "../utils/hooks.js";
 import MyImg from "./MyImg.vue";
 
@@ -109,8 +109,7 @@ export default {
     const self = reactive({
       cell: null,
       ss:(e)=>{
-        const s = `radial-gradient(circle at ${e.layerX}px ${e.layerY}px,deeppink, rgba(79,20,204,0) calc(0% + 150px)) no-repeat border-box border-box rgba(255,255,255, 0.1)`
-        self.cell.style.background =  s
+        self.cell.style.background =  `radial-gradient(circle at ${e.layerX}px ${e.layerY}px,deeppink, rgba(79,20,204,0) calc(0% + 100px)) no-repeat border-box border-box rgba(255,255,255, 0.1)`
       },
       dd:()=>{
         self.cell.style.background =  ''
@@ -168,6 +167,7 @@ export default {
 
 .navItem_left:hover {
   background-color: #f2f2f2;
+  color: #390de5;
 }
 
 .content-btn {

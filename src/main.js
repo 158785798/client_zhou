@@ -11,6 +11,7 @@ import 'element-plus/dist/index.css'
 import 'ant-design-vue/dist/antd.css'
 import './global.scss'
 import './assets/font/iconfont.css'
+import './style.css'
 
 
 // const socketIo = new VueSocketIO({

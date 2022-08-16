@@ -4,7 +4,7 @@
   </el-backtop>
 
   <div class="common-layout" style="display: flex;height: 100%">
-    <aside style="height: 100%;background-color: #fff;width:200px;border-radius: 6px;">
+    <aside class="left-card main-bg" style="height: 100%;width:200px;border-radius: 6px;">
       <div style="position: sticky;top:60px;">
         <div style="font-size: 25px; margin: 10px 20px;height: 100%;">首页</div>
         <div class="navItem_left cursor-pointer" v-for="item in nvamenus">
@@ -30,7 +30,7 @@
     </main>
     <aside style="height: 100%;width:300px;border-radius: 6px;">
       <div style="position: sticky;top:-50px;">
-        <div class="right-card cursor-pointer">
+        <div class="right-card main-bg cursor-pointer">
           <div style="margin-bottom: 10px; ">
             <span>猫猫热搜</span>
           </div>
@@ -44,9 +44,7 @@
             <span>😍</span>
           </div>
         </div>
-        <div class="cursor-pointer" style="background-color: #fff;
-  border-radius: 6px;
-  margin-bottom: 10px;">
+        <div class="main-bg cursor-pointer" style="border-radius: 6px;margin-bottom: 10px;">
           <div style="padding: 10px 15px 10px 15px;">
             <span>你可能感兴趣的人</span>
           </div>
@@ -157,11 +155,10 @@ export default {
 @import "../../global";
 
 .navItem_left:hover {
-  background-color: #f2f2f2;
+  background-color: $main_bg_color;
 }
 
 .right-card {
-  background-color: #fff;
   padding: 10px 15px 20px 15px;
   border-radius: 6px;
   margin-bottom: 10px;
