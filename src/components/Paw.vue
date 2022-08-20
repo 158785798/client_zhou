@@ -178,7 +178,7 @@ export default {
         let box = self.paw.getBoundingClientRect()
         let radius = self.paw.querySelector('#bubbleradius').getBoundingClientRect().width
         let max = (box.width * box.height) / 600 / Math.pow(radius, 1.2)
-        for (let i = 0; i < max; i++) {
+        for (let i = 0; i < 10; i++) {
 
           self.circles.push({
             key: Math.random(),

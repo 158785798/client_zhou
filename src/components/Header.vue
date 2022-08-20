@@ -14,7 +14,8 @@
 
     </div>
     <div>
-      <audio loop="loop" id="audio" autoplay="autoplay"
+<!--      autoplay="autoplay"-->
+      <audio loop="loop" id="audio"
              src="https://auspollo.top/static/music/cats.mp3"></audio>
     </div>
     <div class="flex-align-items" style="justify-content: space-around; margin: auto 0;position: relative">
@@ -95,14 +96,14 @@ export default {
     const store = useStore()
     const router = useRouter();
     onMounted(() => {
-          setTimeout(() => {
-            const audio = document.getElementById('audio')
-            self.play = !audio.paused
-          }, 500)
+          // setTimeout(() => {
+          //   const audio = document.getElementById('audio')
+          //   self.play = !audio.paused
+          // }, 500)
         }
     )
     const self = reactive({
-          play: true,
+          play: false,
           aboutShow: false,
           dropdownMenuShow: false,
           pub: () => {
