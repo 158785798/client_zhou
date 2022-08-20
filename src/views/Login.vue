@@ -3,7 +3,7 @@
     <img src="../assets/logo.png" alt=""
          style="border-radius: 50%; width: 60px;margin: 100px auto 30px;"
          @click="toTab('Home')">
-    <summary style="font-size: 24px">Sign in to CandyCats</summary>
+    <div style="font-size: 24px">Sign in to CandyCats</div>
     <main class="container" style="box-shadow: 0 0 20px 5px rgba(0,0,0,0.2)">
       <div style="display: flex; justify-content: center;">
         <el-form
@@ -16,7 +16,7 @@
             style="max-width: 280px;color:#201e1e; "
         >
           <el-form-item prop="username">
-            <summary>Username or email address</summary>
+            <div>Username or email address</div>
             <el-input
                 clearable
                 placeholder="Username or email address here"
@@ -24,7 +24,7 @@
           </el-form-item>
           <el-form-item prop="password">
             <div style="display: flex;justify-content: space-between; width: 100%">
-              <summary>Password</summary>
+              <div>Password</div>
               <a href="javascript:" @click="toTab('PasswordReset')">Forgot password?</a>
             </div>
             <el-input
