@@ -1,7 +1,7 @@
 <template>
   <div style="padding-bottom: 50px">
   <div style="text-align: center; font-size: 60px;color: purple">
-      <strong>Build our meow better, together</strong>
+      <strong>Make our meow better, be together</strong>
   </div>
   <el-carousel v-if="images.length!==0" type="card" height="800px" :autoplay="false" indicator-position="none" arrow="always">
     <el-carousel-item v-for="(src, index) in images.slice(16,23)" :key="index">
