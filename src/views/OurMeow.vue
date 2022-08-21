@@ -1,10 +1,14 @@
 <template>
-  <!--  <div style="display: flex; justify-content: center">-->
-  <!--    <div style="width: 464px">-->
-  <!--      <CatCarousel></CatCarousel>-->
-  <!--    </div>-->
-  <!--  </div>-->
-  <ul style="margin: 0; padding: 0">
+  <div style="padding-bottom: 50px">
+  <div style="text-align: center; font-size: 60px;color: purple">
+      <strong>Build our meow better, together</strong>
+  </div>
+  <el-carousel v-if="images.length!==0" type="card" height="800px" :autoplay="false" indicator-position="none" arrow="always">
+    <el-carousel-item v-for="(src, index) in images.slice(16,23)" :key="index">
+      <img :src="src.middle" alt="" style="width: 630px;">
+    </el-carousel-item>
+  </el-carousel>
+  <ul style="margin: 20px 0; padding: 0">
     <li v-for="(src, index) in images" class="imgItem" @click="show_image_preview({images: images, index: index})">
       <div class="wrapper">
         <img :src="src.middle" alt="" style="width: 162px; background-clip: padding-box">
@@ -12,11 +16,8 @@
 
     </li>
   </ul>
-  <div style="text-align: center; padding-top: 100px; font-size: 60px;color: purple">
-    <p>
-    <strong>Build our meow better, together</strong>
-    </p>
   </div>
+
 
 </template>
 
@@ -50,6 +51,13 @@ export default {
 
 <style lang="scss" scoped>
 
+.el-carousel__item:nth-child(2n) {
+  background-color: #99a9bf;
+}
+
+.el-carousel__item:nth-child(2n + 1) {
+  background-color: #d3dce6;
+}
 
 .imgItem {
   float: left;
